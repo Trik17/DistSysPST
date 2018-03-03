@@ -9,11 +9,11 @@ public class ServerImp implements Server {
     };
 
 
-    public int read(string dataId) {
+    public int read(String dataId) {
         return 0;
     }
 
-    public void write(string dataId, int newData) {
+    public void write(String dataId, int newData) {
 
     }
 
