@@ -9,12 +9,12 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Client {
-    protected String ip;
-    protected int port;
-    protected Socket socketclient;
-    protected Scanner socketIn;
-    protected PrintWriter socketOut;
-    protected Scanner stIn = new Scanner(System.in);
+    private String ip;
+    private int port;
+    private Socket socketclient;
+    private Scanner socketIn;
+    private PrintWriter socketOut;
+    private Scanner stIn = new Scanner(System.in);
 
     public Client(String ip, int port) throws IOException {
         this.ip = ip;
@@ -22,18 +22,6 @@ public class Client {
         this.socketclient = new Socket(ip, port);
         this.socketIn = new Scanner(socketclient.getInputStream());
         this.socketOut = new PrintWriter(socketclient.getOutputStream());
-    }
-
-    public static void main(String[] args) {
-        try {
-            Client client = new Client(InetAddress.getLocalHost().toString(), 1330);
-            System.out.println("Connection established");
-            client.startClient();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private void startClient() throws IOException {
@@ -52,6 +40,18 @@ public class Client {
             socketIn.close();
             socketOut.close();
             socketclient.close();
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            Client client = new Client(InetAddress.getLocalHost().getHostAddress(), 1330);
+            System.out.println("Connection established");
+            client.startClient();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
