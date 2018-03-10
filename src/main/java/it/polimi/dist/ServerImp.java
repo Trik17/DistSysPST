@@ -23,14 +23,14 @@ public class ServerImp implements Server {
 
     public int read(String dataId) {
         return 0;
+    }//TODO
+
+    public void write(String dataId, int newData) {  //TODO
+
     }
 
-    public void write(String dataId, int newData) {
-
-    }
-
-    public static void main() {
-
+        ServerImp Server=new ServerImp();
+    public static void main(String[] args){
 
     }
 
