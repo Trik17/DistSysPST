@@ -15,7 +15,7 @@ public class Server  {
 
 
     public Server(int port) {
-        this.data = new DataStorage();
+        //this.data = new DataStorage();
         this.port = port;
     }
 
@@ -52,8 +52,8 @@ public class Server  {
         executor.shutdown();
     }
 
-    public static void main() {
-        Server server = new Server(1330);
+    public static void main(String[] args) {
+        Server server = new Server(1337);
         server.startServer();
     }
 }

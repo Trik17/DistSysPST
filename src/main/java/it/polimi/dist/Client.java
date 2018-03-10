@@ -45,7 +45,7 @@ public class Client {
 
     public static void main(String[] args) {
         try {
-            Client client = new Client(InetAddress.getLocalHost().getHostAddress(), 1330);
+            Client client = new Client(InetAddress.getLocalHost().getHostAddress(), 1337);
             System.out.println("Connection established");
             client.startClient();
         } catch (UnknownHostException e) {
