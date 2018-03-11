@@ -16,7 +16,7 @@ public class Server  {
 
     public Server(int port) {
         this.data = new DataStorage();
-        this.port = port;
+        //this.port = port;
     }
 
     public int read(String dataId) {
@@ -52,7 +52,7 @@ public class Server  {
         executor.shutdown();
     }
 
-    public static void main() {
+    public static void main(String[] args) {
         Server server = new Server(1330);
         server.startServer();
     }

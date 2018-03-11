@@ -8,10 +8,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,7 +25,7 @@ public class DataStorage {
         this.mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
         try {
             fileReader = new FileReader("src/main/resources/data.json");
-        }catch (IOException e) {
+        }catch (Exception e) {
             this.data = new HashMap(); // or HashMap<String, Integer>()
             file = new File("src/main/resources/data.json");
             try {
@@ -37,7 +34,8 @@ public class DataStorage {
                 writeToFile();
                 //filewriter.close(); // ATTENZIONE
             } catch (IOException e1) {
-                e.printStackTrace();
+               e.printStackTrace();
+               System.out.println("qua 1");
             }
         }
     }
@@ -50,6 +48,7 @@ public class DataStorage {
             filewriter.flush();
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("qua 2");
         }
 
     }
