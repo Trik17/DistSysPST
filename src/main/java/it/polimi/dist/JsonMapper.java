@@ -17,7 +17,7 @@ public class JsonMapper {
 
     }
 
-/*
+
         try{
             fileT= new FileReader("src/main/resources/cards/territory.json");
             fileC= new FileReader("src/main/resources/cards/character.json");

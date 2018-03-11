@@ -1,5 +1,7 @@
 package it.polimi.dist;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
@@ -23,43 +25,69 @@ public class DataStorage {
     public DataStorage(){
         this.mapper = new ObjectMapper();       //declare a new ObjectMapper variable
         this.mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
+        this.data = new HashMap(); // or HashMap<String, Integer>()
         try {
             fileReader = new FileReader("src/main/resources/data.json");
+            //filewriter = new FileWriter("src/main/resources/data.json");
+            TypeReference<HashMap<String, Integer>> mapTypeJ= new TypeReference<HashMap<String, Integer>>() {};
+            try{
+                this.data= mapper.readValue(fileReader,mapTypeJ);
+                fileReader.close();
+            } catch (JsonMappingException e1) {
+                System.out.println("no map in .json file: new server, it's not a reboot");
+                //TODO OGNI VOLTA BISOGNA RESETTARE IL FILE
+                //TODO: questo e il caso di non reboot
+                //e1.printStackTrace();
+            }
         }catch (Exception e) {
-            this.data = new HashMap(); // or HashMap<String, Integer>()
+            e.printStackTrace();
+           /*
             file = new File("src/main/resources/data.json");
-            try {
+
+            /*try {
                 file.createNewFile();
                 filewriter = new FileWriter(file);
                 writeToFile();
                 //filewriter.close(); // ATTENZIONE
             } catch (IOException e1) {
                e.printStackTrace();
-               System.out.println("qua 1");
-            }
+               //System.out.println("errore 1");
+            }*/
         }
+        //DA QUA PER PROVA FILE:
+        //TODO CANCELLA:
+        int i= data.get("miriam");
+        System.out.println("AAAAAAAAAA:");
+        System.out.printf("%d",i);
+       /* write("andrea", 17);
+        write("miriam", 3);
+        write("santa", 4);
+*/
     }
 
     private void writeToFile(){
         JSONObject json = new JSONObject();
         json.putAll( data );
         try {
-            filewriter.write(json.toJSONString());
+            filewriter = new FileWriter("src/main/resources/data.json");
+            String mapString=json.toJSONString();
+            filewriter.write(mapString);
             filewriter.flush();
+            filewriter.close(); // ATTENZIONE
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("qua 2");
+            //System.out.println("qua 2");
         }
 
     }
 
     public int read(String dataId) {
-
-        return 0;
+        return this.data.get(dataId);
     }
 
     public void write(String dataId, int newData) {  //TODO
-
+        this.data.put(dataId,newData);
+        writeToFile();
     }
 
 

@@ -16,15 +16,15 @@ public class Server  {
 
     public Server(int port) {
         this.data = new DataStorage();
-        //this.port = port;
+        this.port = port;
     }
 
     public int read(String dataId) {
-        return 0;
+        return this.data.read(dataId);
     }
 
     public void write(String dataId, int newData) {
-
+        this.data.write(dataId,newData);
     }
 
     public void startServer() {
