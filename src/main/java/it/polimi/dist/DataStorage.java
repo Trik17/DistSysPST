@@ -33,6 +33,7 @@ public class DataStorage {
             try{
                 this.data= mapper.readValue(fileReader,mapTypeJ);
                 fileReader.close();
+                System.out.println("found map in .json file: it's a reboot");
             } catch (JsonMappingException e1) {
                 System.out.println("no map in .json file: new server, it's not a reboot");
                 //TODO OGNI VOLTA BISOGNA RESETTARE IL FILE
@@ -56,13 +57,13 @@ public class DataStorage {
         }
         //DA QUA PER PROVA FILE:
         //TODO CANCELLA:
-        int i= data.get("miriam");
+        /*int i= data.get("miriam");
         System.out.println("AAAAAAAAAA:");
-        System.out.printf("%d",i);
+        System.out.printf("%d",i); */
        /* write("andrea", 17);
         write("miriam", 3);
         write("santa", 4);
-*/
+        */
     }
 
     private void writeToFile(){
