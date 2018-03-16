@@ -1,2 +1,5 @@
 
+*.class
+
+
 \.idea/workspace\.xml
