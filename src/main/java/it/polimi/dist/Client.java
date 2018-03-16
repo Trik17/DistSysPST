@@ -1,6 +1,8 @@
 package it.polimi.dist;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -12,40 +14,45 @@ public class Client {
     private String ip;
     private int port;
     private Socket socketclient;
-    private Scanner socketIn;
-    private PrintWriter socketOut;
+    private PrintWriter provaOut;
+    private Scanner provaIn;
+    private ObjectInputStream objIn;
+    private ObjectOutputStream objOut;
     private Scanner stIn = new Scanner(System.in);
 
     public Client(String ip, int port) throws IOException {
         this.ip = ip;
         this.port = port;
         this.socketclient = new Socket(ip, port);
-        this.socketIn = new Scanner(socketclient.getInputStream());
-        this.socketOut = new PrintWriter(socketclient.getOutputStream());
+        this.objOut = new ObjectOutputStream(socketclient.getOutputStream());
+        this.objIn = new ObjectInputStream(socketclient.getInputStream());
+        this.provaOut = new PrintWriter(socketclient.getOutputStream());
+        this.provaIn = new Scanner(socketclient.getInputStream());
     }
 
     private void startClient() throws IOException {
         try {
             while (true) {
+                System.out.println("Eccomi");
                 String inputLine = stIn.nextLine();
-                socketOut.println(inputLine);
-                socketOut.flush();
-                String socketLine = socketIn.nextLine();
-                System.out.println(socketLine);
+                provaOut.println(inputLine);
+                provaOut.flush();
+                //String socketLine = provaIn.nextLine();
+                //System.out.println(socketLine);
             }
         } catch (NoSuchElementException e) {
             System.out.println("Connection closed");
         } finally {
             stIn.close();
-            socketIn.close();
-            socketOut.close();
+            provaIn.close();
+            provaOut.close();
             socketclient.close();
         }
     }
 
     public static void main(String[] args) {
         try {
-            Client client = new Client(InetAddress.getLocalHost().getHostAddress(), 1337);
+            Client client = new Client(InetAddress.getLocalHost().getHostAddress(), 9334);
             System.out.println("Connection established");
             client.startClient();
         } catch (UnknownHostException e) {
