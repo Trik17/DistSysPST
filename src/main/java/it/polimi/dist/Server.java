@@ -27,11 +27,11 @@ public class Server  {
     }
 
     public int read(String dataId) {
-        return 0;
+        return this.data.read(dataId);
     }
 
     public void write(String dataId, int newData) {
-
+        this.data.write(dataId,newData);
     }
 
     public void startServer() {
