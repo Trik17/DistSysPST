@@ -7,8 +7,8 @@ public class ReadMessage extends Message{
     }
 
     @Override
-    public void execute() {
-        super.execute();
+    public void execute(Server server) {
+
     }
 
     @Override

@@ -8,22 +8,18 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class ClientHandler implements Runnable  {
-    private ObjectInputStream multiIn;
-    private ObjectOutputStream multiOut;
+    private Server server;
+
     private Socket socket;
-    private Socket groupSocket;
     private PrintWriter provaOut;
     private Scanner provaIn;
-    private ObjectOutputStream out;
+    private ObjectOutputStream out;//canali client
     private ObjectInputStream in;
 
     public ClientHandler(Socket socket, Socket groupSocket) throws IOException {
         this.socket = socket;
-        this.groupSocket = groupSocket;
         this.out = new ObjectOutputStream(this.socket.getOutputStream());//forced to be before than ObjectInputStream otherwise there is a deadlock (no bug)
         this.in = new ObjectInputStream(this.socket.getInputStream());
-        this.multiOut = new ObjectOutputStream(this.groupSocket.getOutputStream());
-        this.multiIn = new ObjectInputStream(this.groupSocket.getInputStream());
         this.provaOut = new PrintWriter(this.socket.getOutputStream());
         this.provaIn = new Scanner(this.socket.getInputStream());
     }
@@ -31,7 +27,16 @@ public class ClientHandler implements Runnable  {
     public void run() {
         try {
             while (true) {
+                try {
+                    Message msg = (Message) in.readObject();
+                    server.addElementQueue(msg);
+
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+           /* while (true) {
                 String line = provaIn.nextLine();
+                out.w
                 System.out.println(line);
                 if (line.equals("quit")) {
                     break;
@@ -42,8 +47,9 @@ public class ClientHandler implements Runnable  {
                 }
             }
             provaIn.close();
-            provaOut.close();
-            socket.close();
+            provaOut.close();*/
+                socket.close();
+            }
         }
         catch (IOException e) {
             System.err.println(e.getMessage());

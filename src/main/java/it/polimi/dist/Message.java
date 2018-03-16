@@ -9,11 +9,15 @@ public abstract class Message {
     public Message() {
     }
 
-    public void execute() {
-        //called by server in order  to get and use data and set timestamp/processNumber
+    public void execute(Server server) {
+        //called by server in order  to get and use data and set timestamp/processNumbe
     }
 
     public void fill() {
         //filled by Client (set key/data)
+    }
+
+    public int getTimeStamp() {
+        return timestamp;
     }
 }

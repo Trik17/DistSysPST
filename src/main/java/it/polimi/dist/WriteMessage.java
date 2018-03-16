@@ -6,8 +6,9 @@ public class WriteMessage extends Message {
         super();
     }
 
-        @Override
-    public void execute() {
+    @Override
+    public void execute(Server server) {
+        server.addElementQueue(this);
 
     }
 
