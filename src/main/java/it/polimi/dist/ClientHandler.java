@@ -29,7 +29,7 @@ public class ClientHandler implements Runnable  {
             while (true) {
                 try {
                     Message msg = (Message) in.readObject();
-                    server.addElementQueue(msg);
+                    server.addMsgQueue(msg);
 
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();

@@ -1,6 +1,8 @@
 package it.polimi.dist;
 
 public abstract class Message {
+    protected int ID;
+
     protected int timestamp;
     protected int processNumber;
     protected String key;
@@ -10,7 +12,7 @@ public abstract class Message {
     }
 
     public void execute(Server server) {
-        //called by server in order  to get and use data and set timestamp/processNumbe
+        //called by server in order  to get and use data and set timestamp/processNumber
     }
 
     public void fill() {
@@ -19,5 +21,9 @@ public abstract class Message {
 
     public int getTimeStamp() {
         return timestamp;
+    }
+
+    public int getID() {
+        return ID;
     }
 }

@@ -28,7 +28,7 @@ public class MulticastHandler {
             while (true) {
                 try {
                     Message msg = (Message) multiIn.readObject();
-                    server.addElementQueue(msg);
+                    server.addMsgQueue(msg);
                     int timeStamp = msg.getTimeStamp();
                     calculateClock(msg.getTimeStamp());
                     ackManagement();

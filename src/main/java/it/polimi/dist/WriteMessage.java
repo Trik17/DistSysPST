@@ -8,7 +8,7 @@ public class WriteMessage extends Message {
 
     @Override
     public void execute(Server server) {
-        server.addElementQueue(this);
+        server.addMsgQueue(this);
 
     }
 

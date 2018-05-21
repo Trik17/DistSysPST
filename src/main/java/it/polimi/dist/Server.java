@@ -4,11 +4,15 @@ import java.io.IOException;
 import java.net.MulticastSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Server  {
+
+    private int numberOfActiveProcesses;
 
     private int numberOfServer; //TODO
 
@@ -16,7 +20,8 @@ public class Server  {
     private ExecutorService executor;
     private int port; //port for Server-Client Socket
     private int multiPort; //port for Server Multicast Socket
-    private List<Message> queue;
+    private List<Message> msgQueue;
+    private Map<Integer, List<Acknowledgement>> ackQueue;
 
     private int processNumber;
 
@@ -74,8 +79,25 @@ public class Server  {
         executor.shutdown();
     }
 
-    public void checkQueue(){
-        //TODO
+    public void execute(Message msg){
+
+        if(allAcksReceived(msg)) {
+
+            deliver(msg);
+            clearAcks(msg);
+        }
+
+    }
+
+
+    //non sto prendendo in considerazione la possibilità di due ack uguali mandati dallo stesso processo perché non so se può succedere
+    public boolean allAcksReceived(Message msg) {
+
+        Integer ID = msg.getID();
+        int numberOfAcks = ackQueue.get(ID).size();
+
+        return numberOfAcks == numberOfActiveProcesses;
+
     }
 
     public static void main(String[] args) {
@@ -83,25 +105,37 @@ public class Server  {
         server.startServer();
     }
 
-    public void addElementQueue(Message msg) {
-        int tstamp = msg.getTimeStamp();
-        int index = queue.size() -1;
+    public void addAckQueue(Acknowledgement ack){
+        Integer ID = ack.getID();
 
-        if (queue.isEmpty()) {
-            queue.add(msg);
-            return;
+        try{
+
+            ackQueue.get(ID).add(ack);
+
+        }catch(NullPointerException e){
+
+            List<Acknowledgement> acks = new ArrayList<Acknowledgement>();
+            acks.add(ack);
+            ackQueue.put(ID,acks);
+
         }
+    }
+
+    public void addMsgQueue(Message msg) {
+        int tstamp = msg.getTimeStamp();
+        int index = msgQueue.size() -1;
+
         while (index >= 0){
 
-            if (tstamp > queue.get(index).getTimeStamp()) {
-                queue.add(index +1, msg);
+            if (tstamp > msgQueue.get(index).getTimeStamp()) {
+                msgQueue.add(index +1, msg);
                 return;
             }
 
             index--;
         }
 
-        queue.add(0, msg);
+        msgQueue.add(0, msg);
     }
 
     public void setLamportClock(int lamportClock) {
@@ -115,4 +149,16 @@ public class Server  {
     public int getProcessNumber() {
         return processNumber;
     }
+
+    //in realtà il contenuto del messaggio andrebbe messo nella coda dell'applicazione che lo deve eseguire, ma siccome
+    //noi non abbiamo applicazioni ma solo un metodo execute nel msg, l'ho lasciato così
+    public void deliver(Message msg){
+        msg.execute(this);
+    }
+
+    public void clearAcks(Message msg){
+        Integer ID = msg.getID();
+        ackQueue.remove(ID);
+    }
+
 }
