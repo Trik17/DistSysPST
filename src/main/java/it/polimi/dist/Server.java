@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.Predicate;
 
 public class Server  {
 
@@ -90,11 +91,19 @@ public class Server  {
     }
 
 
-    //non sto prendendo in considerazione la possibilità di due ack uguali mandati dallo stesso processo perché non so se può succedere
     public boolean allAcksReceived(Message msg) {
-
         Integer ID = msg.getID();
         int numberOfAcks = ackQueue.get(ID).size();
+        List<Acknowledgement> acks = ackQueue.get(ID);
+
+        for (int i = 0; i < numberOfAcks -2; i++) {
+            for (int j = i +1; j < numberOfAcks -1; j++){
+                if (acks.get(i).getProcessNumber() == acks.get(j).getProcessNumber()) {
+                    acks.remove(j);
+                    numberOfAcks--;
+                }
+            }
+        }
 
         return numberOfAcks == numberOfActiveProcesses;
 

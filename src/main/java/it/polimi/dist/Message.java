@@ -26,4 +26,8 @@ public abstract class Message {
     public int getID() {
         return ID;
     }
+
+    public int getProcessNumber() {
+        return processNumber;
+    }
 }
