@@ -58,6 +58,11 @@ public class Server  {
         logic.write(dataId,newData);
     }
 
+    public void sendMulti(Message message){
+        //TODO
+    }
+
+
     public DataStorage getData() {
         return data;
     }

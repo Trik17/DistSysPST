@@ -26,6 +26,10 @@ public class Logic implements Runnable{
         this.writeBuffer = new LinkedList<WriteMessage>();
     }
 
+    public void receivedMessage(Message m){
+        //TODO sia per messaggi di scrittura che per gli acks
+    }
+
     public void write(String dataId, int newData) {
         //mettere un buffer delle richieste per write
         /*TODO manda broadcast a tutti e aspetta gli ack
