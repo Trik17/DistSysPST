@@ -9,7 +9,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.function.Predicate;
+import java.net.InetAddress;
+
+import static java.net.InetAddress.getLocalHost;
+//import java.util.function.Predicate;
 
 public class Server  {
 
@@ -23,6 +26,8 @@ public class Server  {
     private int multiPort; //port for Server Multicast Socket
     private List<Message> msgQueue;
     private Map<Integer, List<Acknowledgement>> ackQueue;
+    private InetAddress group;
+    private Logic logic;
 
     private int processNumber;
 
@@ -39,31 +44,40 @@ public class Server  {
         //this.data = new DataStorage();
         this.port = port;
         this.lamportClock = 1;
-
-
+        this.multiPort = multiPort;
+        executor = Executors.newCachedThreadPool();
+        this.logic=new Logic(0,this);
     }
+
 
     public int read(String dataId) {
         return this.data.read(dataId);
     }
 
     public void write(String dataId, int newData) {
-        this.data.write(dataId,newData);
+        logic.write(dataId,newData);
+    }
+
+    public DataStorage getData() {
+        return data;
     }
 
     public void startServer() {
-        executor = Executors.newCachedThreadPool();
         ServerSocket serverSocket;
         MulticastSocket multiSocket;
         try {
+            group = InetAddress.getByName("228.5.6.7");
             serverSocket = new ServerSocket(port);
             multiSocket = new MulticastSocket(multiPort);
-        } catch (IOException e) {
+            multiSocket.joinGroup(group);
+
+        /*} catch (IOException e) {
             System.err.println(e.getMessage());
             return;
-        }
+        }*/
         System.out.println("Server online");
-        try {
+        //try {
+            InetAddress ProvaAAA=multiSocket.getInetAddress();
             Socket groupSocket = new Socket(multiSocket.getInetAddress(), multiPort);
             MulticastHandler multicastHandler = new MulticastHandler(this, groupSocket);
             while (true) {
@@ -75,6 +89,7 @@ public class Server  {
                 }
             }
         } catch (IOException e) {
+            System.err.println(e.getMessage());
             System.out.println("error");
         }
         executor.shutdown();
