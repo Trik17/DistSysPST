@@ -26,10 +26,6 @@ public class Logic implements Runnable{
         this.writeBuffer = new LinkedList<WriteMessage>();
     }
 
-    public void receivedMessage(Message m){
-        //TODO sia per messaggi di scrittura che per gli acks
-    }
-
     public void write(String dataId, int newData) {
         //mettere un buffer delle richieste per write
         /*TODO manda broadcast a tutti e aspetta gli ack
@@ -42,6 +38,7 @@ public class Logic implements Runnable{
     }
 
     //TODO
+    //TODO sia per messaggi di scrittura che per gli acks
     public void received(Message m){
         if (m.getID()<sequenceID)
             return;
@@ -57,14 +54,12 @@ public class Logic implements Runnable{
     }
 
     //TODO fare un messaggio particolare che chieda la ritrasmissione: e un metodo che lo ritrasmette
-
-    //TODO
     private void requestRetransmission(int i) {
-
+            //TODO
     }
 
     public void run() {
-        // dopo che verifica che può deve scrivere il messaggio che ha in testa alla lista
+        //TODO dopo che verifica che può deve scrivere il messaggio che ha in testa alla lista
         //this.server.getData().write(dataId,newData);
     }
 
