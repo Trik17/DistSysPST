@@ -10,7 +10,7 @@ public class WriteMessage extends Message {
 
     @Override
     public void execute(Server server) {
-        server.addMsgQueue(this);
+        //server.addMsgQueue(this);
 
     }
 

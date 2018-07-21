@@ -30,9 +30,9 @@ public class MulticastHandler {
             while (true) {
                 try {
                     Message msg = (Message) multiIn.readObject();
-                    server.addMsgQueue(msg);
-                    int timeStamp = msg.getTimeStamp();
-                    calculateClock(msg.getTimeStamp());
+                    //server.addMsgQueue(msg);
+                    long timeStamp = msg.getTimeStamp();
+                    //calculateClock(msg.getTimeStamp());
                     ackManagement();
 
 
@@ -77,7 +77,7 @@ public class MulticastHandler {
 
 
     }
-
+/*
     public void calculateClock(int tstamp){
         int lclock = server.getLamportClock();
 
@@ -86,6 +86,6 @@ public class MulticastHandler {
         else
             server.setLamportClock(tstamp +1);
      }
-
+*/
 }
 

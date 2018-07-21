@@ -22,8 +22,6 @@ public class Logic{
     private LinkedList<WriteMessage> resendBuffer;
     private LinkedList<Acknowledgement> ackBuffer;
 
-    //TODO server i chi manda i messsaggi! per fare le richieste di ritrasmissione
-
     public Logic(int serverID, Server server){
         this.server=server;
         this.serverID = serverID;
@@ -46,10 +44,10 @@ public class Logic{
 
     //TODO sia per messaggi di scrittura che per gli acks
     public void received(Message m){
-        if (m.getID()< serverID)
-            return;
-        if (m.getID()!= serverID +1)
-            outOfSequence(m.getID());
+        //if (m.getID()< serverID)
+          //  return;
+        //if (m.getID()!= serverID +1)
+         //   outOfSequence(m.getID());
     }
 
     //TODO prima aspetto un certo tempo

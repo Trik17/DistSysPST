@@ -24,8 +24,8 @@ public class Server  {
     private ExecutorService executor;
     private int port; //port for Server-Client Socket
     private int multiPort; //port for Server Multicast Socket
-    private List<Message> msgQueue;
-    private Map<Integer, List<Acknowledgement>> ackQueue;
+    //private List<Message> msgQueue;
+    //private Map<Integer, List<Acknowledgement>> ackQueue;
     private InetAddress group;
     private Logic logic;
 
@@ -99,7 +99,7 @@ public class Server  {
         }
         executor.shutdown();
     }
-
+    /*
     public void execute(Message msg){
 
         if(allAcksReceived(msg)) {
@@ -108,9 +108,9 @@ public class Server  {
             clearAcks(msg);
         }
 
-    }
+    }*/
 
-
+/*
     public boolean allAcksReceived(Message msg) {
         Integer ID = msg.getID();
         int numberOfAcks = ackQueue.get(ID).size();
@@ -118,7 +118,7 @@ public class Server  {
 
         for (int i = 0; i < numberOfAcks -2; i++) {
             for (int j = i +1; j < numberOfAcks -1; j++){
-                if (acks.get(i).getProcessNumber() == acks.get(j).getProcessNumber()) {
+                if (acks.get(i).getServerNumber() == acks.get(j).getServerNumber()) {
                     acks.remove(j);
                     numberOfAcks--;
                 }
@@ -128,12 +128,12 @@ public class Server  {
         return numberOfAcks == numberOfActiveProcesses;
 
     }
-
+*/
     public static void main(String[] args) {
         Server server = new Server(9334, 9000);
         server.startServer();
     }
-
+    /*
     public void addAckQueue(Acknowledgement ack){
         Integer ID = ack.getID();
 
@@ -148,10 +148,10 @@ public class Server  {
             ackQueue.put(ID,acks);
 
         }
-    }
-
+    }*/
+/*
     public void addMsgQueue(Message msg) {
-        int tstamp = msg.getTimeStamp();
+        long tstamp = msg.getTimeStamp();
         int index = msgQueue.size() -1;
 
         while (index >= 0){
@@ -166,11 +166,12 @@ public class Server  {
 
         msgQueue.add(0, msg);
     }
-
+*/
+/*
     public void setLamportClock(int lamportClock) {
         this.lamportClock = lamportClock;
     }
-
+*/
     public int getLamportClock() {
         return lamportClock;
     }
@@ -184,10 +185,10 @@ public class Server  {
     public void deliver(Message msg){
         msg.execute(this);
     }
-
+    /*
     public void clearAcks(Message msg){
         Integer ID = msg.getID();
         ackQueue.remove(ID);
-    }
+    }*/
 
 }
