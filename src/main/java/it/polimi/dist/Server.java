@@ -1,5 +1,7 @@
 package it.polimi.dist;
 
+import it.polimi.dist.Messages.Message;
+
 import java.io.IOException;
 import java.net.MulticastSocket;
 import java.net.ServerSocket;
@@ -10,8 +12,6 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.net.InetAddress;
-
-import static java.net.InetAddress.getLocalHost;
 //import java.util.function.Predicate;
 
 public class Server  {
