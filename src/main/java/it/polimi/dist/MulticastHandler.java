@@ -1,17 +1,13 @@
 package it.polimi.dist;
 
-<<<<<<< HEAD
+
 import java.io.*;
 import java.net.DatagramPacket;
 import java.net.MulticastSocket;
-=======
 import it.polimi.dist.Messages.Message;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
->>>>>>> e498f01db29b6bc8529250328f340c8528f5a21a
+
 
 public class MulticastHandler implements Runnable {
 
@@ -27,7 +23,7 @@ public class MulticastHandler implements Runnable {
     }
 
     public void start() {
-<<<<<<< HEAD
+
         /*Thread outputThread = new Thread();
         outputThread.run();*/ //useless?
 
@@ -44,24 +40,11 @@ public class MulticastHandler implements Runnable {
                 ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
                 ObjectInputStream ois = new ObjectInputStream(bais);
                 Message msg = (Message) ois.readObject();
-=======
-        try {
-            Thread outputThread = new Thread();
-            outputThread.run();
-            while (true) {
-                try {
-                    Message msg = (Message) multiIn.readObject();
-                    //server.addMsgQueue(msg);
-                    long timeStamp = msg.getTimeStamp();
-                    //calculateClock(msg.getTimeStamp());
-                    ackManagement();
->>>>>>> e498f01db29b6bc8529250328f340c8528f5a21a
 
-
-                server.addMsgQueue(msg);
-                int timeStamp = msg.getTimeStamp();
-                calculateClock(msg.getTimeStamp());
-                ackManagement();
+                //server.addMsgQueue(msg);
+                //int timeStamp = msg.getTimeStamp();
+                //calculateClock(msg.getTimeStamp());
+                //ackManagement();
 
 
 

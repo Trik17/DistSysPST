@@ -10,12 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-<<<<<<< HEAD
-
-import static java.net.InetAddress.getLocalHost;
-=======
 import java.net.InetAddress;
->>>>>>> e498f01db29b6bc8529250328f340c8528f5a21a
+
 //import java.util.function.Predicate;
 
 public class Server  {
@@ -107,8 +103,6 @@ public class Server  {
         }
         executor.shutdown();
     }
-<<<<<<< HEAD
-
     public InetAddress getIP() throws SocketException {
         Enumeration e = NetworkInterface.getNetworkInterfaces();
         while(e.hasMoreElements())
@@ -125,19 +119,6 @@ public class Server  {
         }
         return null;
     }
-
-=======
-    /*
->>>>>>> e498f01db29b6bc8529250328f340c8528f5a21a
-    public void execute(Message msg){
-
-        if(allAcksReceived(msg)) {
-
-            deliver(msg);
-            clearAcks(msg);
-        }
-
-    }*/
 
 /*
     public boolean allAcksReceived(Message msg) {
@@ -157,16 +138,9 @@ public class Server  {
         return numberOfAcks == numberOfActiveProcesses;
 
     }
-<<<<<<< HEAD
 
-
-
-=======
 */
-    public static void main(String[] args) {
-        Server server = new Server(9334, 9000);
-        server.startServer();
-    }
+
     /*
 >>>>>>> e498f01db29b6bc8529250328f340c8528f5a21a
     public void addAckQueue(Acknowledgement ack){

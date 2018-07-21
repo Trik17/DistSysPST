@@ -1,5 +1,7 @@
 package it.polimi.dist;
 
+import it.polimi.dist.Messages.WriteMessage;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
