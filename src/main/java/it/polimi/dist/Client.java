@@ -32,14 +32,18 @@ public class Client {
 
     private void startClient() throws IOException {
         try {
-            while (true) {
+            //while (true) {
                 System.out.println("Eccomi");
-                String inputLine = stIn.nextLine();
+                WriteMessage writeMessage = new WriteMessage();
+                objOut.writeObject(writeMessage);
+                objOut.flush();
+                objOut.reset();
+                /*String inputLine = stIn.nextLine();
                 provaOut.println(inputLine);
-                provaOut.flush();
+                provaOut.flush();*/
                 //String socketLine = provaIn.nextLine();
                 //System.out.println(socketLine);
-            }
+           // }
         } catch (NoSuchElementException e) {
             System.out.println("Connection closed");
         } finally {

@@ -16,7 +16,7 @@ public class ClientHandler implements Runnable  {
     private ObjectOutputStream out;//canali client
     private ObjectInputStream in;
 
-    public ClientHandler(Socket socket, Socket groupSocket) throws IOException {
+    public ClientHandler(Socket socket) throws IOException {
         this.socket = socket;
         this.out = new ObjectOutputStream(this.socket.getOutputStream());//forced to be before than ObjectInputStream otherwise there is a deadlock (no bug)
         this.in = new ObjectInputStream(this.socket.getInputStream());
@@ -28,8 +28,9 @@ public class ClientHandler implements Runnable  {
         try {
             while (true) {
                 try {
-                    Message msg = (Message) in.readObject();
-                    server.addMsgQueue(msg);
+                    Message message = (Message) in.readObject();
+                    server.getMulticastHandler().sendMulti(message);
+                    server.addMsgQueue(message);
 
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
