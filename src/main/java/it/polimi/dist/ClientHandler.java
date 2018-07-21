@@ -18,7 +18,8 @@ public class ClientHandler implements Runnable  {
     private ObjectOutputStream out;//canali client
     private ObjectInputStream in;
 
-    public ClientHandler(Socket socket) throws IOException {
+    public ClientHandler(Server server, Socket socket) throws IOException {
+        this.server = server;
         this.socket = socket;
         this.out = new ObjectOutputStream(this.socket.getOutputStream());//forced to be before than ObjectInputStream otherwise there is a deadlock (no bug)
         this.in = new ObjectInputStream(this.socket.getInputStream());
@@ -26,11 +27,13 @@ public class ClientHandler implements Runnable  {
         this.provaIn = new Scanner(this.socket.getInputStream());
     }
 
+    @Override
     public void run() {
         try {
             while (true) {
                 try {
                     Message message = (Message) in.readObject();
+                    System.out.println("Message received");
                     server.getMulticastHandler().sendMulti(message);
                     //server.addMsgQueue(message);
 
@@ -51,7 +54,6 @@ public class ClientHandler implements Runnable  {
             }
             provaIn.close();
             provaOut.close();*/
-                socket.close();
             }
         }
         catch (IOException e) {

@@ -22,14 +22,15 @@ public class MulticastHandler implements Runnable {
 
     }
 
-    public void start() {
+    @Override
+    public void  run(){
 
         /*Thread outputThread = new Thread();
         outputThread.run();*/ //useless?
 
         while (true) {
             try {
-
+                System.out.println("Multicast Handler");
                 //Create buffer to receive datagram
                 byte[] buffer = new byte[bufferSize];
                 DatagramPacket datagram = new DatagramPacket(buffer, bufferSize);
@@ -67,27 +68,26 @@ public class MulticastHandler implements Runnable {
         }
         provaIn.close();
         provaOut.close();*/
-            multiSocket.close();
         }
-    }
-     public void  run(){
-        while (true){
 
-        }
-     }
+    }
+
 
      public void sendMulti(Message message){
          try {
 
-         //Serialize data message
-         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-         ObjectOutputStream oos = new ObjectOutputStream(baos);
-         oos.writeObject(message);
-         byte[] data = baos.toByteArray();
-         DatagramPacket packet = new DatagramPacket(data, data.length, server.getgroup(), multiSocket.getPort());
 
-         //Send data
-         multiSocket.send(packet);
+            //Serialize data message
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(baos);
+            oos.writeObject(message);
+            byte[] data = baos.toByteArray();
+            DatagramPacket packet = new DatagramPacket(data, data.length, server.getgroup(), multiSocket.getLocalPort());
+
+            //Send data
+            multiSocket.send(packet);
+            System.out.println("sent multi message");
+
 
          } catch (IOException e) {
         e.printStackTrace();
@@ -95,8 +95,8 @@ public class MulticastHandler implements Runnable {
      }
 
     public void ackManagement(){
-        Message ack = new Acknowledgement(server);
-        sendMulti(ack);
+       // Message ack = new Acknowledgement(server);
+        //sendMulti(ack);
 
     }
 /*

@@ -1,7 +1,7 @@
 package it.polimi.dist;
 
 import it.polimi.dist.Messages.Message;
-import it.polimi.dist.Messages.RequestRetransmission;
+//import it.polimi.dist.Messages.RequestRetransmission;
 import it.polimi.dist.Messages.WriteMessage;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ public class Logic{
     private ExecutorService executor; //executor.submit(this);
     private LinkedList<WriteMessage> writeBuffer;
     private LinkedList<WriteMessage> resendBuffer;
-    private LinkedList<Acknowledgement> ackBuffer;
+   // private LinkedList<Acknowledgement> ackBuffer;
 
     public Logic(int serverID, Server server, int serverNumber){
         this.serverNumber=serverNumber;
@@ -31,7 +31,7 @@ public class Logic{
         this.executor = Executors.newCachedThreadPool();
         this.writeBuffer = new LinkedList<WriteMessage>();
         this.resendBuffer = new LinkedList<WriteMessage>();
-        this.ackBuffer = new LinkedList<Acknowledgement>();
+      //  this.ackBuffer = new LinkedList<Acknowledgement>();
     }
 
     public void write(String dataId, int newData) {
@@ -61,9 +61,9 @@ public class Logic{
 
     //TODO fare un messaggio particolare che chieda la ritrasmissione: e un metodo che lo ritrasmette
     private void requestRetransmission(int i) {
-        RequestRetransmission r = new RequestRetransmission();
+      //  RequestRetransmission r = new RequestRetransmission();
         //r.fill();
-        server.sendMulti(r);
+       // server.sendMulti(r);
     }
 
     public LinkedList<WriteMessage> getResendBuffer() {  return resendBuffer;    }

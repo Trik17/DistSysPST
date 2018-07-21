@@ -1,5 +1,6 @@
 package it.polimi.dist.Messages;
 
-public class RequestRetransmission extends Message{
+/*public class RequestRetransmission extends Message{
 
 }
+*/

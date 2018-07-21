@@ -34,18 +34,20 @@ public class Client {
 
     private void startClient() throws IOException {
         try {
-            //while (true) {
-                System.out.println("Eccomi");
-                WriteMessage writeMessage = new WriteMessage();
-                objOut.writeObject(writeMessage);
-                objOut.flush();
-                objOut.reset();
+            System.out.println("Eccomi");
+            WriteMessage writeMessage = new WriteMessage(5);
+            objOut.writeObject(writeMessage);
+            System.out.println("Sent client message");
+            objOut.flush();
+            objOut.reset();
+            while (true) {
+
                 /*String inputLine = stIn.nextLine();
                 provaOut.println(inputLine);
                 provaOut.flush();*/
                 //String socketLine = provaIn.nextLine();
                 //System.out.println(socketLine);
-           // }
+            }
         } catch (NoSuchElementException e) {
             System.out.println("Connection closed");
         } finally {

@@ -81,7 +81,7 @@ public class Server  {
 
             serverSocket = new ServerSocket(port);
             multiSocket = new MulticastSocket(multiPort);
-            multiSocket.setInterface(this.getIP());
+            //multiSocket.setInterface(this.getIP());
             multiSocket.joinGroup(group); //join message?
             System.out.println("Server joined");
 
@@ -92,7 +92,7 @@ public class Server  {
             while (true) {
                 //Client-Server connections
                 Socket socket = serverSocket.accept();
-                clientHandler = new ClientHandler(socket);
+                clientHandler = new ClientHandler(this, socket);
                 executor.submit(clientHandler);
                 if (serverSocket.isClosed()) {
                     break;

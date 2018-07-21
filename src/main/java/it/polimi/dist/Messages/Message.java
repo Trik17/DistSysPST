@@ -1,10 +1,12 @@
 package it.polimi.dist.Messages;
 
 import it.polimi.dist.Server;
+
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
-public abstract class Message {
+public abstract class Message implements Serializable {
 
     protected long timestamp; //needed?
     protected String key;
