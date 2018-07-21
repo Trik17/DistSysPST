@@ -32,6 +32,7 @@ public class ClientHandler implements Runnable  {
                 try {
                     Message message = (Message) in.readObject();
                     server.getMulticastHandler().sendMulti(message);
+                    System.out.println("sent multi message");
                     //server.addMsgQueue(message);
 
                 } catch (ClassNotFoundException e) {

@@ -1,12 +1,16 @@
 package it.polimi.dist.Messages;
 
+import it.polimi.dist.Logic;
 import it.polimi.dist.Server;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
 public abstract class Message {
 
-    protected long timestamp; //needed?
+    protected long timestamp;
+    /*
+    the timestamp is usefull
+     */
     protected String key;
     protected int data;
     protected ArrayList<Integer> vectorClock;
@@ -17,15 +21,12 @@ public abstract class Message {
         this.timestamp = System.currentTimeMillis();
     }
 
-    public void execute(Server server) {
-        //called by server in order  to get and use data and set timestamp/serverNumber
-    }
+    public abstract void execute(Logic logic);
 
-    public void fill(String key, int data, ArrayList<Integer> vectorClock) {
+    public void fill(String key, int data) {
         //filled by Client (set key/data)
         this.data=data;
         this.key=key;
-        this.vectorClock=vectorClock;
     }
 
     public void setVectorClock(ArrayList vectorClock) {

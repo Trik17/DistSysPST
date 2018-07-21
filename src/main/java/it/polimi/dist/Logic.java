@@ -1,7 +1,7 @@
 package it.polimi.dist;
 
 import it.polimi.dist.Messages.Message;
-import it.polimi.dist.Messages.RequestRetransmission;
+//import it.polimi.dist.Messages.RequestRetransmission;
 import it.polimi.dist.Messages.WriteMessage;
 
 import java.util.ArrayList;
@@ -13,35 +13,34 @@ import java.util.concurrent.Executors;
 
 public class Logic{
 
-    private int serverID;
-    private Server server;
-    private Map<Integer,Message> messages;
-    private ArrayList<Integer> vectorClock;
-    private int serverNumber;
+    protected Server server;
+    protected Map<Integer,Message> messages;
+    protected ArrayList<Integer> vectorClock;
+    protected int serverNumber;
     private ExecutorService executor; //executor.submit(this);
-    private LinkedList<WriteMessage> writeBuffer;
-    private LinkedList<WriteMessage> resendBuffer;
-    private LinkedList<Acknowledgement> ackBuffer;
+    protected LinkedList<WriteMessage> writeBuffer;
+    protected LinkedList<WriteMessage> resendBuffer;
+    //protected LinkedList<Acknowledgement> ackBuffer;
 
-    public Logic(int serverID, Server server, int serverNumber){
+    public Logic(Server server, int serverNumber){
         this.serverNumber=serverNumber;
         this.server=server;
-        this.serverID = serverID;
         this.messages = new HashMap<Integer,Message>();
         this.executor = Executors.newCachedThreadPool();
         this.writeBuffer = new LinkedList<WriteMessage>();
         this.resendBuffer = new LinkedList<WriteMessage>();
-        this.ackBuffer = new LinkedList<Acknowledgement>();
+        //this.ackBuffer = new LinkedList<Acknowledgement>();
     }
 
     public void write(String dataId, int newData) {
         /*TODO manda broadcast a tutti e aspetta gli ack
         */
         WriteMessage m = new WriteMessage(this.serverNumber);
-        m.fill(dataId,newData,this.vectorClock);
+        m.fill(dataId,newData);
         writeBuffer.add(m);
-        SendWrite send = new SendWrite(this, server);
+        SendWrite send = new SendWrite(this, server, m);
         executor.submit(send);
+        //forse si può mettere tutto qua il codice della SENDWRITE TODO
     }
 
     //TODO sia per messaggi di scrittura che per gli acks
@@ -61,18 +60,12 @@ public class Logic{
 
     //TODO fare un messaggio particolare che chieda la ritrasmissione: e un metodo che lo ritrasmette
     private void requestRetransmission(int i) {
-        RequestRetransmission r = new RequestRetransmission();
+        //RequestRetransmission r = new RequestRetransmission();
         //r.fill();
-        server.sendMulti(r);
+        //server.sendMulti(r);
     }
 
-    public LinkedList<WriteMessage> getResendBuffer() {  return resendBuffer;    }
 
-    public LinkedList<WriteMessage> getWriteBuffer() {   return writeBuffer;    }
-
-    public void setMessages(Map<Integer, Message> messages) { this.messages = messages;   }
-
-    public Message getMessage(int id) {    return this.messages.get(id);    }
 }
 /*
 TODO:

@@ -1,7 +1,7 @@
 package it.polimi.dist.Messages;
 
 import it.polimi.dist.Server;
-
+/*
 public class ReadMessage extends Message{
 
     public ReadMessage() {
@@ -14,3 +14,4 @@ public class ReadMessage extends Message{
     }
 
 }
+*/

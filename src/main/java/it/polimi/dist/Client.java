@@ -36,7 +36,7 @@ public class Client {
         try {
             //while (true) {
                 System.out.println("Eccomi");
-                WriteMessage writeMessage = new WriteMessage();
+                WriteMessage writeMessage = new WriteMessage(5);
                 objOut.writeObject(writeMessage);
                 objOut.flush();
                 objOut.reset();
