@@ -49,7 +49,7 @@ public class Server  {
         this.lamportClock = 1;
         this.multiPort = multiPort;
         executor = Executors.newCachedThreadPool();
-        this.logic = new Logic(0,this, this.serverNumber);//TODO bisogna dare un numero al server
+        this.logic = new Logic(this, this.serverNumber);//TODO bisogna dare un numero al server
         group = InetAddress.getByName(groupIP);
     }
 
@@ -193,7 +193,7 @@ public class Server  {
     //in realtà il contenuto del messaggio andrebbe messo nella coda dell'applicazione che lo deve eseguire, ma siccome
     //noi non abbiamo applicazioni ma solo un metodo execute nel msg, l'ho lasciato così
     public void deliver(Message msg){
-        msg.execute(this);
+        msg.execute(this.logic);
     }
     /*
     public void clearAcks(Message msg){

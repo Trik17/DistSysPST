@@ -95,7 +95,7 @@ public class MulticastHandler implements Runnable {
      }
 
     public void ackManagement(){
-       // Message ack = new Acknowledgement(server);
+        //Message ack = new Acknowledgement(server);
         //sendMulti(ack);
 
     }

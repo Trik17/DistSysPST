@@ -1,29 +1,24 @@
 package it.polimi.dist;
 
+import it.polimi.dist.Messages.WriteMessage;
+
 public class SendWrite implements Runnable{
     private Logic logic;
     private Server server;
+    private WriteMessage message;
 
-    public SendWrite(Logic logic, Server server){
+    public SendWrite(Logic logic, Server server, WriteMessage message){
         this.logic = logic;
         this.server = server;
+        this.message=message;
     }
 
     public void run() {
         //TODO dopo che verifica che può deve scrivere il messaggio che ha in testa alla lista
         //this.server.getData().write(dataId,newData);
-        synchronized (logic) {
-            while(!logic.getResendBuffer().isEmpty()){
-                /*try {
-                    wait(1); //TODO ok? o un while vuoto o con una wait
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }*/
-            }
-            server.sendMulti(logic.getWriteBuffer().getFirst());
+        message.setVectorClock(VectoClockUtil.addOne(logic));
+        server.sendMulti(message);
+        //logic.writeBuffer.removeFirst();
 
-
-            logic.getWriteBuffer().removeFirst();
-        }
     }
 }

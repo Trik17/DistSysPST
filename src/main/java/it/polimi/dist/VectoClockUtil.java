@@ -3,6 +3,7 @@ package it.polimi.dist;
 import java.util.ArrayList;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.tan;
 
 
 public abstract class VectoClockUtil {
@@ -53,6 +54,19 @@ public abstract class VectoClockUtil {
         //else
         //    return 0;
     }
+
+    public static ArrayList<Integer> addOne(Logic logic) {
+        ArrayList<Integer> res;
+        int temp;
+        synchronized (logic) {
+            res = logic.vectorClock;
+            temp = res.get(logic.serverNumber) + 1;
+            res.set(logic.serverNumber, temp);
+            logic.vectorClock=res;
+        }
+        return res;
+    }
+
 
     public static int hammingDist(ArrayList<Integer> v1, ArrayList<Integer> v2){
         int count=0;

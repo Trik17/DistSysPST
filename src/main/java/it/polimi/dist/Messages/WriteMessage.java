@@ -1,6 +1,6 @@
 package it.polimi.dist.Messages;
 
-import it.polimi.dist.Server;
+import it.polimi.dist.Logic;
 
 public class WriteMessage extends Message {
 
@@ -8,10 +8,10 @@ public class WriteMessage extends Message {
         super(serverNumber);
     }
 
-    @Override
-    public void execute(Server server) {
-        //server.addMsgQueue(this);
 
+    public void execute(Logic logic) {
+        //TODO
     }
+
 
 }
