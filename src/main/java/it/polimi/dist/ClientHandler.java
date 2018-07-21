@@ -1,5 +1,7 @@
 package it.polimi.dist;
 
+import it.polimi.dist.Messages.Message;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -28,9 +30,14 @@ public class ClientHandler implements Runnable  {
         try {
             while (true) {
                 try {
+<<<<<<< HEAD
                     Message message = (Message) in.readObject();
                     server.getMulticastHandler().sendMulti(message);
                     server.addMsgQueue(message);
+=======
+                    Message msg = (Message) in.readObject();
+                    //server.addMsgQueue(msg);
+>>>>>>> e498f01db29b6bc8529250328f340c8528f5a21a
 
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
