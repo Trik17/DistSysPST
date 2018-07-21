@@ -112,7 +112,7 @@ public class Server  {
             while (ee.hasMoreElements())
             {
                 InetAddress i = (InetAddress) ee.nextElement();
-                if(i.getHostAddress().contains("192.168.43"))
+               // if(i.getHostAddress().contains("192.168.43"))
                     //if(i.getHostAddress().contains("192.168.1"))
                     return i;
             }
@@ -217,7 +217,7 @@ public class Server  {
     public static void main(String[] args) {
         Server server = null;
         try {
-            server = new Server(9334, 9000,"228.5.6.7");
+            server = new Server(9334, 9000,"225.4.5.6");
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
