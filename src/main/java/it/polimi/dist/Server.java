@@ -30,6 +30,7 @@ public class Server  {
     private Logic logic;
     private MulticastHandler multicastHandler;
     private ClientHandler clientHandler;
+    private int serverNumber;
 
     private int processNumber;
 
@@ -48,7 +49,7 @@ public class Server  {
         this.lamportClock = 1;
         this.multiPort = multiPort;
         executor = Executors.newCachedThreadPool();
-        this.logic = new Logic(0,this);
+        this.logic = new Logic(0,this, this.serverNumber);//TODO bisogna dare un numero al server
         group = InetAddress.getByName(groupIP);
     }
 
