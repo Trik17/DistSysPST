@@ -4,8 +4,8 @@ import it.polimi.dist.Server;
 
 public class WriteMessage extends Message {
 
-    public WriteMessage() {
-        super();
+    public WriteMessage(int serverNumber) {
+        super(serverNumber);
     }
 
     @Override

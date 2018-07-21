@@ -17,15 +17,17 @@ public class Logic{
     private Server server;
     private Map<Integer,Message> messages;
     private ArrayList<Integer> vectorClock;
+    private int serverNumber;
     private ExecutorService executor; //executor.submit(this);
     private LinkedList<WriteMessage> writeBuffer;
     private LinkedList<WriteMessage> resendBuffer;
     private LinkedList<Acknowledgement> ackBuffer;
 
-    public Logic(int serverID, Server server){
+    public Logic(int serverID, Server server, int serverNumber){
+        this.serverNumber=serverNumber;
         this.server=server;
         this.serverID = serverID;
-        this.messages = new HashMap();
+        this.messages = new HashMap<Integer,Message>();
         this.executor = Executors.newCachedThreadPool();
         this.writeBuffer = new LinkedList<WriteMessage>();
         this.resendBuffer = new LinkedList<WriteMessage>();
@@ -35,8 +37,8 @@ public class Logic{
     public void write(String dataId, int newData) {
         /*TODO manda broadcast a tutti e aspetta gli ack
         */
-        WriteMessage m = new WriteMessage();
-        m.fill(dataId,newData);
+        WriteMessage m = new WriteMessage(this.serverNumber);
+        m.fill(dataId,newData,this.vectorClock);
         writeBuffer.add(m);
         SendWrite send = new SendWrite(this, server);
         executor.submit(send);

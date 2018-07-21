@@ -12,10 +12,6 @@ public abstract class Message {
     protected ArrayList<Integer> vectorClock;
     protected int serverNumber; //position in the vector clock of the message's server
 
-    public Message() {
-        this.timestamp = System.currentTimeMillis();
-    }
-
     public Message(int serverNumber){
         this.serverNumber=serverNumber;
         this.timestamp = System.currentTimeMillis();
@@ -25,10 +21,11 @@ public abstract class Message {
         //called by server in order  to get and use data and set timestamp/serverNumber
     }
 
-    public void fill(String key, int data) {
+    public void fill(String key, int data, ArrayList<Integer> vectorClock) {
         //filled by Client (set key/data)
         this.data=data;
         this.key=key;
+        this.vectorClock=vectorClock;
     }
 
     public void setVectorClock(ArrayList vectorClock) {
