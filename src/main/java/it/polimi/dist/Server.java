@@ -52,13 +52,7 @@ public class Server  {
     }
 
 
-    public int read(String dataId) {
-        return this.data.read(dataId);
-    }
 
-    public void write(String dataId, int newData) {
-        logic.write(dataId,newData);
-    }
 
     public void sendMulti(Message message){
         //TODO

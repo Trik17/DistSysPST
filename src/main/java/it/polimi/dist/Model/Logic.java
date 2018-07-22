@@ -43,7 +43,7 @@ public class Logic{
     }
 
     //TODO sia per messaggi di scrittura che per gli acks
-    public void received(Message message){
+    public void receive(Message message){
         message.execute(this);
         checkAckBuffer();
     }
@@ -83,7 +83,7 @@ Using vector clocks:
 sending a message. On receive, just merge,
 not increment
 • Hold a reply until the previous messages
-are received:
+are receive:
 – ts(r)[j] = Vk[j]+1
 – ts(r)[i] ≤ Vk[i] for all i ≠ j
 

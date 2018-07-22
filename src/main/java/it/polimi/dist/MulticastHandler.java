@@ -35,13 +35,13 @@ public class MulticastHandler implements Runnable {
                 byte[] buffer = new byte[bufferSize];
                 DatagramPacket datagram = new DatagramPacket(buffer, bufferSize);
                 multiSocket.receive(datagram);
-                System.out.println("packet received");
+                System.out.println("packet receive");
 
                 //Deserialize object
                 ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
                 ObjectInputStream ois = new ObjectInputStream(bais);
                 Message message = (Message) ois.readObject();
-                server.getLogic().received(message);
+                server.getLogic().receive(message);
                 System.out.println("Message deserialized");
 
                 //server.addMsgQueue(msg);
