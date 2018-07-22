@@ -16,6 +16,18 @@ public abstract class VectoClockUtil {
         return true;
     }
 
+    public static boolean outOfSequence(ArrayList<Integer> vMessage, ArrayList<Integer> vClock){
+
+        //todo
+        return false;
+    }
+
+    public static int[] missedMessage (ArrayList<Integer> vMessage, ArrayList<Integer> vClock){
+        int index[] = new int[2];
+        //todo
+        return index;
+    }
+
     /*
     it returns:
      0 if v1 and v2 are not comparable (or IF THEY ARE EQUAL-> control this before)
