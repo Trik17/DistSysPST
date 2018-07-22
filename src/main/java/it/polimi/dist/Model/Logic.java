@@ -42,8 +42,8 @@ public class Logic{
         //forse si può mettere tutto qua il codice della SENDWRITE
     }
 
-    //TODO sia per messaggi di scrittura che per gli acks
     public void received(Message message){
+        //outOfSequence(message);?? todo -> selvalo e poi eseguilo dopo
         message.execute(this);
         checkAckBuffer();
     }
@@ -63,7 +63,21 @@ public class Logic{
     }
 
     public void checkAckBuffer(){
-        //TODO
+        //TODO si può migliorare come compessità??
+        int count=0;
+        for (int i = 0; i < writeBuffer.size(); i++) {
+            for (int j = 0; j < ackBuffer.size(); j++) {
+                if (ackBuffer.get(j).writeTimestamp==writeBuffer.get(i).timestamp
+                        && ackBuffer.get(j).writeServerNumber==writeBuffer.get(i).serverNumber)
+                    count++;
+            }
+            if (count>= vectorClock.size())
+                performWrite(writeBuffer.get(i));
+        }
+    }
+
+    private void performWrite(WriteMessage writeMessage){
+        server.getData().write(writeMessage.key,writeMessage.data);
     }
 
     public Server getServer() {
@@ -71,7 +85,6 @@ public class Logic{
     }
 }
 /*
-TODO:
 ogni server parte da 0
 ogni volta che si aggiunge un server aggiungo un nuovo elemento al vectorClock
 ad ogni messaggio inviato (ad ogni write inserita dall'utente
@@ -87,8 +100,10 @@ are received:
 – ts(r)[j] = Vk[j]+1
 – ts(r)[i] ≤ Vk[i] for all i ≠ j
 
-
-
-
+TODO 1: il rinvio di uno perso
+--------------------
+TODO 2: server che cadono e devono riavviarsi
+TODO 3: server sconosciuti
 
  */
+
