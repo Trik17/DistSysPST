@@ -1,6 +1,4 @@
-package it.polimi.dist.Messages;
-
-import it.polimi.dist.Logic;
+package it.polimi.dist.Model;
 
 public class WriteMessage extends Message {
 

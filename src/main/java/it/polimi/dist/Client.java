@@ -1,6 +1,6 @@
 package it.polimi.dist;
 
-import it.polimi.dist.Messages.WriteMessage;
+import it.polimi.dist.Model.WriteMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

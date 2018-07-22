@@ -1,13 +1,11 @@
 package it.polimi.dist;
 
-import it.polimi.dist.Messages.Message;
+import it.polimi.dist.Model.Logic;
+import it.polimi.dist.Model.Message;
 
 import java.io.IOException;
 import java.net.*;
-import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.net.InetAddress;

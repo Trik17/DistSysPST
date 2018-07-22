@@ -1,9 +1,7 @@
-package it.polimi.dist;
+package it.polimi.dist.Model;
 
-import it.polimi.dist.Messages.Acknowledgement;
-import it.polimi.dist.Messages.Message;
 //import it.polimi.dist.Messages.RequestRetransmission;
-import it.polimi.dist.Messages.WriteMessage;
+import it.polimi.dist.Server;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,13 +13,13 @@ import java.util.concurrent.Executors;
 public class Logic{
 
     protected Server server;
-    public Map<Integer,Message> messages;
-    public ArrayList<Integer> vectorClock;
-    public int serverNumber;
+    protected Map<Integer,Message> messages;
+    protected ArrayList<Integer> vectorClock;
+    protected int serverNumber;
     private ExecutorService executor; //executor.submit(this);
-    public LinkedList<WriteMessage> writeBuffer;
-    public LinkedList<WriteMessage> resendBuffer;
-    public LinkedList<Acknowledgement> ackBuffer;
+    protected LinkedList<WriteMessage> writeBuffer;
+    protected LinkedList<WriteMessage> resendBuffer;
+    protected LinkedList<Acknowledgement> ackBuffer;
 
     public Logic(Server server, int serverNumber){
         this.serverNumber=serverNumber;
