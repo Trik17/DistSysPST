@@ -69,29 +69,26 @@ public class Logic{
     }
 
     public void receive(Message message){
-        /*if(VectoClockUtil.outOfSequence(message.vectorClock,this.vectorClock)) {
+        if(VectoClockUtil.outOfSequence(message.vectorClock,this.vectorClock, message.serverNumber)) {
             int index[] = new int[2];
             index = VectoClockUtil.missedMessage(message.vectorClock,this.vectorClock);
             queue.put(index,message);
-            //requestRetransmission(i);//ma deve aspettare un attimo magari?
+            //todo requestRetransmission(i);//ma deve aspettare un attimo magari?
             return;
-        }*/
+        }
         message.execute(this);
         checkAckBuffer();
-        //if(filledMessage()){
-
-        //}
+        //todo if(filledMessage()){        }
     }
 
-    //TODO fare un messaggio particolare che chieda la ritrasmissione: e un metodo che lo ritrasmette
     private void requestRetransmission(int i) {
         //RequestRetransmission r = new RequestRetransmission();
         //r.fill();
+        //TODO fare un messaggio particolare che chieda la ritrasmissione: e un metodo che lo ritrasmette
         //server.sendMulti(r);
     }
 
     public void checkAckBuffer(){
-        //TODO si può migliorare come compessità??
         int count=0;
         for (int i = 0; i < writeBuffer.size(); i++) {
             for (int j = 0; j < ackBuffer.size(); j++) {
@@ -109,6 +106,10 @@ public class Logic{
     }
 
     public Server getServer() {   return server;    }
+
+    public ArrayList<Integer> getVectorClock() {
+        return vectorClock;
+    }
 }
 /*
 ogni server parte da 0
