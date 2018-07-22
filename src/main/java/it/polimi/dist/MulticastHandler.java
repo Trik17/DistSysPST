@@ -35,7 +35,7 @@ public class MulticastHandler implements Runnable {
                 byte[] buffer = new byte[bufferSize];
                 DatagramPacket datagram = new DatagramPacket(buffer, bufferSize);
                 multiSocket.receive(datagram);
-                System.out.println("packet receive");
+                System.out.println("Packet receive");
 
                 //Deserialize object
                 ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
@@ -77,12 +77,11 @@ public class MulticastHandler implements Runnable {
 
      public void sendMulti(Message message){
          try {
-
-
             //Serialize data message
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ObjectOutputStream oos = new ObjectOutputStream(baos);
             oos.writeObject(message);
+            oos.flush();
             byte[] data = baos.toByteArray();
             DatagramPacket packet = new DatagramPacket(data, data.length, server.getgroup(), multiSocket.getLocalPort());
 

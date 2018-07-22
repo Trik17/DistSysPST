@@ -12,7 +12,7 @@ public abstract class Message implements Serializable {
     protected int serverNumber; //position in the vector clock of the message's server
 
     public Message(int serverNumber){
-        this.serverNumber=serverNumber;
+        this.serverNumber = serverNumber;
         this.timestamp = System.currentTimeMillis();
     }
 
@@ -20,8 +20,8 @@ public abstract class Message implements Serializable {
 
     public void fill(String key, int data) {
         //filled by Client (set key/data)
-        this.data=data;
-        this.key=key;
+        this.data = data;
+        this.key = key;
     }
 
     public void setVectorClock(ArrayList vectorClock) {
@@ -38,5 +38,34 @@ public abstract class Message implements Serializable {
 
     public int getServerNumber() {
         return serverNumber;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public int getData() {
+        return data;
+    }
+
+    public void setData(int data) {
+        this.data = data;
+    }
+
+
+    public void setServerNumber(int serverNumber) {
+        this.serverNumber = serverNumber;
     }
 }
