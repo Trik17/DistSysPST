@@ -215,6 +215,90 @@ public class Server  {
         return clientHandler;
     }
 
+    public int getNumberOfActiveProcesses() {
+        return numberOfActiveProcesses;
+    }
+
+    public void setNumberOfActiveProcesses(int numberOfActiveProcesses) {
+        this.numberOfActiveProcesses = numberOfActiveProcesses;
+    }
+
+    public int getNumberOfServer() {
+        return numberOfServer;
+    }
+
+    public void setNumberOfServer(int numberOfServer) {
+        this.numberOfServer = numberOfServer;
+    }
+
+    public void setData(DataStorage data) {
+        this.data = data;
+    }
+
+    public ExecutorService getExecutor() {
+        return executor;
+    }
+
+    public void setExecutor(ExecutorService executor) {
+        this.executor = executor;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    public int getMultiPort() {
+        return multiPort;
+    }
+
+    public void setMultiPort(int multiPort) {
+        this.multiPort = multiPort;
+    }
+
+    public InetAddress getGroup() {
+        return group;
+    }
+
+    public void setGroup(InetAddress group) {
+        this.group = group;
+    }
+
+    public Logic getLogic() {
+        return logic;
+    }
+
+    public void setLogic(Logic logic) {
+        this.logic = logic;
+    }
+
+    public void setMulticastHandler(MulticastHandler multicastHandler) {
+        this.multicastHandler = multicastHandler;
+    }
+
+    public void setClientHandler(ClientHandler clientHandler) {
+        this.clientHandler = clientHandler;
+    }
+
+    public int getServerNumber() {
+        return serverNumber;
+    }
+
+    public void setServerNumber(int serverNumber) {
+        this.serverNumber = serverNumber;
+    }
+
+    public void setProcessNumber(int processNumber) {
+        this.processNumber = processNumber;
+    }
+
+    public void setLamportClock(int lamportClock) {
+        this.lamportClock = lamportClock;
+    }
+
     public static void main(String[] args) {
         Server server = null;
         try {

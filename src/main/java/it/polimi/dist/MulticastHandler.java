@@ -40,7 +40,9 @@ public class MulticastHandler implements Runnable {
                 //Deserialize object
                 ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
                 ObjectInputStream ois = new ObjectInputStream(bais);
-                Message msg = (Message) ois.readObject();
+                Message message = (Message) ois.readObject();
+                server.getLogic().received(message);
+                System.out.println("Message deserialized");
 
                 //server.addMsgQueue(msg);
                 //int timeStamp = msg.getTimeStamp();
