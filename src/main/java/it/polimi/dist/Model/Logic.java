@@ -77,7 +77,7 @@ public class Logic{
     }
 
     private void performWrite(WriteMessage writeMessage){
-        server.getData().write(writeMessage.key,writeMessage.data);
+        server.getStorage().write(writeMessage.key,writeMessage.data);
     }
 
     public Server getServer() {

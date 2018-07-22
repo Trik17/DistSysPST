@@ -2,17 +2,14 @@ package it.polimi.dist;
 
 import it.polimi.dist.Model.*;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-public class Client {
+public class Client implements Serializable {
     private String ip;
     private int port;
     private Socket socketclient;
@@ -88,7 +85,7 @@ public class Client {
 
     public void sendToServer(ClientMessage clientMessage){
         try {
-            objOut.writeObject(this);
+            objOut.writeObject(clientMessage);
             objOut.flush();
             objOut.reset();
         } catch (IOException e) {

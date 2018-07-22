@@ -1,5 +1,6 @@
 package it.polimi.dist;
 
+import it.polimi.dist.Model.JoinMessage;
 import it.polimi.dist.Model.Logic;
 import it.polimi.dist.Model.Message;
 
@@ -18,7 +19,7 @@ public class Server  {
 
     private int numberOfServer; //TODO
 
-    private DataStorage data;
+    private DataStorage storage;
     private ExecutorService executor;
     private int port; //port for Server-Client Socket
     private int multiPort; //port for Server Multicast Socket
@@ -42,7 +43,7 @@ public class Server  {
 
 
     public Server(int port, int multiPort, String groupIP) throws UnknownHostException {
-        //this.data = new DataStorage();
+        this.storage = new DataStorage();
         this.port = port;
         this.lamportClock = 1;
         this.multiPort = multiPort;
@@ -59,8 +60,8 @@ public class Server  {
     }
 
 
-    public DataStorage getData() {
-        return data;
+    public DataStorage getStorage() {
+        return storage;
     }
 
     public void startServer() {
@@ -74,12 +75,14 @@ public class Server  {
             serverSocket = new ServerSocket(port);
             multiSocket = new MulticastSocket(multiPort);
             //multiSocket.setInterface(this.getIP());
-            multiSocket.joinGroup(group); //join message?
+            multiSocket.joinGroup(group);
             System.out.println("Server joined");
 
 
             multicastHandler = new MulticastHandler(this, multiSocket);
             new Thread(multicastHandler).start(); //start Multicast Handling
+            JoinMessage joinMessage = new JoinMessage();
+            multicastHandler.sendMulti(joinMessage);
 
             while (true) {
                 //Client-Server connections
@@ -223,8 +226,8 @@ public class Server  {
         this.numberOfServer = numberOfServer;
     }
 
-    public void setData(DataStorage data) {
-        this.data = data;
+    public void setStorage(DataStorage storage) {
+        this.storage = storage;
     }
 
     public ExecutorService getExecutor() {

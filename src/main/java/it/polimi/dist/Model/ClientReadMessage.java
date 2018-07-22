@@ -24,7 +24,7 @@ public class ClientReadMessage extends ClientMessage {
 
     @Override
     public void execute(Logic logic) {
-        result = logic.getServer().getData().read(key);
+        result = logic.getServer().getStorage().read(key);
         logic.getServer().getClientHandler().sendToClient(this);
     }
 }
