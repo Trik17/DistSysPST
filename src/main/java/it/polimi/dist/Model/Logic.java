@@ -1,34 +1,63 @@
 package it.polimi.dist.Model;
 
-//import it.polimi.dist.Messages.RequestRetransmission;
 import it.polimi.dist.Server;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class Logic{
 
     protected Server server;
-    protected Map<Integer,Message> messages;
+    //protected Map<Integer,Message> messages;
     protected ArrayList<Integer> vectorClock;
     protected int serverNumber;
-    private ExecutorService executor; //executor.submit(this);
+    //private ExecutorService executor; //executor.submit(this);
     protected LinkedList<WriteMessage> writeBuffer;
     protected LinkedList<WriteMessage> resendBuffer;
     protected LinkedList<Acknowledgement> ackBuffer;
+    private Map<int[],Message> queue;
 
     public Logic(Server server, int serverNumber){
         this.serverNumber=serverNumber;
         this.server=server;
-        this.messages = new HashMap<Integer,Message>();
-        this.executor = Executors.newCachedThreadPool();
+        //this.messages = new HashMap<Integer,Message>();
+        //this.executor = Executors.newCachedThreadPool();
         this.writeBuffer = new LinkedList<WriteMessage>();
         this.resendBuffer = new LinkedList<WriteMessage>();
-        //this.ackBuffer = new LinkedList<Acknowledgement>();
+        this.ackBuffer = new LinkedList<Acknowledgement>();
+        this.queue = new HashMap<int[], Message>();
+        this.vectorClock = new ArrayList<Integer>();
+    }
+
+    //TODO -> collegare a server santa
+    public void inizializeVector(){
+        //TODO
+    }
+
+    //TODO -> collegare a server santa
+    public void inizializeData(){
+        //todo
+    }
+
+    //TODO -> collegare a server santa
+    public void addServer(){
+        //TODO
+        //e le write già pending??
+        //e per questo bisogna mandare qualche conferma!!!
+
+    }
+
+    //TODO -> collegare a server santa
+    public void removeServer(int serverNumber){
+        for (int i = 0; i < writeBuffer.size(); i++) {
+            if(writeBuffer.get(i).serverNumber==serverNumber)
+                writeBuffer.remove(i);
+        }
+        for (int j = 0; j < ackBuffer.size(); j++) {
+            if(ackBuffer.get(j).serverNumber==serverNumber)
+                ackBuffer.remove(j);
+        }
     }
 
     public void write(String dataId, int newData) {
@@ -37,33 +66,29 @@ public class Logic{
         writeBuffer.add(message);
         message.setVectorClock(VectoClockUtil.addOne(this));
         server.sendMulti(message);
-        //SendWrite send = new SendWrite(this, server, m);
-        //executor.submit(send);
-        //forse si può mettere tutto qua il codice della SENDWRITE
     }
 
-    //TODO sia per messaggi di scrittura che per gli acks
     public void receive(Message message){
+        if(VectoClockUtil.outOfSequence(message.vectorClock,this.vectorClock, message.serverNumber)) {
+            int index[] = new int[2];
+            index = VectoClockUtil.missedMessage(message.vectorClock,this.vectorClock);
+            queue.put(index,message);
+            //todo requestRetransmission(i);//ma deve aspettare un attimo magari?
+            return;
+        }
         message.execute(this);
         checkAckBuffer();
+        //todo if(filledMessage()){        }
     }
 
-    //TODO prima aspetto un certo tempo
-    private void outOfSequence(int id) {
-        for (int i = id; i < id; i++) {
-            requestRetransmission(i);
-        }
-    }
-
-    //TODO fare un messaggio particolare che chieda la ritrasmissione: e un metodo che lo ritrasmette
     private void requestRetransmission(int i) {
         //RequestRetransmission r = new RequestRetransmission();
         //r.fill();
+        //TODO fare un messaggio particolare che chieda la ritrasmissione: e un metodo che lo ritrasmette
         //server.sendMulti(r);
     }
 
     public void checkAckBuffer(){
-        //TODO si può migliorare come compessità??
         int count=0;
         for (int i = 0; i < writeBuffer.size(); i++) {
             for (int j = 0; j < ackBuffer.size(); j++) {
@@ -80,8 +105,10 @@ public class Logic{
         server.getStorage().write(writeMessage.key,writeMessage.data);
     }
 
-    public Server getServer() {
-        return server;
+    public Server getServer() {   return server;    }
+
+    public ArrayList<Integer> getVectorClock() {
+        return vectorClock;
     }
 }
 /*
@@ -101,9 +128,12 @@ are receive:
 – ts(r)[i] ≤ Vk[i] for all i ≠ j
 
 TODO 1: il rinvio di uno perso
+todo 4: inizializzazione del vector clock
 --------------------
-TODO 2: server che cadono e devono riavviarsi
-TODO 3: server sconosciuti
+TODO 2: server che cadono e devono riavviarsi e sicronizzare i dati
+        (e se cadono devo toglierli dai vectorclock?)
+TODO 3: server sconosciuti, va bene quel che abbiamo fatto?
 
+TODO se nella read chiedo un elemento che non esiste : restituire qualcosa es.0 o -1 o un'allerta
  */
 

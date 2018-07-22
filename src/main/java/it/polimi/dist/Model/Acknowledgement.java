@@ -14,14 +14,15 @@ public class Acknowledgement extends Message {
     }
 
     public void execute(Logic logic) {
-        if(logic.ackBuffer.contains(this)) //does it works?todo
-            return;
         //otherwise:
-        /*for (int i = 0; i < logic.ackBuffer.size(); i++) {
+        /*if(logic.ackBuffer.contains(this)) //does it works?todo
+            return;
+        */
+        for (int i = 0; i < logic.ackBuffer.size(); i++) {
             if (logic.ackBuffer.get(i).timestamp==this.timestamp
                     && logic.ackBuffer.get(i).serverNumber==this.serverNumber)
                 return;
-        }*/
+        }
         //todo
         logic.ackBuffer.add(this);
     }
