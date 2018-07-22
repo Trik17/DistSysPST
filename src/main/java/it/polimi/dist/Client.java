@@ -1,6 +1,6 @@
 package it.polimi.dist;
 
-import it.polimi.dist.Model.WriteMessage;
+import it.polimi.dist.Model.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -35,12 +35,11 @@ public class Client {
     private void startClient() throws IOException {
         try {
             System.out.println("Eccomi");
-            WriteMessage writeMessage = new WriteMessage(5);
-            objOut.writeObject(writeMessage);
-            System.out.println("Sent client message");
-            objOut.flush();
-            objOut.reset();
             while (true) {
+            ClientMessage clientMessage = createMessage();
+            clientMessage.inputFromClient(this);
+            System.out.println("Sent Client message");
+
 
                 /*String inputLine = stIn.nextLine();
                 provaOut.println(inputLine);
@@ -58,6 +57,111 @@ public class Client {
         }
     }
 
+    public ClientMessage createMessage(){
+        System.out.println("Which action do you want to execute? \n (R) Read - (W) Write");
+        Scanner scanner = new Scanner(System.in);
+        String choice = scanner.next();
+        if ("W".equals(choice)) {
+            ClientWriteMessage clientWriteMessage = new ClientWriteMessage();
+            return clientWriteMessage;
+
+        } else if ("R".equals(choice)) {
+            ClientReadMessage clientReadMessage = new ClientReadMessage();
+            return clientReadMessage;
+
+        } else {
+            System.out.println("Invalid Input, ");
+            return createMessage();
+        }
+    }
+
+    public void receiveRead() {
+        try {
+            Message receivedMessage = (Message) objIn.readObject();
+            System.out.println("Value: " + receivedMessage.getData());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendToServer(ClientMessage clientMessage){
+        try {
+            objOut.writeObject(this);
+            objOut.flush();
+            objOut.reset();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    public Socket getSocketclient() {
+        return socketclient;
+    }
+
+    public void setSocketclient(Socket socketclient) {
+        this.socketclient = socketclient;
+    }
+
+    public PrintWriter getProvaOut() {
+        return provaOut;
+    }
+
+    public void setProvaOut(PrintWriter provaOut) {
+        this.provaOut = provaOut;
+    }
+
+    public Scanner getProvaIn() {
+        return provaIn;
+    }
+
+    public void setProvaIn(Scanner provaIn) {
+        this.provaIn = provaIn;
+    }
+
+    public ObjectInputStream getObjIn() {
+        return objIn;
+    }
+
+    public void setObjIn(ObjectInputStream objIn) {
+        this.objIn = objIn;
+    }
+
+    public ObjectOutputStream getObjOut() {
+        return objOut;
+    }
+
+    public void setObjOut(ObjectOutputStream objOut) {
+        this.objOut = objOut;
+    }
+
+    public Scanner getStIn() {
+        return stIn;
+    }
+
+    public void setStIn(Scanner stIn) {
+        this.stIn = stIn;
+    }
+
+
     public static void main(String[] args) {
         try {
             Client client = new Client(InetAddress.getLocalHost().getHostAddress(), 9334);
@@ -69,4 +173,6 @@ public class Client {
             e.printStackTrace();
         }
     }
+
+
 }

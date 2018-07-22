@@ -1,14 +1,26 @@
 package it.polimi.dist.Model;
 
-import it.polimi.dist.Server;
+import it.polimi.dist.Client;
 
-public class ClientWriteMessage extends Message{
+import java.io.IOException;
+import java.util.Scanner;
+
+public class ClientWriteMessage extends ClientMessage{
 
 
     public ClientWriteMessage() {
-        super(-1);
+        super();
     }
 
+    @Override
+    public void inputFromClient(Client client) throws IOException {
+        System.out.println("Insert the data ID you want to modify");
+        Scanner scanner = new Scanner(System.in);
+        key = scanner.next();
+        System.out.println("Insert the value you want to write");
+        data = scanner.nextInt();
+        client.sendToServer(this);
+    }
 
 
     @Override
