@@ -1,8 +1,7 @@
-package it.polimi.dist;
+package it.polimi.dist.Model;
 
-import it.polimi.dist.Messages.Message;
 //import it.polimi.dist.Messages.RequestRetransmission;
-import it.polimi.dist.Messages.WriteMessage;
+import it.polimi.dist.Server;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +19,7 @@ public class Logic{
     private ExecutorService executor; //executor.submit(this);
     protected LinkedList<WriteMessage> writeBuffer;
     protected LinkedList<WriteMessage> resendBuffer;
-    //protected LinkedList<Acknowledgement> ackBuffer;
+    protected LinkedList<Acknowledgement> ackBuffer;
 
     public Logic(Server server, int serverNumber){
         this.serverNumber=serverNumber;
@@ -33,22 +32,20 @@ public class Logic{
     }
 
     public void write(String dataId, int newData) {
-        /*TODO manda broadcast a tutti e aspetta gli ack
-        */
-        WriteMessage m = new WriteMessage(this.serverNumber);
-        m.fill(dataId,newData);
-        writeBuffer.add(m);
-        SendWrite send = new SendWrite(this, server, m);
-        executor.submit(send);
-        //forse si può mettere tutto qua il codice della SENDWRITE TODO
+        WriteMessage message = new WriteMessage(this.serverNumber);
+        message.fill(dataId,newData);
+        writeBuffer.add(message);
+        message.setVectorClock(VectoClockUtil.addOne(this));
+        server.sendMulti(message);
+        //SendWrite send = new SendWrite(this, server, m);
+        //executor.submit(send);
+        //forse si può mettere tutto qua il codice della SENDWRITE
     }
 
     //TODO sia per messaggi di scrittura che per gli acks
-    public void received(Message m){
-        //if (m.getID()< serverID)
-          //  return;
-        //if (m.getID()!= serverID +1)
-         //   outOfSequence(m.getID());
+    public void received(Message message){
+        message.execute(this);
+        checkAckBuffer();
     }
 
     //TODO prima aspetto un certo tempo
@@ -65,7 +62,13 @@ public class Logic{
         //server.sendMulti(r);
     }
 
+    public void checkAckBuffer(){
+        //TODO
+    }
 
+    public Server getServer() {
+        return server;
+    }
 }
 /*
 TODO:

@@ -1,18 +1,11 @@
-package it.polimi.dist.Messages;
-
-import it.polimi.dist.Logic;
-import it.polimi.dist.Server;
+package it.polimi.dist.Model;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 
 public abstract class Message implements Serializable {
 
     protected long timestamp;
-    /*
-    the timestamp is usefull
-     */
     protected String key;
     protected int data;
     protected ArrayList<Integer> vectorClock;

@@ -1,9 +1,8 @@
-package it.polimi.dist;
+package it.polimi.dist.Model;
 
 import java.util.ArrayList;
 
 import static java.lang.Math.abs;
-import static java.lang.Math.tan;
 
 
 public abstract class VectoClockUtil {

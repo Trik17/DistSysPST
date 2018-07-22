@@ -1,4 +1,4 @@
-package it.polimi.dist.Messages;
+package it.polimi.dist.Model;
 
 import it.polimi.dist.Server;
 /*

@@ -1,4 +1,4 @@
-package it.polimi.dist;
+/*package it.polimi.dist;
 
 import it.polimi.dist.Messages.WriteMessage;
 
@@ -22,3 +22,4 @@ public class SendWrite implements Runnable{
 
     }
 }
+*/
