@@ -10,9 +10,6 @@ import java.util.ArrayList;
 public abstract class Message implements Serializable {
 
     protected long timestamp;
-    /*
-    the timestamp is usefull
-     */
     protected String key;
     protected int data;
     protected ArrayList<Integer> vectorClock;

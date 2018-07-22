@@ -8,10 +8,13 @@ public class WriteMessage extends Message {
         super(serverNumber);
     }
 
-
     public void execute(Logic logic) {
         //TODO
+        logic.writeBuffer.add(this);
+        Acknowledgement ack= new Acknowledgement(logic.serverNumber);
+        ack.fillReferences(this.timestamp,this.serverNumber);
+        logic.ackBuffer.add(ack);
+        logic.getServer().sendMulti(ack);
     }
-
 
 }
