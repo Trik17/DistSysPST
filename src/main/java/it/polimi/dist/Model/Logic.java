@@ -40,12 +40,19 @@ public class Logic{
         //todo
     }
 
-    //TODO -> collegare a server santa
     public void addServer(){
-        //TODO
-        //e le write già pending??
-        //e per questo bisogna mandare qualche conferma!!!
+        for (int i = 0; i < vectorClock.size(); i++) {
+            vectorClock.set(i,0);
+        }
+        vectorClock.add(0);
+        ackBuffer.clear();
+        queue.clear();
+        for (int i = 0; i < writeBuffer.size(); i++) {
+            if (writeBuffer.get(i).serverNumber!=this.serverNumber)
+                writeBuffer.remove(i);
+        }
 
+        //TODO aspettare qualche secondo e iniziare a inviare di nuovo le write vecchie
     }
 
     //TODO -> collegare a server santa
@@ -85,6 +92,7 @@ public class Logic{
         //todo if(filledMessage()){        }
     }
 
+    //TODO
     private void requestRetransmission(int i) {
         //RequestRetransmission r = new RequestRetransmission();
         //r.fill();
@@ -146,7 +154,7 @@ todo alla connessione invirsi le pending, data storage e vector clock
 TODO 2: server che cadono e devono riavviarsi e sicronizzare i dati
         (e se cadono devo toglierli dai vectorclock?)
 TODO 3: server sconosciuti, va bene quel che abbiamo fatto?
-
+TODO timer di ritrasmissione
 TODO se nella read chiedo un elemento che non esiste : restituire qualcosa es.0 o -1 o un'allerta
  */
 
