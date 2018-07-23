@@ -47,9 +47,11 @@ public class Server  {
         this.port = port;
         this.lamportClock = 1;
         this.multiPort = multiPort;
-        executor = Executors.newCachedThreadPool();
+        this.executor = Executors.newCachedThreadPool();
+        this.serverNumber = -1; //until it is unknown the real number inside the group
+        this.group = InetAddress.getByName(groupIP);
         this.logic = new Logic(this, this.serverNumber);//TODO bisogna dare un numero al server
-        group = InetAddress.getByName(groupIP);
+
     }
 
 
