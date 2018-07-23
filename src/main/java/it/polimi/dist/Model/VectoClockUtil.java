@@ -25,9 +25,9 @@ public abstract class VectoClockUtil {
     index[0] -> serverNumber
     index[1] -> timestamp
      */
-    public static int[] missedMessage (ArrayList<Integer> vMessage, ArrayList<Integer> vClock){
-        int index[] = new int[2];
-        //todo
+    public static long[] missedMessage (ArrayList<Integer> vMessage, ArrayList<Integer> vClock){
+        long index[] = new long[2];
+        //todo---------------!!!!!!!!!!!!!!!!!!!!!!!!!!!
         return index;
     }
 

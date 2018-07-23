@@ -16,7 +16,10 @@ public class Logic{
     protected LinkedList<WriteMessage> writeBuffer;
     protected LinkedList<WriteMessage> resendBuffer;
     protected LinkedList<Acknowledgement> ackBuffer;
-    private Map<int[],Message> queue;
+    private Map<long[],Message> queue;/*
+    index[0] -> serverNumber
+    index[1] -> timestamp
+     */
 
     public Logic(Server server, int serverNumber){
         this.serverNumber=serverNumber;
@@ -26,7 +29,7 @@ public class Logic{
         this.writeBuffer = new LinkedList<WriteMessage>();
         this.resendBuffer = new LinkedList<WriteMessage>();
         this.ackBuffer = new LinkedList<Acknowledgement>();
-        this.queue = new HashMap<int[], Message>();
+        this.queue = new HashMap<long[], Message>();
         this.vectorClock = new ArrayList<Integer>();
         inizializeVectorClock(serverNumber+1);
     }
@@ -84,15 +87,25 @@ public class Logic{
                 else
                     return;
         if(!message.isNetMessage && VectoClockUtil.outOfSequence(message.vectorClock,this.vectorClock, message.serverNumber)) {
-            int index[] = new int[2];
+            long index[] = new long[2];
             index = VectoClockUtil.missedMessage(message.vectorClock,this.vectorClock);
             queue.put(index,message);
             //todo requestRetransmission(i);//ma deve aspettare un attimo magari?
             return;
         }
         message.execute(this);
-        //todo if(filledMessage()){        }
+        checkQueue(message);
     }
+
+    private void checkQueue(Message message) {
+        //todo  forse è più di uno? devo fare una specie di for??
+        /*long index[] = new long[2];
+        //index[0] -> serverNumber        index[1] -> timestamp
+        index[0]=message.serverNumber;
+        index[1]=message.timestamp;
+        if (queue.containsKey(index))
+            queue.get(index).execute(this);
+    */}
 
     //TODO
     private void requestRetransmission(int clock, int serverNumber) {
