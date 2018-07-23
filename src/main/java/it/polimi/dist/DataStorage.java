@@ -85,7 +85,11 @@ public class DataStorage {
     }
 
     public int read(String dataId) {
-        return this.data.get(dataId);
+        try {
+            return this.data.get(dataId);
+        } catch (NullPointerException n){
+            return Integer.parseInt(null);
+        }
     }
 
     public void write(String dataId, int newData) {  //TODO

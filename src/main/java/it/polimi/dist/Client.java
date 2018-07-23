@@ -75,7 +75,10 @@ public class Client implements Serializable {
     public void receiveRead() {
         try {
             Message receivedMessage = (Message) objIn.readObject();
-            System.out.println("Value: " + receivedMessage.getData());
+            if (receivedMessage.getData() == Integer.parseInt(null))
+                System.out.println("The selected data id does not already exist");
+            else
+                System.out.println("Value: " + receivedMessage.getData());
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {

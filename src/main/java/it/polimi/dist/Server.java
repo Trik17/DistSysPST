@@ -7,6 +7,7 @@ import it.polimi.dist.Model.Message;
 import java.io.IOException;
 import java.net.*;
 import java.util.Enumeration;
+import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.net.InetAddress;
@@ -30,7 +31,16 @@ public class Server  {
         this.multiPort = multiPort;
         this.executor = Executors.newCachedThreadPool();
         this.group = InetAddress.getByName(groupIP);
-        this.logic = new Logic(this, -1);//TODO bisogna dare un numero al server
+        this.logic = new Logic(this, -1);
+    }
+
+    public Server(int port, int multiPort, String groupIP, int serverNumber) throws UnknownHostException {
+        this.storage = new DataStorage();
+        this.port = port;
+        this.multiPort = multiPort;
+        this.executor = Executors.newCachedThreadPool();
+        this.group = InetAddress.getByName(groupIP);
+        this.logic = new Logic(this, serverNumber);
     }
 
     public void startServer() {
@@ -39,19 +49,17 @@ public class Server  {
         ServerSocket serverSocket;
         MulticastSocket multiSocket;
         try {
-            //multicast connection todo managing IP addresses for multisocket
-
+            //multicast connection
             serverSocket = new ServerSocket(port);
             multiSocket = new MulticastSocket(multiPort);
             //multiSocket.setInterface(this.getIP());
             multiSocket.joinGroup(group);
             System.out.println("Server joined");
 
-
             multicastHandler = new MulticastHandler(this, multiSocket);
             new Thread(multicastHandler).start(); //start Multicast Handling
             JoinMessage joinMessage = new JoinMessage();
-            multicastHandler.sendMulti(joinMessage);
+            sendMulti(joinMessage);
 
             while (true) {
                 //Client-Server connections
@@ -168,7 +176,13 @@ public class Server  {
     public static void main(String[] args) {
         Server server = null;
         try {
-            server = new Server(9334, 9000,"225.4.5.6");
+            System.out.println("Are you the first server? \n (Y) - (N)");
+            Scanner scanner = new Scanner(System.in);
+            String choice = scanner.next();
+            if (choice.equals("Y"))
+                server = new Server(9334, 9000,"225.4.5.6", 0);
+            else
+                server = new Server(9334, 9000,"225.4.5.6");
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
