@@ -14,7 +14,7 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DataStorage {
+public class DataStorage implements Serializable{
 
     private Map<String, Integer> data; //data storage
     private ObjectMapper mapper;
@@ -66,7 +66,13 @@ public class DataStorage {
         */
     }
 
+    public Map<String, Integer> getData() {
+        return data;
+    }
 
+    public void setData(Map<String, Integer> data) {
+        this.data = data;
+    }
 
     private void writeToFile(){
         JSONObject json = new JSONObject();

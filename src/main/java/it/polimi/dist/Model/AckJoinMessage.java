@@ -2,16 +2,18 @@ package it.polimi.dist.Model;
 
 import it.polimi.dist.DataStorage;
 
+import java.util.Map;
+
 public class AckJoinMessage extends Message{
 
     private int numberOfServers;
-    private DataStorage dataStorage;
+    private Map<String, Integer> dataStorage;
 
     public AckJoinMessage(int serverNumber, int numberOfServers, DataStorage dataStorage) {
         super(serverNumber);
         this.numberOfServers = numberOfServers;
         this.isNetMessage = true;
-        this.dataStorage = dataStorage;
+        this.dataStorage = dataStorage.getData();
     }
 
     @Override

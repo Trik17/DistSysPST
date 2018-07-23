@@ -7,6 +7,7 @@ import it.polimi.dist.Model.Message;
 import java.io.IOException;
 import java.net.*;
 import java.util.Enumeration;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -118,8 +119,8 @@ public class Server  {
 
 
 
-    public void setStorage(DataStorage storage) {
-        this.storage = storage;
+    public void setStorage(Map<String, Integer> storage) {
+        this.storage.setData(storage);
     }
 
     public ExecutorService getExecutor() {
@@ -176,10 +177,10 @@ public class Server  {
     public static void main(String[] args) {
         Server server = null;
         try {
-            System.out.println("Are you the first server? \n (Y) - (N)");
+            System.out.println("Are you the first server? \n (1) Yes - (2) No");
             Scanner scanner = new Scanner(System.in);
-            String choice = scanner.next();
-            if (choice.equals("Y"))
+            int choice = scanner.nextInt();
+            if (choice == 1)
                 server = new Server(9334, 9000,"225.4.5.6", 0);
             else
                 server = new Server(9334, 9000,"225.4.5.6");
