@@ -55,14 +55,14 @@ public class Client implements Serializable {
     }
 
     public ClientMessage createMessage(){
-        System.out.println("Which action do you want to execute? \n (R) Read - (W) Write");
+        System.out.println("Which action do you want to execute? \n (r) Read - (w) Write");
         Scanner scanner = new Scanner(System.in);
         String choice = scanner.next();
-        if ("W".equals(choice)) {
+        if ("w".equals(choice)) {
             ClientWriteMessage clientWriteMessage = new ClientWriteMessage();
             return clientWriteMessage;
 
-        } else if ("R".equals(choice)) {
+        } else if ("r".equals(choice)) {
             ClientReadMessage clientReadMessage = new ClientReadMessage();
             return clientReadMessage;
 
@@ -74,11 +74,11 @@ public class Client implements Serializable {
 
     public void receiveRead() {
         try {
-            Message receivedMessage = (Message) objIn.readObject();
-            if (receivedMessage.getData() == Integer.parseInt(null))
-                System.out.println("The selected data id does not already exist");
+            ClientReadMessage receivedMessage = (ClientReadMessage) objIn.readObject();
+            if (receivedMessage.getResult().equals("null"))
+                System.out.println("Data id Not found");
             else
-                System.out.println("Value: " + receivedMessage.getData());
+                System.out.println("Value: " + receivedMessage.getResult());
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
