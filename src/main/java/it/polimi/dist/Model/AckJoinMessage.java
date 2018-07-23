@@ -18,6 +18,7 @@ public class AckJoinMessage extends Message{
     public void execute(Logic logic) {
         if(logic.getServerNumber() == -1) {
             logic.setServerNumber(numberOfServers);
+            logic.inizializeVectorClock(numberOfServers);
             logic.server.setStorage(dataStorage);
         }
 

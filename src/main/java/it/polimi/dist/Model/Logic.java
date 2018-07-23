@@ -28,11 +28,13 @@ public class Logic{
         this.ackBuffer = new LinkedList<Acknowledgement>();
         this.queue = new HashMap<int[], Message>();
         this.vectorClock = new ArrayList<Integer>();
+        inizializeVectorClock(serverNumber+1);
     }
 
-    //TODO -> collegare a server santa
-    public void inizializeVector(){
-        //TODO
+    public void inizializeVectorClock(int size){
+        for (int i = 0; i < size; i++) {
+            vectorClock.add(0);
+        }
     }
 
     //TODO -> collegare a server santa
@@ -93,7 +95,7 @@ public class Logic{
     }
 
     //TODO
-    private void requestRetransmission(int i) {
+    private void requestRetransmission(int clock, int serverNumber) {
         //RequestRetransmission r = new RequestRetransmission();
         //r.fill();
         //TODO fare un messaggio particolare che chieda la ritrasmissione: e un metodo che lo ritrasmette

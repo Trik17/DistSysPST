@@ -13,7 +13,7 @@ public class JoinMessage extends Message {
         if (logic.getServerNumber() != -1) {
             int serverNumber = logic.getServerNumber();
             int numberOfServers = logic.getVectorClock().size();
-            AckJoinMessage joinMessage = new AckJoinMessage(serverNumber, numberOfServers);
+            AckJoinMessage joinMessage = new AckJoinMessage(serverNumber, numberOfServers, logic.getServer().getStorage());
             logic.getServer().sendMulti(joinMessage);
             logic.addServer();
         }
