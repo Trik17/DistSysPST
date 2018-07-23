@@ -70,4 +70,6 @@ public abstract class Message implements Serializable {
     public void setServerNumber(int serverNumber) {
         this.serverNumber = serverNumber;
     }
+
+
 }

@@ -40,7 +40,8 @@ public class ClientHandler implements Runnable  {
                 try {
                     //receive Client Messages
                     Message message = (Message) in.readObject();
-                    System.out.println("Client Message received");
+                    System.out.println("Message Received from Client");
+                    //System.out.println(message.toString());
                     message.execute(server.getLogic());
                     System.out.println("Message processed");
 

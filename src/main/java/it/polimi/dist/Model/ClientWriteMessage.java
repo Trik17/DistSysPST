@@ -13,7 +13,7 @@ public class ClientWriteMessage extends ClientMessage{
     }
 
     @Override
-    public void inputFromClient(Client client) throws IOException {
+    public void inputFromClient(Client client)  {
         System.out.println("Insert the data ID you want to modify");
         Scanner scanner = new Scanner(System.in);
         key = scanner.next();

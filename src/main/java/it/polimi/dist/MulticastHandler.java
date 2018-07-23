@@ -42,14 +42,8 @@ public class MulticastHandler implements Runnable {
                 ObjectInputStream ois = new ObjectInputStream(bais);
                 Message message = (Message) ois.readObject();
                 server.getLogic().receive(message);
-                System.out.println("Message deserialized");
-
-                //server.addMsgQueue(msg);
-                //int timeStamp = msg.getTimeStamp();
-                //calculateClock(msg.getTimeStamp());
-                //ackManagement();
-
-
+                //System.out.println(message.toString());
+                System.out.println("Multicast Message Received");
 
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
@@ -87,7 +81,7 @@ public class MulticastHandler implements Runnable {
 
             //Send data
             multiSocket.send(packet);
-            System.out.println("sent multi message");
+            System.out.println("Sent multi message");
 
 
          } catch (IOException e) {
