@@ -164,8 +164,8 @@ public class Client implements Serializable {
 
     public static void main(String[] args) {
         try {
-            //String ip = InetAddress.getLocalHost().getHostAddress()
-            String ip = "10.169.223.103";
+            String ip = InetAddress.getLocalHost().getHostAddress()
+            //String ip = "10.169.223.103";
             Client client = new Client(ip, 9334);
             System.out.println("Connection established");
             client.startClient();
