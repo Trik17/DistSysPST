@@ -7,11 +7,13 @@ public class AckJoinMessage extends Message{
     public AckJoinMessage(int serverNumber, int numberOfServers) {
         super(serverNumber);
         this.numberOfServers = numberOfServers;
+        this.isNetMessage = true;
     }
 
     @Override
     public void execute(Logic logic) {
-        if(logic.getServer().getServerNumber() == -1)
-            logic = new Logic(this, this.serverNumber);//TODO bisogna dare un numero al server
+        if(logic.getServerNumber() == -1)
+            logic.setServerNumber(numberOfServers);
+
     }
 }

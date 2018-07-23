@@ -69,7 +69,12 @@ public class Logic{
     }
 
     public void receive(Message message){
-        if(VectoClockUtil.outOfSequence(message.vectorClock,this.vectorClock, message.serverNumber)) {
+        if(serverNumber==-1)
+            if (message.isNetMessage)
+                message.execute(this);
+                else
+                    return;
+        if(!message.isNetMessage && VectoClockUtil.outOfSequence(message.vectorClock,this.vectorClock, message.serverNumber)) {
             int index[] = new int[2];
             index = VectoClockUtil.missedMessage(message.vectorClock,this.vectorClock);
             queue.put(index,message);
@@ -77,7 +82,6 @@ public class Logic{
             return;
         }
         message.execute(this);
-        checkAckBuffer();
         //todo if(filledMessage()){        }
     }
 
@@ -110,6 +114,14 @@ public class Logic{
     public ArrayList<Integer> getVectorClock() {
         return vectorClock;
     }
+
+    public int getServerNumber() {
+        return serverNumber;
+    }
+
+    public void setServerNumber(int serverNumber) {
+        this.serverNumber = serverNumber;
+    }
 }
 /*
 ogni server parte da 0
@@ -129,7 +141,8 @@ are receive:
 
 TODO 1: il rinvio di uno perso
 todo 4: inizializzazione del vector clock
---------------------
+todo alla connessione invirsi le pending, data storage e vector clock
+-------------------
 TODO 2: server che cadono e devono riavviarsi e sicronizzare i dati
         (e se cadono devo toglierli dai vectorclock?)
 TODO 3: server sconosciuti, va bene quel che abbiamo fatto?

@@ -25,5 +25,6 @@ public class Acknowledgement extends Message {
         }
         //todo
         logic.ackBuffer.add(this);
+        logic.checkAckBuffer();
     }
 }

@@ -10,10 +10,12 @@ public abstract class Message implements Serializable {
     protected int data;
     protected ArrayList<Integer> vectorClock;
     protected int serverNumber; //position in the vector clock of the message's server
+    protected boolean isNetMessage;
 
     public Message(int serverNumber){
         this.serverNumber = serverNumber;
         this.timestamp = System.currentTimeMillis();
+        this.isNetMessage=false;
     }
 
     public abstract void execute(Logic logic);

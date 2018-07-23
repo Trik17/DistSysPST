@@ -11,59 +11,26 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.net.InetAddress;
 
-//import java.util.function.Predicate;
 
 public class Server  {
-
-    private int numberOfActiveProcesses;
-
-    private int numberOfServer; //TODO
 
     private DataStorage storage;
     private ExecutorService executor;
     private int port; //port for Server-Client Socket
     private int multiPort; //port for Server Multicast Socket
-    //private List<Message> msgQueue;
-    //private Map<Integer, List<Acknowledgement>> ackQueue;
     private InetAddress group;
     private Logic logic;
     private MulticastHandler multicastHandler;
     private ClientHandler clientHandler;
-    private int serverNumber;
-
-    private int processNumber;
-
-    private int lamportClock;
-
-
-    public Server(int port) {
-
-    }
-
 
 
     public Server(int port, int multiPort, String groupIP) throws UnknownHostException {
         this.storage = new DataStorage();
         this.port = port;
-        this.lamportClock = 1;
         this.multiPort = multiPort;
         this.executor = Executors.newCachedThreadPool();
-        this.serverNumber = -1; //until it is unknown the real number inside the group
         this.group = InetAddress.getByName(groupIP);
-        this.logic = new Logic(this, this.serverNumber);//TODO bisogna dare un numero al server
-
-    }
-
-
-
-
-    public void sendMulti(Message message){
-        //TODO
-    }
-
-
-    public DataStorage getStorage() {
-        return storage;
+        this.logic = new Logic(this, -1);//TODO bisogna dare un numero al server
     }
 
     public void startServer() {
@@ -101,6 +68,7 @@ public class Server  {
         }
         executor.shutdown();
     }
+
     public InetAddress getIP() throws SocketException {
         Enumeration e = NetworkInterface.getNetworkInterfaces();
         while(e.hasMoreElements())
@@ -118,86 +86,14 @@ public class Server  {
         return null;
     }
 
-/*
-    public boolean allAcksReceived(Message msg) {
-        Integer ID = msg.getID();
-        int numberOfAcks = ackQueue.get(ID).size();
-        List<Acknowledgement> acks = ackQueue.get(ID);
-
-        for (int i = 0; i < numberOfAcks -2; i++) {
-            for (int j = i +1; j < numberOfAcks -1; j++){
-                if (acks.get(i).getServerNumber() == acks.get(j).getServerNumber()) {
-                    acks.remove(j);
-                    numberOfAcks--;
-                }
-            }
-        }
-
-        return numberOfAcks == numberOfActiveProcesses;
-
+    synchronized public void sendMulti(Message message){
+        multicastHandler.sendMulti(message);
     }
 
-*/
 
-    /*
->>>>>>> e498f01db29b6bc8529250328f340c8528f5a21a
-    public void addAckQueue(Acknowledgement ack){
-        Integer ID = ack.getID();
-
-        try{
-
-            ackQueue.get(ID).add(ack);
-
-        }catch(NullPointerException e){
-
-            List<Acknowledgement> acks = new ArrayList<Acknowledgement>();
-            acks.add(ack);
-            ackQueue.put(ID,acks);
-
-        }
-    }*/
-/*
-    public void addMsgQueue(Message msg) {
-        long tstamp = msg.getTimeStamp();
-        int index = msgQueue.size() -1;
-
-        while (index >= 0){
-
-            if (tstamp > msgQueue.get(index).getTimeStamp()) {
-                msgQueue.add(index +1, msg);
-                return;
-            }
-
-            index--;
-        }
-
-        msgQueue.add(0, msg);
+    public DataStorage getStorage() {
+        return storage;
     }
-*/
-/*
-    public void setLamportClock(int lamportClock) {
-        this.lamportClock = lamportClock;
-    }
-*/
-    public int getLamportClock() {
-        return lamportClock;
-    }
-
-    public int getProcessNumber() {
-        return processNumber;
-    }
-
-    //in realtà il contenuto del messaggio andrebbe messo nella coda dell'applicazione che lo deve eseguire, ma siccome
-    //noi non abbiamo applicazioni ma solo un metodo execute nel msg, l'ho lasciato così
-    public void deliver(Message msg){
-        msg.execute(this.logic);
-    }
-    /*
-    public void clearAcks(Message msg){
-        Integer ID = msg.getID();
-        ackQueue.remove(ID);
-    }*/
-
 
     public InetAddress getgroup() {
         return group;
@@ -212,21 +108,7 @@ public class Server  {
         return clientHandler;
     }
 
-    public int getNumberOfActiveProcesses() {
-        return numberOfActiveProcesses;
-    }
 
-    public void setNumberOfActiveProcesses(int numberOfActiveProcesses) {
-        this.numberOfActiveProcesses = numberOfActiveProcesses;
-    }
-
-    public int getNumberOfServer() {
-        return numberOfServer;
-    }
-
-    public void setNumberOfServer(int numberOfServer) {
-        this.numberOfServer = numberOfServer;
-    }
 
     public void setStorage(DataStorage storage) {
         this.storage = storage;
@@ -280,21 +162,8 @@ public class Server  {
         this.clientHandler = clientHandler;
     }
 
-    public int getServerNumber() {
-        return serverNumber;
-    }
 
-    public void setServerNumber(int serverNumber) {
-        this.serverNumber = serverNumber;
-    }
 
-    public void setProcessNumber(int processNumber) {
-        this.processNumber = processNumber;
-    }
-
-    public void setLamportClock(int lamportClock) {
-        this.lamportClock = lamportClock;
-    }
 
     public static void main(String[] args) {
         Server server = null;
