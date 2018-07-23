@@ -59,8 +59,10 @@ public class Server  {
 
             multicastHandler = new MulticastHandler(this, multiSocket);
             new Thread(multicastHandler).start(); //start Multicast Handling
-            JoinMessage joinMessage = new JoinMessage();
-            sendMulti(joinMessage);
+            if (logic.getServerNumber() == -1) {
+                JoinMessage joinMessage = new JoinMessage();
+                sendMulti(joinMessage);
+            }
 
             while (true) {
                 //Client-Server connections

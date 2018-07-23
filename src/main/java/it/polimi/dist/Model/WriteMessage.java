@@ -14,10 +14,16 @@ public class WriteMessage extends Message {
         */
         for (int i = 0; i < logic.writeBuffer.size(); i++) {
             if (logic.writeBuffer.get(i).timestamp == this.timestamp
-                    && logic.writeBuffer.get(i).serverNumber == this.serverNumber)
+                    && logic.writeBuffer.get(i).serverNumber == this.serverNumber){
+                sendAck(logic);
                 return;
+            }
         }
         logic.writeBuffer.add(this);
+        sendAck(logic);
+    }
+
+    private void sendAck(Logic logic){
         Acknowledgement ack= new Acknowledgement(logic.serverNumber);
         ack.fillReferences(this.timestamp,this.serverNumber);
         ack.setVectorClock(VectoClockUtil.addOne(logic));
