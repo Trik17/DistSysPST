@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class ClientReadMessage extends ClientMessage {
-    private int result;
+    private String result;
 
 
     public ClientReadMessage() {
@@ -26,5 +26,9 @@ public class ClientReadMessage extends ClientMessage {
     public void execute(Logic logic) {
         result = logic.getServer().getStorage().read(key);
         logic.getServer().getClientHandler().sendToClient(this);
+    }
+
+    public String getResult() {
+        return result;
     }
 }

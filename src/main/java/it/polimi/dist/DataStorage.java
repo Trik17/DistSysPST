@@ -97,12 +97,9 @@ public class DataStorage implements Serializable{
 
     }
 
-    public int read(String dataId) {
-        try {
-            return this.data.get(dataId);
-        } catch (NullPointerException n){
-            return Integer.parseInt(null);
-        }
+    public String read(String dataId) {
+        return String.valueOf(this.data.get(dataId));
+
     }
 
     public void write(String dataId, int newData) {  //TODO
