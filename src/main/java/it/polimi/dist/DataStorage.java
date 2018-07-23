@@ -5,14 +5,18 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import it.polimi.dist.Model.ClientReadMessage;
+import it.polimi.dist.Model.ClientWriteMessage;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import javax.xml.crypto.Data;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 public class DataStorage implements Serializable{
 
@@ -26,6 +30,7 @@ public class DataStorage implements Serializable{
         this.mapper = new ObjectMapper();       //declare a new ObjectMapper variable
         this.mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
         this.data = new HashMap(); // or HashMap<String, Integer>()
+        /*TODO togliere da qua per  avere json
         try {
             fileReader = new FileReader("src/main/resources/data.json");
             //filewriter = new FileWriter("src/main/resources/data.json");
@@ -42,6 +47,8 @@ public class DataStorage implements Serializable{
             }
         }catch (Exception e) {
             e.printStackTrace();
+
+        }todo fino a qua (più il commento nella funzione write */
            /*
             file = new File("src/main/resources/data.json");
 
@@ -54,7 +61,7 @@ public class DataStorage implements Serializable{
                e.printStackTrace();
                //System.out.println("errore 1");
             }*/
-        }
+
         //DA QUA PER PROVA FILE:
         //TODO CANCELLA:
         /*int i= data.get("miriam");
@@ -100,13 +107,33 @@ public class DataStorage implements Serializable{
 
     public void write(String dataId, int newData) {  //TODO
         this.data.put(dataId,newData);
-        writeToFile();
-    }
-
-
-
-
-
-    //TODO fare parte json
+        //todo togliendo il commento(QUA E NEL COSTRUTTORE) si fa il file json writeToFile();
+    }/*
+    public static void main(String[] args) {
+        while(true) {
+            DataStorage dataStorage = new DataStorage();
+            System.out.println("Which action do you want to execute? \n (R) Read - (W) Write");
+            Scanner scanner = new Scanner(System.in);
+            String choice = scanner.next();
+            String key;
+            int data;
+            if ("W".equals(choice)) {
+                System.out.println("Insert the data ID you want to modify");
+                scanner = new Scanner(System.in);
+                key = scanner.next();
+                System.out.println("Insert the value you want to write");
+                data = scanner.nextInt();
+                dataStorage.write(key, data);
+            } else if ("R".equals(choice)) {
+                System.out.println("Insert the data ID you want to read");
+                scanner = new Scanner(System.in);
+                key = scanner.next();
+                System.out.println(dataStorage.read(key));
+            } else {
+                System.out.println("Invalid Input, ");
+            }
+        }
+    }*/
+    //QUESTO RISOLTO CON ALTRI METODI
     //TODO quando viene avviato il costruttore devo controllare se c'è già un file json e a quel punto ricaricare quella hash e far partire il recovery
 }
