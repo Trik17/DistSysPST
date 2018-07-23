@@ -55,7 +55,7 @@ public class Client implements Serializable {
     }
 
     public ClientMessage createMessage(){
-        System.out.println("Which action do you want to execute? \n (r) Read - (w) Write");
+        System.out.println("Which action do you want to execute? \n(r) Read - (w) Write");
         Scanner scanner = new Scanner(System.in);
         String choice = scanner.next();
         if ("w".equals(choice)) {
@@ -164,7 +164,9 @@ public class Client implements Serializable {
 
     public static void main(String[] args) {
         try {
-            Client client = new Client(InetAddress.getLocalHost().getHostAddress(), 9334);
+            //String ip = InetAddress.getLocalHost().getHostAddress()
+            String ip = "10.169.223.103";
+            Client client = new Client(ip, 9334);
             System.out.println("Connection established");
             client.startClient();
         } catch (UnknownHostException e) {

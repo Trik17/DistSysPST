@@ -26,6 +26,7 @@ public class Server  {
     private ClientHandler clientHandler;
 
 
+
     public Server(int port, int multiPort, String groupIP) throws UnknownHostException {
         this.storage = new DataStorage();
         this.port = port;
@@ -179,7 +180,7 @@ public class Server  {
     public static void main(String[] args) {
         Server server = null;
         try {
-            System.out.println("Are you the first server? \n (1) Yes - (2) No");
+            System.out.println("Are you the first server? \n(1) Yes - (2) No");
             Scanner scanner = new Scanner(System.in);
             int choice = scanner.nextInt();
             if (choice == 1)
