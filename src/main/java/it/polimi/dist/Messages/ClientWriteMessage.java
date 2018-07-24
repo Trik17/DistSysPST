@@ -14,6 +14,11 @@ public class ClientWriteMessage extends ClientMessage {
         super();
     }
 
+    public ClientWriteMessage(String id, int value) {
+        this.key = id;
+        this.data = value;
+    }
+
     @Override
     public void inputFromClient(Client client)  {
         System.out.println("Insert the data ID you want to modify");

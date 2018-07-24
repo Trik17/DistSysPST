@@ -9,17 +9,18 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.NoSuchElementException;
+import java.util.Random;
 import java.util.Scanner;
 
-public class Client implements Serializable {
+import static java.lang.Thread.*;
+
+public class Client {
     private String ip;
     private int port;
     private Socket socketclient;
-    private PrintWriter provaOut;
-    private Scanner provaIn;
     private ObjectInputStream objIn;
     private ObjectOutputStream objOut;
-    private Scanner stIn = new Scanner(System.in);
+    private Scanner scanner = new Scanner(System.in);
 
     public Client(String ip, int port) throws IOException {
         this.ip = ip;
@@ -27,38 +28,60 @@ public class Client implements Serializable {
         this.socketclient = new Socket(ip, port);
         this.objOut = new ObjectOutputStream(socketclient.getOutputStream());
         this.objIn = new ObjectInputStream(socketclient.getInputStream());
-        this.provaOut = new PrintWriter(socketclient.getOutputStream());
-        this.provaIn = new Scanner(socketclient.getInputStream());
     }
 
     private void startClient() throws IOException {
         try {
             System.out.println("Eccomi");
             while (true) {
-            ClientMessage clientMessage = createMessage();
-            clientMessage.inputFromClient(this);
-            System.out.println("Sent Client message");
+                ClientMessage clientMessage = createMessage();
+                clientMessage.inputFromClient(this);
+                System.out.println("Sent Client message");
 
-
-                /*String inputLine = stIn.nextLine();
-                provaOut.println(inputLine);
-                provaOut.flush();*/
-                //String socketLine = provaIn.nextLine();
-                //System.out.println(socketLine);
             }
         } catch (NoSuchElementException e) {
             System.out.println("Connection closed");
         } finally {
-            stIn.close();
-            provaIn.close();
-            provaOut.close();
             socketclient.close();
         }
     }
 
+    public void createRandomMessages() {
+        try {
+            new ClientReadThread(socketclient).start();
+
+            do {
+                System.out.println("Type anything and press Enter to start...");
+                String choice = scanner.next();
+
+                Random rnd = new Random();
+
+                //Communicating with the server
+                for (int i = 0; i < 20; i++) {
+                    Thread.sleep(50);
+                    String id = String.valueOf(rnd.nextInt(5));
+                    int value = rnd.nextInt(50);
+                    ClientMessage clientMessage;
+                    if (Math.random() < 0.5) {
+                        clientMessage = new ClientReadMessage(id);
+                        System.out.println("AUTO-READ ID: " + id);
+                    } else {
+                        clientMessage = new ClientWriteMessage(id, value);
+                        System.out.println("AUTO-WRITE ID: " + id + ", VALUE: " + value);
+                    }
+                    sendToServer(clientMessage);
+                }
+            } while (true);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
     public ClientMessage createMessage(){
         System.out.println("Which action do you want to execute? \n(r) Read - (w) Write");
-        Scanner scanner = new Scanner(System.in);
+        scanner = new Scanner(System.in);
         String choice = scanner.next();
         if ("w".equals(choice)) {
             ClientWriteMessage clientWriteMessage = new ClientWriteMessage();
@@ -123,21 +146,6 @@ public class Client implements Serializable {
         this.socketclient = socketclient;
     }
 
-    public PrintWriter getProvaOut() {
-        return provaOut;
-    }
-
-    public void setProvaOut(PrintWriter provaOut) {
-        this.provaOut = provaOut;
-    }
-
-    public Scanner getProvaIn() {
-        return provaIn;
-    }
-
-    public void setProvaIn(Scanner provaIn) {
-        this.provaIn = provaIn;
-    }
 
     public ObjectInputStream getObjIn() {
         return objIn;
@@ -153,14 +161,6 @@ public class Client implements Serializable {
 
     public void setObjOut(ObjectOutputStream objOut) {
         this.objOut = objOut;
-    }
-
-    public Scanner getStIn() {
-        return stIn;
-    }
-
-    public void setStIn(Scanner stIn) {
-        this.stIn = stIn;
     }
 
 

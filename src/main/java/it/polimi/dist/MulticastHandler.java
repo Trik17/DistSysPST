@@ -62,7 +62,7 @@ public class MulticastHandler implements Runnable {
             //Send data
             multiSocket.send(packet);
             System.out.println("Sent multi message");
-            //message.retransmission(server);
+            message.retransmission(server); //retransmission of the write/join message
 
          } catch (IOException e) {
         e.printStackTrace();

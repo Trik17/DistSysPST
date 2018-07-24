@@ -15,6 +15,10 @@ public class ClientReadMessage extends ClientMessage {
         super();
     }
 
+    public ClientReadMessage(String id) {
+        this.key = id;
+    }
+
     @Override
     public void inputFromClient(Client client) throws IOException {
         System.out.println("Insert the data ID you want to read");

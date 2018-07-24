@@ -20,6 +20,8 @@ public class Logic{
     //private LinkedList<WriteMessage> resendBuffer;
     private LinkedList<Acknowledgement> ackBuffer;
     private Map<ArrayList<Long>,Message> queue;
+    private Map<Message,TimerThread> retransmissionTimers;
+
 
     /*
     index[0] -> serverNumber
@@ -35,6 +37,7 @@ public class Logic{
         //this.resendBuffer = new LinkedList<WriteMessage>();
         this.ackBuffer = new LinkedList<Acknowledgement>();
         this.queue = new HashMap<ArrayList<Long>, Message>();
+        this.retransmissionTimers = new HashMap<Message, TimerThread>();
         this.vectorClock = new ArrayList<Integer>();
         if(serverNumber==-1)
             inizializeVectorClock(1);
@@ -147,6 +150,8 @@ public class Logic{
     }
 
     private void performWrite(WriteMessage writeMessage){
+        retransmissionTimers.get(writeMessage).interrupt();
+        retransmissionTimers.remove(writeMessage);
         server.getStorage().write(writeMessage.getKey(),writeMessage.getData());
         //todo cancella i write message e i rispettivi ack!
     }
@@ -171,6 +176,10 @@ public class Logic{
 
     public Map<ArrayList<Long>, Message> getQueue() {
         return queue;
+    }
+
+    public Map<Message, TimerThread> getRetransmissionTimers() {
+        return retransmissionTimers;
     }
 
     public int getServerNumber() {
