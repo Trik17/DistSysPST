@@ -40,4 +40,9 @@ public class Acknowledgement extends Message {
         logic.getAckBuffer().add(this);
         logic.checkAckBuffer();
     }
+
+    @Override
+    public String toString() {
+        return "ACKWRITE \nWrite Timestamp: " + String.valueOf(writeTimestamp) + "\nWrite Server Number: " + String.valueOf(writeServerNumber) + super.toString();
+    }
 }

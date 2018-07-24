@@ -33,4 +33,9 @@ public class ClientReadMessage extends ClientMessage {
     public String getResult() {
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "CLIENT READ MESSAGE" + super.toString();
+    }
 }

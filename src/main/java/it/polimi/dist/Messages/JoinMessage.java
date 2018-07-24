@@ -29,4 +29,9 @@ public class JoinMessage extends Message {
         timerThread.start();
         // add to Hash Map in Logic with Message - Timer
     }
+
+    @Override
+    public String toString() {
+        return "JOIN MESSAGE" + super.toString();
+    }
 }
