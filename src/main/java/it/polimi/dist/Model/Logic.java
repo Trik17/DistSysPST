@@ -31,7 +31,10 @@ public class Logic{
         this.ackBuffer = new LinkedList<Acknowledgement>();
         this.queue = new HashMap<long[], Message>();
         this.vectorClock = new ArrayList<Integer>();
-        inizializeVectorClock(serverNumber+1);
+        if(serverNumber==-1)
+            inizializeVectorClock(1);
+        else
+            inizializeVectorClock(serverNumber+1);
     }
 
     public void inizializeVectorClock(int size){

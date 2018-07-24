@@ -22,6 +22,7 @@ public class AckJoinMessage extends Message{
             logic.setServerNumber(numberOfServers);
             logic.inizializeVectorClock(numberOfServers);
             logic.server.setStorage(dataStorage);
+
         }
 
     }
