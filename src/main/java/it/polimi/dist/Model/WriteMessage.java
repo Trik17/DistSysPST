@@ -14,14 +14,14 @@ public class WriteMessage extends Message {
         if(logic.writeBuffer.contains(this)) //does it works?todo
             return;
         */
-        for (int i = 0; i < logic.writeBuffer.size(); i++) {
-            if (logic.writeBuffer.get(i).timestamp == this.timestamp
-                    && logic.writeBuffer.get(i).serverNumber == this.serverNumber){
+        for (int i = 0; i < logic.getWriteBuffer().size(); i++) {
+            if (logic.getWriteBuffer().get(i).timestamp == this.timestamp
+                    && logic.getWriteBuffer().get(i).serverNumber == this.serverNumber){
                 sendAck(logic);
                 return;
             }
         }
-        logic.writeBuffer.add(this);
+        logic.getWriteBuffer().add(this);
         sendAck(logic);
     }
 
@@ -34,10 +34,10 @@ public class WriteMessage extends Message {
     }
 
     private void sendAck(Logic logic){
-        Acknowledgement ack= new Acknowledgement(logic.serverNumber);
+        Acknowledgement ack= new Acknowledgement(logic.getServerNumber());
         ack.fillReferences(this.timestamp,this.serverNumber);
         ack.setVectorClock(VectoClockUtil.addOne(logic));
-        logic.ackBuffer.add(ack);
+        logic.getAckBuffer().add(ack);
         logic.getServer().sendMulti(ack);
     }
 

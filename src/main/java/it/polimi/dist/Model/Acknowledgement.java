@@ -19,7 +19,7 @@ public class Acknowledgement extends Message {
             return;
         */
         //todo
-        logic.ackBuffer.add(this);
+        logic.getAckBuffer().add(this);
         logic.checkAckBuffer();
     }
 }

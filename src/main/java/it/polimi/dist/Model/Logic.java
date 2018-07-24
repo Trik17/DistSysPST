@@ -8,14 +8,14 @@ import java.util.Map;
 
 public class Logic{
 
-    protected Server server;
-    //protected Map<Integer,Message> messages;
-    protected ArrayList<Integer> vectorClock;
-    protected int serverNumber;
+    private Server server;
+    //private Map<Integer,Message> messages;
+    private ArrayList<Integer> vectorClock;
+    private int serverNumber;
     //private ExecutorService executor; //executor.submit(this);
-    protected LinkedList<WriteMessage> writeBuffer;
-    protected LinkedList<WriteMessage> resendBuffer;
-    protected LinkedList<Acknowledgement> ackBuffer;
+    private LinkedList<WriteMessage> writeBuffer;
+    private LinkedList<WriteMessage> resendBuffer;
+    private LinkedList<Acknowledgement> ackBuffer;
     private Map<ArrayList<Long>,Message> queue;
 
     /*
@@ -136,6 +136,46 @@ public class Logic{
 
     public ArrayList<Integer> getVectorClock() {
         return vectorClock;
+    }
+
+    public void setServer(Server server) {
+        this.server = server;
+    }
+
+    public void setVectorClock(ArrayList<Integer> vectorClock) {
+        this.vectorClock = vectorClock;
+    }
+
+    public LinkedList<WriteMessage> getWriteBuffer() {
+        return writeBuffer;
+    }
+
+    public void setWriteBuffer(LinkedList<WriteMessage> writeBuffer) {
+        this.writeBuffer = writeBuffer;
+    }
+
+    public LinkedList<WriteMessage> getResendBuffer() {
+        return resendBuffer;
+    }
+
+    public void setResendBuffer(LinkedList<WriteMessage> resendBuffer) {
+        this.resendBuffer = resendBuffer;
+    }
+
+    public LinkedList<Acknowledgement> getAckBuffer() {
+        return ackBuffer;
+    }
+
+    public void setAckBuffer(LinkedList<Acknowledgement> ackBuffer) {
+        this.ackBuffer = ackBuffer;
+    }
+
+    public Map<ArrayList<Long>, Message> getQueue() {
+        return queue;
+    }
+
+    public void setQueue(Map<ArrayList<Long>, Message> queue) {
+        this.queue = queue;
     }
 
     public int getServerNumber() {

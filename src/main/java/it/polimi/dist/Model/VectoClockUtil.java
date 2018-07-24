@@ -78,10 +78,10 @@ public abstract class VectoClockUtil {
         ArrayList<Integer> res;
         int temp;
         synchronized (logic) {
-            res = logic.vectorClock;
-            temp = res.get(logic.serverNumber) + 1;
-            res.set(logic.serverNumber, temp);
-            logic.vectorClock=res;
+            res = logic.getVectorClock();
+            temp = res.get(logic.getServerNumber()) + 1;
+            res.set(logic.getServerNumber(), temp);
+            logic.setVectorClock(res);
         }
         return res;
     }
