@@ -63,31 +63,36 @@ public class Server  implements Runnable{
                 sendMulti(joinMessage);
             }
             new Thread(this).start();
+            Object lock = new Object();
+            synchronized (lock) {
+                lock.wait();
+            }
         } catch (IOException e) {
             System.err.println(e.getMessage());
             System.out.println("error");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void run() {
-        while (true) {
-            //Client-Server connections
+        //Client-Server connections
+        try {
             ServerSocket serverSocket;
-            try {
-                serverSocket = new ServerSocket(port);
+            serverSocket = new ServerSocket(port);
+            while (true) {
                 Socket socket = serverSocket.accept();
                 clientHandler = new ClientHandler(this, socket);
                 executor.submit(clientHandler);
                 if (serverSocket.isClosed()) {
                     break;
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+            executor.shutdown();
+        }catch(IOException e){
+                e.printStackTrace();
         }
-        executor.shutdown();
-
     }
 
     public InetAddress getIP() throws SocketException {
