@@ -77,6 +77,7 @@ public abstract class Message implements Serializable {
     public void retransmission(Server server){
         return;
     }
+
     @Override
     public boolean equals(Object obj) {
         if (((Message)obj).timestamp==this.timestamp
@@ -84,5 +85,10 @@ public abstract class Message implements Serializable {
             return true;
         else
             return false;
+    }
+
+    @Override
+    public String toString() {
+        return "";
     }
 }
