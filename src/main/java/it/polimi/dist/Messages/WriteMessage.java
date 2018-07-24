@@ -42,7 +42,6 @@ public class WriteMessage extends Message {
         Acknowledgement ack= new Acknowledgement(logic.getServerNumber());
         ack.fillReferences(this.timestamp,this.serverNumber);
         ack.setVectorClock(VectoClockUtil.addOne(logic));
-        logic.getAckBuffer().add(ack);
         logic.getServer().sendMulti(ack);
     }
 

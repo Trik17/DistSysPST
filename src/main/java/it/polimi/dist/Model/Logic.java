@@ -90,13 +90,14 @@ public class Logic{
             else
                 return;
         }
-        if(!message.isNetMessage() && VectoClockUtil.outOfSequence(message.getVectorClock(),this.vectorClock, message.getServerNumber())) {
+        /*if(!message.isNetMessage() && VectoClockUtil.outOfSequence(message.getVectorClock(),this.vectorClock, message.getServerNumber())) {
+            //TODO NON FUNZIONA!!!
             ArrayList<Long> index ;
             index=VectoClockUtil.missedMessage(message.getVectorClock(),this.vectorClock);
             queue.put(index,message);
             //todo requestRetransmission(i);//ma deve aspettare un attimo magari?
             return;
-        }
+        }*/
         message.execute(this);
         checkQueue(message);
     }
@@ -143,10 +144,6 @@ public class Logic{
         return vectorClock;
     }
 
-    public void setServer(Server server) {
-        this.server = server;
-    }
-
     public void setVectorClock(ArrayList<Integer> vectorClock) {
         this.vectorClock = vectorClock;
     }
@@ -155,32 +152,16 @@ public class Logic{
         return writeBuffer;
     }
 
-    public void setWriteBuffer(LinkedList<WriteMessage> writeBuffer) {
-        this.writeBuffer = writeBuffer;
-    }
-
     public LinkedList<WriteMessage> getResendBuffer() {
         return resendBuffer;
-    }
-
-    public void setResendBuffer(LinkedList<WriteMessage> resendBuffer) {
-        this.resendBuffer = resendBuffer;
     }
 
     public LinkedList<Acknowledgement> getAckBuffer() {
         return ackBuffer;
     }
 
-    public void setAckBuffer(LinkedList<Acknowledgement> ackBuffer) {
-        this.ackBuffer = ackBuffer;
-    }
-
     public Map<ArrayList<Long>, Message> getQueue() {
         return queue;
-    }
-
-    public void setQueue(Map<ArrayList<Long>, Message> queue) {
-        this.queue = queue;
     }
 
     public int getServerNumber() {
