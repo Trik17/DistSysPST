@@ -26,20 +26,19 @@ public class MulticastHandler implements Runnable {
     public void  run(){
         while (true) {
             try {
-                System.out.println("Multicast Handler");
+                System.out.println("Multicast Handler online");
                 //Create buffer to receive datagram
                 byte[] buffer = new byte[bufferSize];
                 DatagramPacket datagram = new DatagramPacket(buffer, bufferSize);
                 multiSocket.receive(datagram);
-                System.out.println("Packet receive");
+                System.out.println("Packet received");
 
                 //Deserialize object
                 ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
                 ObjectInputStream ois = new ObjectInputStream(bais);
                 Message message = (Message) ois.readObject();
-                server.getLogic().receive(message);
                 System.out.println(message.toString());
-                System.out.println("Multicast Message Received");
+                server.getLogic().receive(message);
 
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
