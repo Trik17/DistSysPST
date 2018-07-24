@@ -72,4 +72,12 @@ public abstract class Message implements Serializable {
     }
 
 
+    @Override
+    public boolean equals(Object obj) {
+        if (((Message)obj).timestamp==this.timestamp
+                && ((Message)obj).serverNumber==this.serverNumber)
+            return true;
+        else
+            return false;
+    }
 }
