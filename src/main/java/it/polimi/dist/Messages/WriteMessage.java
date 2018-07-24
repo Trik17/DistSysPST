@@ -20,7 +20,7 @@ public class WriteMessage extends Message {
         for (int i = 0; i < logic.getWriteBuffer().size(); i++) {
             if (logic.getWriteBuffer().get(i).timestamp == this.timestamp
                     && logic.getWriteBuffer().get(i).serverNumber == this.serverNumber){
-                sendAck(logic);
+                //sendAck(logic);
                 return;
             }
         }

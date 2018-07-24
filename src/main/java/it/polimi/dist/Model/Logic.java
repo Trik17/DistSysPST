@@ -84,13 +84,14 @@ public class Logic{
     }
 
     public void receive(Message message){
-        if(serverNumber==-1)
+        if(serverNumber==-1) {
             if (message.isNetMessage())
                 message.execute(this);
-                else
-                    return;
+            else
+                return;
+        }
         if(!message.isNetMessage() && VectoClockUtil.outOfSequence(message.getVectorClock(),this.vectorClock, message.getServerNumber())) {
-            ArrayList<Long> index = new ArrayList<Long>();
+            ArrayList<Long> index ;
             index=VectoClockUtil.missedMessage(message.getVectorClock(),this.vectorClock);
             queue.put(index,message);
             //todo requestRetransmission(i);//ma deve aspettare un attimo magari?
@@ -119,6 +120,7 @@ public class Logic{
     }
 
     public void checkAckBuffer(){
+        //controlla quanti ack ci sono e se sono > di vectorclock size fa la scrittura
         int count=0;
         for (int i = 0; i < writeBuffer.size(); i++) {
             for (int j = 0; j < ackBuffer.size(); j++) {
