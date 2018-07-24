@@ -30,7 +30,8 @@ public class ClientWriteMessage extends ClientMessage {
         logic.write(this.key, this.data);
     }
 
-
-
-
+    @Override
+    public String toString() {
+        return "CLIENT WRITE MESSAGE" + super.toString();
+    }
 }

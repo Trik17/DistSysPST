@@ -46,4 +46,8 @@ public class WriteMessage extends Message {
         logic.getServer().sendMulti(ack);
     }
 
+    @Override
+    public String toString() {
+        return "WRITE MESSAGE" + super.toString();
+    }
 }
