@@ -77,4 +77,12 @@ public abstract class Message implements Serializable {
     public void retransmission(Server server){
         return;
     }
+    @Override
+    public boolean equals(Object obj) {
+        if (((Message)obj).timestamp==this.timestamp
+                && ((Message)obj).serverNumber==this.serverNumber)
+            return true;
+        else
+            return false;
+    }
 }

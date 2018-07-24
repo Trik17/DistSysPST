@@ -16,7 +16,9 @@ public class Logic{
     protected LinkedList<WriteMessage> writeBuffer;
     protected LinkedList<WriteMessage> resendBuffer;
     protected LinkedList<Acknowledgement> ackBuffer;
-    private Map<long[],Message> queue;/*
+    private Map<ArrayList<Long>,Message> queue;
+
+    /*
     index[0] -> serverNumber
     index[1] -> timestamp
      */
@@ -29,20 +31,18 @@ public class Logic{
         this.writeBuffer = new LinkedList<WriteMessage>();
         this.resendBuffer = new LinkedList<WriteMessage>();
         this.ackBuffer = new LinkedList<Acknowledgement>();
-        this.queue = new HashMap<long[], Message>();
+        this.queue = new HashMap<ArrayList<Long>, Message>();
         this.vectorClock = new ArrayList<Integer>();
-        inizializeVectorClock(serverNumber+1);
+        if(serverNumber==-1)
+            inizializeVectorClock(1);
+        else
+            inizializeVectorClock(serverNumber+1);
     }
 
     public void inizializeVectorClock(int size){
         for (int i = 0; i < size; i++) {
             vectorClock.add(0);
         }
-    }
-
-    //TODO -> collegare a server santa
-    public void inizializeData(){
-        //todo
     }
 
     public void addServer(){
@@ -87,8 +87,8 @@ public class Logic{
                 else
                     return;
         if(!message.isNetMessage && VectoClockUtil.outOfSequence(message.vectorClock,this.vectorClock, message.serverNumber)) {
-            long index[] = new long[2];
-            index = VectoClockUtil.missedMessage(message.vectorClock,this.vectorClock);
+            ArrayList<Long> index = new ArrayList<Long>();
+            index=VectoClockUtil.missedMessage(message.vectorClock,this.vectorClock);
             queue.put(index,message);
             //todo requestRetransmission(i);//ma deve aspettare un attimo magari?
             return;
@@ -163,13 +163,11 @@ are receive:
 – ts(r)[i] ≤ Vk[i] for all i ≠ j
 
 TODO 1: il rinvio di uno perso
-todo 4: inizializzazione del vector clock
 todo alla connessione invirsi le pending, data storage e vector clock
 -------------------
 TODO 2: server che cadono e devono riavviarsi e sicronizzare i dati
         (e se cadono devo toglierli dai vectorclock?)
 TODO 3: server sconosciuti, va bene quel che abbiamo fatto?
 TODO timer di ritrasmissione
-TODO se nella read chiedo un elemento che non esiste : restituire qualcosa es.0 o -1 o un'allerta
- */
+*/
 
