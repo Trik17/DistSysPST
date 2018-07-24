@@ -1,5 +1,7 @@
 package it.polimi.dist.Model;
 
+import it.polimi.dist.Server;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -72,4 +74,7 @@ public abstract class Message implements Serializable {
     }
 
 
+    public void retransmission(Server server){
+        return;
+    }
 }

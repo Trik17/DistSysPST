@@ -54,7 +54,7 @@ public class Server  {
             //multicast connection
             serverSocket = new ServerSocket(port);
             multiSocket = new MulticastSocket(multiPort);
-            //multiSocket.setInterface(this.getIP());
+            multiSocket.setInterface(this.getIP());
             multiSocket.joinGroup(group);
             System.out.println("Server joined");
 
@@ -90,7 +90,7 @@ public class Server  {
             while (ee.hasMoreElements())
             {
                 InetAddress i = (InetAddress) ee.nextElement();
-               // if(i.getHostAddress().contains("192.168.43"))
+                if(i.getHostAddress().contains("192.168.43"))
                     //if(i.getHostAddress().contains("192.168.1"))
                     return i;
             }

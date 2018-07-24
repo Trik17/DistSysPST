@@ -1,5 +1,7 @@
 package it.polimi.dist.Model;
 
+import it.polimi.dist.Server;
+
 public class JoinMessage extends Message {
 
 
@@ -17,5 +19,12 @@ public class JoinMessage extends Message {
             logic.getServer().sendMulti(joinMessage);
             logic.addServer();
         }
+    }
+
+    @Override
+    public void retransmission(Server server) {
+        TimerThread timerThread = new TimerThread(this, server);
+        timerThread.start();
+        // add to Hash Map in Logic with Message - Timer
     }
 }

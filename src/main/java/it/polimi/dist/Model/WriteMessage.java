@@ -1,5 +1,7 @@
 package it.polimi.dist.Model;
 
+import it.polimi.dist.Server;
+
 public class WriteMessage extends Message {
 
     public WriteMessage(int serverNumber) {
@@ -21,6 +23,14 @@ public class WriteMessage extends Message {
         }
         logic.writeBuffer.add(this);
         sendAck(logic);
+    }
+
+    @Override
+    public void retransmission(Server server) {
+        TimerThread timerThread = new TimerThread(this, server);
+        timerThread.start();
+        // add to Hash Map in Logic with Message - Timer
+
     }
 
     private void sendAck(Logic logic){
