@@ -38,7 +38,7 @@ public class MulticastHandler implements Runnable {
                 ObjectInputStream ois = new ObjectInputStream(bais);
                 Message message = (Message) ois.readObject();
                 server.getLogic().receive(message);
-                //System.out.println(message.toString());
+                System.out.println(message.toString());
                 System.out.println("Multicast Message Received");
 
             } catch (ClassNotFoundException e) {

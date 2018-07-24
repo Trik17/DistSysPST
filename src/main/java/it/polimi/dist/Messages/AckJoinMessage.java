@@ -46,6 +46,6 @@ public class AckJoinMessage extends Message{
 
     @Override
     public String toString() {
-        return "ACKJOIN \nNumber of Servers: " + String.valueOf(numberOfServers) + super.toString();
+        return "<<<<<<<<<<<<<<<<<<<<<<<<<<<<< \nACK JOIN \nNumber of Servers: " + String.valueOf(numberOfServers) + super.toString();
     }
 }

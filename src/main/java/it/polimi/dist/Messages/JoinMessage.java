@@ -32,6 +32,6 @@ public class JoinMessage extends Message {
 
     @Override
     public String toString() {
-        return "JOIN MESSAGE" + super.toString();
+        return "<<<<<<<<<<<<<<<<<<<<<<<<<<<<< \nJOIN MESSAGE" + super.toString();
     }
 }

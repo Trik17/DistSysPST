@@ -32,6 +32,6 @@ public class ClientWriteMessage extends ClientMessage {
 
     @Override
     public String toString() {
-        return "CLIENT WRITE MESSAGE" + super.toString();
+        return "<<<<<<<<<<<<<<<<<<<<<<<<<<<<< \nCLIENT WRITE MESSAGE" + super.toString();
     }
 }

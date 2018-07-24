@@ -43,6 +43,6 @@ public class Acknowledgement extends Message {
 
     @Override
     public String toString() {
-        return "ACKWRITE \nWrite Timestamp: " + String.valueOf(writeTimestamp) + "\nWrite Server Number: " + String.valueOf(writeServerNumber) + super.toString();
+        return "<<<<<<<<<<<<<<<<<<<<<<<<<<<<< \nACK WRITE \nWrite Timestamp: " + String.valueOf(writeTimestamp) + "\nWrite Server Number: " + String.valueOf(writeServerNumber) + super.toString();
     }
 }
