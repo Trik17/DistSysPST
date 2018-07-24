@@ -31,18 +31,22 @@ public class WriteMessage extends Message {
     @Override
     public void retransmission(Server server) {
         TimerThread timerThread = new TimerThread(this, server);
+        server.getLogic().getRetransmissionTimers().put(this, timerThread);// add to HashMap in Logic with Message-Timer
         timerThread.start();
-        // add to Hash Map in Logic with Message - Timer
 
     }
 
 
 
     private void sendAck(Logic logic){
-        Acknowledgement ack= new Acknowledgement(logic.getServerNumber());
+        Acknowledgement ack = new Acknowledgement(logic.getServerNumber());
         ack.fillReferences(this.timestamp,this.serverNumber);
         ack.setVectorClock(VectoClockUtil.addOne(logic));
         logic.getServer().sendMulti(ack);
+        if (logic.getServerNumber() != serverNumber){// the server which sent this message has already started the timer
+            retransmission(logic.getServer());
+        }
+
     }
 
     @Override
