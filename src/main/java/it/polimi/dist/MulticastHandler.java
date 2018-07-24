@@ -24,10 +24,6 @@ public class MulticastHandler implements Runnable {
 
     @Override
     public void  run(){
-
-        /*Thread outputThread = new Thread();
-        outputThread.run();*/ //useless?
-
         while (true) {
             try {
                 System.out.println("Multicast Handler");
@@ -49,23 +45,8 @@ public class MulticastHandler implements Runnable {
                 e.printStackTrace();
             } catch (IOException e) {
                     e.printStackTrace();
-                }
-       /* while (true) {
-            String line = provaIn.nextLine();
-            out.w
-            System.out.println(line);
-            if (line.equals("quit")) {
-                break;
-            }
-            else {
-                provaOut.println("Ok");
-                provaOut.flush();
             }
         }
-        provaIn.close();
-        provaOut.close();*/
-        }
-
     }
 
 
@@ -84,26 +65,11 @@ public class MulticastHandler implements Runnable {
             System.out.println("Sent multi message");
             //message.retransmission(server);
 
-
          } catch (IOException e) {
         e.printStackTrace();
     }
      }
 
-    public void ackManagement(){
-        //Message ack = new Acknowledgement(server);
-        //sendMulti(ack);
 
-    }
-/*
-    public void calculateClock(int tstamp){
-        int lclock = server.getLamportClock();
-
-        if (lclock > tstamp)
-            server.setLamportClock(lclock +1);
-        else
-            server.setLamportClock(tstamp +1);
-     }
-*/
 }
 

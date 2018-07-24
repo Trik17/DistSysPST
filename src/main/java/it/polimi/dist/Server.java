@@ -14,11 +14,11 @@ import java.util.concurrent.Executors;
 import java.net.InetAddress;
 
 
-public class Server  {
+public class Server  implements Runnable{
 
     private DataStorage storage;
     private ExecutorService executor;
-    private int port; //port for Server-Client Socket
+    private int port; //port for Client-Server Socket
     private int multiPort; //port for Server Multicast Socket
     private InetAddress group;
     private Logic logic;
@@ -48,11 +48,9 @@ public class Server  {
     public void startServer() {
         System.out.println("Server online");
 
-        ServerSocket serverSocket;
         MulticastSocket multiSocket;
         try {
             //multicast connection
-            serverSocket = new ServerSocket(port);
             multiSocket = new MulticastSocket(multiPort);
             multiSocket.setInterface(this.getIP());
             multiSocket.joinGroup(group);
@@ -64,21 +62,32 @@ public class Server  {
                 JoinMessage joinMessage = new JoinMessage();
                 sendMulti(joinMessage);
             }
+            new Thread(this).start();
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+            System.out.println("error");
+        }
+    }
 
-            while (true) {
-                //Client-Server connections
+    @Override
+    public void run() {
+        while (true) {
+            //Client-Server connections
+            ServerSocket serverSocket;
+            try {
+                serverSocket = new ServerSocket(port);
                 Socket socket = serverSocket.accept();
                 clientHandler = new ClientHandler(this, socket);
                 executor.submit(clientHandler);
                 if (serverSocket.isClosed()) {
                     break;
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-            System.out.println("error");
         }
         executor.shutdown();
+
     }
 
     public InetAddress getIP() throws SocketException {
@@ -90,8 +99,8 @@ public class Server  {
             while (ee.hasMoreElements())
             {
                 InetAddress i = (InetAddress) ee.nextElement();
-                if(i.getHostAddress().contains("192.168.43"))
-                    //if(i.getHostAddress().contains("192.168.1"))
+                //if(i.getHostAddress().contains("192.168.43")) //todo for tethering
+                    if(i.getHostAddress().contains("192.168.1")) //todo at home
                     return i;
             }
         }
@@ -192,6 +201,7 @@ public class Server  {
         }
         server.startServer();
     }
+
 
 
 }
