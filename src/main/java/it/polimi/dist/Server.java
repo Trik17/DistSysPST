@@ -1,8 +1,8 @@
 package it.polimi.dist;
 
-import it.polimi.dist.Model.JoinMessage;
+import it.polimi.dist.Messages.JoinMessage;
 import it.polimi.dist.Model.Logic;
-import it.polimi.dist.Model.Message;
+import it.polimi.dist.Messages.Message;
 
 import java.io.IOException;
 import java.net.*;

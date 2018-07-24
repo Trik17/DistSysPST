@@ -1,5 +1,6 @@
 package it.polimi.dist.Model;
 
+import it.polimi.dist.Messages.Message;
 import it.polimi.dist.Server;
 
 public class TimerThread extends Thread {

@@ -1,13 +1,11 @@
 package it.polimi.dist;
 
-import it.polimi.dist.Model.Message;
+import it.polimi.dist.Messages.Message;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Scanner;
 
 public class ClientHandler implements Runnable  {
     private Server server;

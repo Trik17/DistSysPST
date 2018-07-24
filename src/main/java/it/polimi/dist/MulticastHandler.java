@@ -4,7 +4,7 @@ package it.polimi.dist;
 import java.io.*;
 import java.net.DatagramPacket;
 import java.net.MulticastSocket;
-import it.polimi.dist.Model.Message;
+import it.polimi.dist.Messages.Message;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 

@@ -1,5 +1,7 @@
 package it.polimi.dist;
 
+import it.polimi.dist.Messages.ClientReadMessage;
+import it.polimi.dist.Messages.ClientWriteMessage;
 import it.polimi.dist.Model.*;
 
 import java.io.*;

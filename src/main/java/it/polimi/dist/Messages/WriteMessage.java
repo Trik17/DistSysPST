@@ -1,5 +1,8 @@
-package it.polimi.dist.Model;
+package it.polimi.dist.Messages;
 
+import it.polimi.dist.Model.Logic;
+import it.polimi.dist.Model.TimerThread;
+import it.polimi.dist.Model.VectoClockUtil;
 import it.polimi.dist.Server;
 
 public class WriteMessage extends Message {
@@ -32,6 +35,8 @@ public class WriteMessage extends Message {
         // add to Hash Map in Logic with Message - Timer
 
     }
+
+
 
     private void sendAck(Logic logic){
         Acknowledgement ack= new Acknowledgement(logic.getServerNumber());

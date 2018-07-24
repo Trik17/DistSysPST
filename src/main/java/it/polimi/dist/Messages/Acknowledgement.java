@@ -1,4 +1,6 @@
-package it.polimi.dist.Model;
+package it.polimi.dist.Messages;
+
+import it.polimi.dist.Model.Logic;
 
 public class Acknowledgement extends Message {
     protected long writeTimestamp;
@@ -11,6 +13,22 @@ public class Acknowledgement extends Message {
     public void fillReferences(long writeTimestamp,int writeServerNumber){
         this.writeServerNumber=writeServerNumber;
         this.writeTimestamp=writeTimestamp;
+    }
+
+    public long getWriteTimestamp() {
+        return writeTimestamp;
+    }
+
+    public void setWriteTimestamp(long writeTimestamp) {
+        this.writeTimestamp = writeTimestamp;
+    }
+
+    public int getWriteServerNumber() {
+        return writeServerNumber;
+    }
+
+    public void setWriteServerNumber(int writeServerNumber) {
+        this.writeServerNumber = writeServerNumber;
     }
 
     public void execute(Logic logic) {

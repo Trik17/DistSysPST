@@ -1,5 +1,8 @@
 package it.polimi.dist.Model;
 
+import it.polimi.dist.Messages.Acknowledgement;
+import it.polimi.dist.Messages.Message;
+import it.polimi.dist.Messages.WriteMessage;
 import it.polimi.dist.Server;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,7 +56,7 @@ public class Logic{
         ackBuffer.clear();
         queue.clear();
         for (int i = 0; i < writeBuffer.size(); i++) {
-            if (writeBuffer.get(i).serverNumber!=this.serverNumber)
+            if (writeBuffer.get(i).getServerNumber()!=this.serverNumber)
                 writeBuffer.remove(i);
         }
 
@@ -63,11 +66,11 @@ public class Logic{
     //TODO -> collegare a server santa
     public void removeServer(int serverNumber){
         for (int i = 0; i < writeBuffer.size(); i++) {
-            if(writeBuffer.get(i).serverNumber==serverNumber)
+            if(writeBuffer.get(i).getServerNumber()==serverNumber)
                 writeBuffer.remove(i);
         }
         for (int j = 0; j < ackBuffer.size(); j++) {
-            if(ackBuffer.get(j).serverNumber==serverNumber)
+            if(ackBuffer.get(j).getServerNumber()==serverNumber)
                 ackBuffer.remove(j);
         }
     }
@@ -82,13 +85,13 @@ public class Logic{
 
     public void receive(Message message){
         if(serverNumber==-1)
-            if (message.isNetMessage)
+            if (message.isNetMessage())
                 message.execute(this);
                 else
                     return;
-        if(!message.isNetMessage && VectoClockUtil.outOfSequence(message.vectorClock,this.vectorClock, message.serverNumber)) {
+        if(!message.isNetMessage() && VectoClockUtil.outOfSequence(message.getVectorClock(),this.vectorClock, message.getServerNumber())) {
             ArrayList<Long> index = new ArrayList<Long>();
-            index=VectoClockUtil.missedMessage(message.vectorClock,this.vectorClock);
+            index=VectoClockUtil.missedMessage(message.getVectorClock(),this.vectorClock);
             queue.put(index,message);
             //todo requestRetransmission(i);//ma deve aspettare un attimo magari?
             return;
@@ -119,8 +122,8 @@ public class Logic{
         int count=0;
         for (int i = 0; i < writeBuffer.size(); i++) {
             for (int j = 0; j < ackBuffer.size(); j++) {
-                if (ackBuffer.get(j).writeTimestamp==writeBuffer.get(i).timestamp
-                        && ackBuffer.get(j).writeServerNumber==writeBuffer.get(i).serverNumber)
+                if (ackBuffer.get(j).getWriteTimestamp()==writeBuffer.get(i).getTimeStamp()
+                        && ackBuffer.get(j).getWriteServerNumber()==writeBuffer.get(i).getServerNumber())
                     count++;
             }
             if (count>= vectorClock.size())
@@ -129,7 +132,7 @@ public class Logic{
     }
 
     private void performWrite(WriteMessage writeMessage){
-        server.getStorage().write(writeMessage.key,writeMessage.data);
+        server.getStorage().write(writeMessage.getKey(),writeMessage.getData());
     }
 
     public Server getServer() {   return server;    }

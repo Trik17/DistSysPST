@@ -1,5 +1,6 @@
-package it.polimi.dist.Model;
+package it.polimi.dist.Messages;
 
+import it.polimi.dist.Model.Logic;
 import it.polimi.dist.Server;
 
 import java.io.Serializable;
@@ -40,39 +41,22 @@ public abstract class Message implements Serializable {
         return timestamp;
     }
 
+    public boolean isNetMessage() {
+        return isNetMessage;
+    }
+
     public int getServerNumber() {
         return serverNumber;
     }
 
-    public long getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
-    }
 
     public String getKey() {
         return key;
     }
 
-    public void setKey(String key) {
-        this.key = key;
-    }
-
     public int getData() {
         return data;
     }
-
-    public void setData(int data) {
-        this.data = data;
-    }
-
-
-    public void setServerNumber(int serverNumber) {
-        this.serverNumber = serverNumber;
-    }
-
 
     public void retransmission(Server server){
         return;
