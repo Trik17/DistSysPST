@@ -169,5 +169,7 @@ TODO 2: server che cadono e devono riavviarsi e sicronizzare i dati
         (e se cadono devo toglierli dai vectorclock?)
 TODO 3: server sconosciuti, va bene quel che abbiamo fatto?
 TODO timer di ritrasmissione
+
+todo cosa succede se arriva 2 volte lo stesso messaggio? devo rispondere ma senza aumentare il clock
 */
 
