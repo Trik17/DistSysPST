@@ -1,5 +1,7 @@
-package it.polimi.dist.Model;
+package it.polimi.dist.Messages;
 
+import it.polimi.dist.Model.Logic;
+import it.polimi.dist.Model.TimerThread;
 import it.polimi.dist.Server;
 
 public class JoinMessage extends Message {
