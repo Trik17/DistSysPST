@@ -1,8 +1,11 @@
 package it.polimi.dist.Model;
 
+import it.polimi.dist.Messages.Message;
+
 import java.util.ArrayList;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.log;
 
 
 public abstract class VectoClockUtil {
@@ -86,6 +89,23 @@ public abstract class VectoClockUtil {
         return res;
     }
 
+    public static boolean alreadyPresentAck(Logic logic, Message message){
+        for (int i = 0; i < logic.getAckBuffer().size(); i++) {
+            if (logic.getAckBuffer().get(i).getTimeStamp() == message.getTimeStamp()
+                    && logic.getAckBuffer().get(i).getServerNumber() == message.getServerNumber())
+                return true;
+        }
+        return false;
+    }
+
+    public static boolean alreadyPresentWrite(Logic logic, Message message){
+        for (int i = 0; i < logic.getWriteBuffer().size(); i++) {
+            if (logic.getWriteBuffer().get(i).getTimeStamp() == message.getTimeStamp()
+                    && logic.getWriteBuffer().get(i).getServerNumber() == message.getServerNumber())
+                return true;
+        }
+        return false;
+    }
 
     public static int hammingDist(ArrayList<Integer> v1, ArrayList<Integer> v2){
         int count=0;

@@ -17,7 +17,7 @@ public class Logic{
     private int serverNumber;
     //private ExecutorService executor; //executor.submit(this);
     private LinkedList<WriteMessage> writeBuffer;
-    private LinkedList<WriteMessage> resendBuffer;
+    //private LinkedList<WriteMessage> resendBuffer;
     private LinkedList<Acknowledgement> ackBuffer;
     private Map<ArrayList<Long>,Message> queue;
 
@@ -32,7 +32,7 @@ public class Logic{
         //this.messages = new HashMap<Integer,Message>();
         //this.executor = Executors.newCachedThreadPool();
         this.writeBuffer = new LinkedList<WriteMessage>();
-        this.resendBuffer = new LinkedList<WriteMessage>();
+        //this.resendBuffer = new LinkedList<WriteMessage>();
         this.ackBuffer = new LinkedList<Acknowledgement>();
         this.queue = new HashMap<ArrayList<Long>, Message>();
         this.vectorClock = new ArrayList<Integer>();
@@ -92,6 +92,18 @@ public class Logic{
         }
         /*if(!message.isNetMessage() && VectoClockUtil.outOfSequence(message.getVectorClock(),this.vectorClock, message.getServerNumber())) {
             //TODO NON FUNZIONA!!!
+            /*
+            a
+            a
+            a
+            a
+            a
+            a  QUEUEEEEEEEEEE
+            a
+            a
+            a
+
+             *//*
             ArrayList<Long> index ;
             index=VectoClockUtil.missedMessage(message.getVectorClock(),this.vectorClock);
             queue.put(index,message);
@@ -136,6 +148,7 @@ public class Logic{
 
     private void performWrite(WriteMessage writeMessage){
         server.getStorage().write(writeMessage.getKey(),writeMessage.getData());
+        //todo cancella i write message e i rispettivi ack!
     }
 
     public Server getServer() {   return server;    }
@@ -150,10 +163,6 @@ public class Logic{
 
     public LinkedList<WriteMessage> getWriteBuffer() {
         return writeBuffer;
-    }
-
-    public LinkedList<WriteMessage> getResendBuffer() {
-        return resendBuffer;
     }
 
     public LinkedList<Acknowledgement> getAckBuffer() {
@@ -197,5 +206,7 @@ TODO 3: server sconosciuti, va bene quel che abbiamo fatto?
 TODO timer di ritrasmissione
 
 todo cosa succede se arriva 2 volte lo stesso messaggio? devo rispondere ma senza aumentare il clock
+
+- non si riaggiungano quelli già presenti!
 */
 

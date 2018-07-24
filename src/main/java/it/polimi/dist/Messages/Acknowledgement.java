@@ -1,6 +1,7 @@
 package it.polimi.dist.Messages;
 
 import it.polimi.dist.Model.Logic;
+import it.polimi.dist.Model.VectoClockUtil;
 
 public class Acknowledgement extends Message {
     protected long writeTimestamp;
@@ -32,11 +33,8 @@ public class Acknowledgement extends Message {
     }
 
     public void execute(Logic logic) {
-        //otherwise:
-        /*if(logic.ackBuffer.contains(this)) //does it works?todo
+        if(logic.getAckBuffer().contains(this))
             return;
-        */
-        //todo
         logic.getAckBuffer().add(this);
         logic.checkAckBuffer();
     }

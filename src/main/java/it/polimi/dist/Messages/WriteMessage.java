@@ -17,6 +17,7 @@ public class WriteMessage extends Message {
         if(logic.writeBuffer.contains(this)) //does it works?todo
             return;
         */
+        //this for avoid the readding of a write already present in the buffer
         for (int i = 0; i < logic.getWriteBuffer().size(); i++) {
             if (logic.getWriteBuffer().get(i).timestamp == this.timestamp
                     && logic.getWriteBuffer().get(i).serverNumber == this.serverNumber){
