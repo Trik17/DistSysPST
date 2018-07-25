@@ -1,6 +1,7 @@
 package it.polimi.dist.Messages;
 
 import it.polimi.dist.ServerPackage.Logic;
+import it.polimi.dist.ServerPackage.VectoUtil;
 
 public class Acknowledgement extends Message {
     protected long writeTimestamp;
@@ -35,6 +36,8 @@ public class Acknowledgement extends Message {
                     && writeServerNumber == logic.getPerformedWrites().get(j).getServerNumber())
                 return;
         }
+        if (serverNumber!=logic.getServerNumber())
+            VectoUtil.addOne(logic,this.serverNumber);
         logic.getAckBuffer().add(this);
         logic.checkAckBuffer();
     }

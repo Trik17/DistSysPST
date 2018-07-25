@@ -76,13 +76,13 @@ public abstract class VectoUtil {
         //    return 0;
     }
 
-    public static ArrayList<Integer> addOne(Logic logic) {
+    public static ArrayList<Integer> addOne(Logic logic, int serverNumber) {
         ArrayList<Integer> res;
         int temp;
         synchronized (logic) {
             res = logic.getVectorClock();
-            temp = res.get(logic.getServerNumber()) + 1;
-            res.set(logic.getServerNumber(), temp);
+            temp = res.get(serverNumber) + 1;
+            res.set(serverNumber, temp);
             logic.setVectorClock(res);
         }
         return res;

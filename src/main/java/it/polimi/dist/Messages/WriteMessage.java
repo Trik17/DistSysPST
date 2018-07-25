@@ -32,6 +32,8 @@ public class WriteMessage extends Message {
                 return;
             }
         }
+        if (serverNumber!=logic.getServerNumber())
+            VectoUtil.addOne(logic,this.serverNumber);
         logic.getWriteBuffer().add(this);
         sendAck(logic);
     }
@@ -56,7 +58,7 @@ public class WriteMessage extends Message {
     private void sendAck(Logic logic){
         Acknowledgement ack = new Acknowledgement(logic.getServerNumber());
         ack.fillReferences(this.timestamp,this.serverNumber);
-        ack.setVectorClock(VectoUtil.addOne(logic));
+        ack.setVectorClock(VectoUtil.addOne(logic, logic.getServerNumber()));
         logic.getServer().sendMulti(ack);
         logic.getTransmittedAcks().add(ack);
         if (logic.getServerNumber() != serverNumber){// the server which sent this message has already started the timer

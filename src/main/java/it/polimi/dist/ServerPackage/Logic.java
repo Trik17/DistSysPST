@@ -86,7 +86,7 @@ public class Logic{
         WriteMessage message = new WriteMessage(this.serverNumber);
         message.fill(dataId,newData);
         writeBuffer.add(message);
-        message.setVectorClock(VectoUtil.addOne(this));
+        message.setVectorClock(VectoUtil.addOne(this, this.serverNumber));
         server.sendMulti(message);
     }
 
@@ -103,10 +103,9 @@ public class Logic{
             /*
             todo  QUEUEEEEEEEE
              */
-            ArrayList<Long> index ;
-            index=VectoUtil.missedMessage(message.getVectorClock(),this.vectorClock);
-            queue.put(index,message);
-            //todo requestRetransmission(i);//ma deve aspettare un attimo magari?
+            //ArrayList<Long> index ;
+            //index=VectoUtil.missedMessage(message.getVectorClock(),this.vectorClock);
+            //queue.put(index,message);
             return;
         }
         message.execute(this);
