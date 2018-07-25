@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import static java.lang.Math.abs;
 
 
-public abstract class VectoClockUtil {
+public abstract class VectoUtil {
     //ArrayList<Integer> vectorClock
 
     public static boolean equalV(ArrayList<Integer> v1, ArrayList<Integer> v2){

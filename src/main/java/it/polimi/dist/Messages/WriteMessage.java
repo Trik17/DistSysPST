@@ -2,7 +2,7 @@ package it.polimi.dist.Messages;
 
 import it.polimi.dist.ServerPackage.Logic;
 import it.polimi.dist.ServerPackage.TimerThread;
-import it.polimi.dist.ServerPackage.VectoClockUtil;
+import it.polimi.dist.ServerPackage.VectoUtil;
 import it.polimi.dist.ServerPackage.Server;
 
 public class WriteMessage extends Message {
@@ -56,7 +56,7 @@ public class WriteMessage extends Message {
     private void sendAck(Logic logic){
         Acknowledgement ack = new Acknowledgement(logic.getServerNumber());
         ack.fillReferences(this.timestamp,this.serverNumber);
-        ack.setVectorClock(VectoClockUtil.addOne(logic));
+        ack.setVectorClock(VectoUtil.addOne(logic));
         logic.getServer().sendMulti(ack);
         logic.getTransmittedAcks().add(ack);
         if (logic.getServerNumber() != serverNumber){// the server which sent this message has already started the timer

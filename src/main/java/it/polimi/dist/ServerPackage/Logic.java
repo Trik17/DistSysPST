@@ -64,27 +64,29 @@ public class Logic{
             if (writeBuffer.get(i).getServerNumber()!=this.serverNumber)
                 writeBuffer.remove(i);
         }
-
-        //TODO aspettare qualche secondo e iniziare a inviare di nuovo le write vecchie
+        //TODO aspettare qualche secondo e iniziare a inviare di nuovo le write vecchie nei buffer
+                    // o bastano i timer già fatti?
     }
 
     //TODO -> collegare a server santa
     public void removeServer(int serverNumber){
+        /*
         for (int i = 0; i < writeBuffer.size(); i++) {
             if(writeBuffer.get(i).getServerNumber()==serverNumber)
                 writeBuffer.remove(i);
         }
+        //todo togliere il server caduto dal vector clock e ricontrollo che ora mi bastino gli ack
         for (int j = 0; j < ackBuffer.size(); j++) {
             if(ackBuffer.get(j).getServerNumber()==serverNumber)
                 ackBuffer.remove(j);
-        }
+        }*/
     }
 
     public void write(String dataId, int newData) {
         WriteMessage message = new WriteMessage(this.serverNumber);
         message.fill(dataId,newData);
         writeBuffer.add(message);
-        message.setVectorClock(VectoClockUtil.addOne(this));
+        message.setVectorClock(VectoUtil.addOne(this));
         server.sendMulti(message);
     }
 
@@ -95,26 +97,18 @@ public class Logic{
             else
                 return;
         }
-        /*if(!message.isNetMessage() && VectoClockUtil.outOfSequence(message.getVectorClock(),this.vectorClock, message.getServerNumber())) {
+        if(!message.isNetMessage() &&
+                VectoUtil.outOfSequence(message.getVectorClock(),this.vectorClock, message.getServerNumber())){
             //TODO NON FUNZIONA!!!
             /*
-            a
-            a
-            a
-            a
-            a
-            a  QUEUEEEEEEEEEE
-            a
-            a
-            a
-
-             *//*
+            todo  QUEUEEEEEEEE
+             */
             ArrayList<Long> index ;
-            index=VectoClockUtil.missedMessage(message.getVectorClock(),this.vectorClock);
+            index=VectoUtil.missedMessage(message.getVectorClock(),this.vectorClock);
             queue.put(index,message);
             //todo requestRetransmission(i);//ma deve aspettare un attimo magari?
             return;
-        }*/
+        }
         message.execute(this);
         checkQueue(message);
     }
