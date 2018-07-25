@@ -51,7 +51,8 @@ public class WriteMessage extends Message {
     @Override
     public void retransmission(Server server) {
         TimerThread timerThread = new TimerThread(this, server);
-        server.getLogic().getRetransmissionTimers().put(this, timerThread);// add to HashMap in Logic with Message-Timer
+        String key = String.valueOf(this.getTimeStamp()).concat(String.valueOf(this.getServerNumber()));
+        server.getLogic().getRetransmissionTimers().put(key, timerThread);// add to HashMap in Logic with Message-Timer
         timerThread.start();
     }
 

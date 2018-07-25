@@ -18,7 +18,7 @@ public class Logic{
     //private LinkedList<WriteMessage> resendBuffer;
     private LinkedList<Acknowledgement> ackBuffer;
     private List<Message> queue;
-    private Map<Message,TimerThread> retransmissionTimers;
+    private Map<String,TimerThread> retransmissionTimers;
 
 
 
@@ -36,7 +36,7 @@ public class Logic{
         //this.resendBuffer = new LinkedList<WriteMessage>();
         this.ackBuffer = new LinkedList<Acknowledgement>();
         this.queue = new ArrayList<Message>();
-        this.retransmissionTimers = new HashMap<Message, TimerThread>();
+        this.retransmissionTimers = new HashMap<String, TimerThread>();
         this.vectorClock = new ArrayList<Integer>();
         this.performedWrites = new ArrayList<WriteMessage>();
         this.transmittedAcks = new ArrayList<Acknowledgement>();
@@ -83,7 +83,7 @@ public class Logic{
     public void write(String dataId, int newData) {
         WriteMessage message = new WriteMessage(this.serverNumber);
         message.fill(dataId,newData);
-        writeBuffer.add(message);
+        //writeBuffer.add(message);
         message.setVectorClock(VectoUtil.addOne(this, this.serverNumber));
         server.sendMulti(message);
     }
@@ -137,8 +137,15 @@ public class Logic{
     }
 
     private void performWrite(WriteMessage writeMessage){
-        retransmissionTimers.get(writeMessage).interrupt();
-        retransmissionTimers.remove(writeMessage);
+        try {
+            String key = String.valueOf(writeMessage.getTimeStamp()).concat(String.valueOf(writeMessage.getServerNumber()));
+            if (retransmissionTimers.get(key).isInterrupted()){
+                retransmissionTimers.get(key).interrupt();
+                retransmissionTimers.remove(key);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         server.getStorage().write(writeMessage.getKey(),writeMessage.getData());
         this.performedWrites.add(writeMessage);
         writeBuffer.remove(writeMessage);
@@ -174,7 +181,7 @@ public class Logic{
         return queue;
     }
 
-    public Map<Message, TimerThread> getRetransmissionTimers() {
+    public Map<String, TimerThread> getRetransmissionTimers() {
         return retransmissionTimers;
     }
 

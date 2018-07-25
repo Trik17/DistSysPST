@@ -29,8 +29,13 @@ public class Acknowledgement extends Message {
     }
 
     public void execute(Logic logic) {
-        if(logic.getAckBuffer().contains(this))
-            return;
+        /*if(logic.getAckBuffer().contains(this))
+            return;*/
+        for (int j = 0; j < logic.getAckBuffer().size(); j++) {
+            if (timestamp==logic.getAckBuffer().get(j).getTimeStamp()
+                    && serverNumber == logic.getAckBuffer().get(j).getServerNumber())
+                return;
+        }
         for (int j = 0; j < logic.getPerformedWrites().size(); j++) {
             if (writeTimestamp==logic.getPerformedWrites().get(j).getTimeStamp()
                     && writeServerNumber == logic.getPerformedWrites().get(j).getServerNumber())
