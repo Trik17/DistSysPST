@@ -20,16 +20,16 @@ public class TimerThread extends Thread {
         try {
             this.sleep(toSleep);
             int numberOfRetransmission = message.getNumberOfRetransmission()
-            if (numberOfRetransmission < retransmissionThreshold){
+            //if (numberOfRetransmission < retransmissionThreshold){
                 server.sendMulti(message);
                 System.out.println("------MESSAGE RETRANSMITTED------ \n" + message.toString());
                 //if I have not already received all acks (and so the timerthread is still alive)
                 // resend the message (only join/write)
                 message.setNumberOfRetransmission(numberOfRetransmission + 1);
-            }
+            /*}
             else {
                 server.getLogic().removeServer();
-            }
+            }*/
 
         } catch (InterruptedException e) {
             System.out.println("No retransmission, timer interrupted");
