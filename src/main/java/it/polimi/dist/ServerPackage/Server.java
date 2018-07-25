@@ -1,6 +1,5 @@
 package it.polimi.dist.ServerPackage;
 
-import it.polimi.dist.JoinHandler;
 import it.polimi.dist.Messages.JoinMessage;
 import it.polimi.dist.Messages.Message;
 

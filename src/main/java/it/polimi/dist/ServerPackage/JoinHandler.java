@@ -1,4 +1,4 @@
-package it.polimi.dist;
+package it.polimi.dist.ServerPackage;
 
 import it.polimi.dist.Messages.AckJoinMessage;
 import it.polimi.dist.ServerPackage.Server;
