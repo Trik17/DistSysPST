@@ -19,7 +19,7 @@ public class TimerThread extends Thread {
     public void run() {
         try {
             this.sleep(toSleep);
-            int numberOfRetransmission = message.getNumberOfRetransmission()
+            int numberOfRetransmission = message.getNumberOfRetransmission();
             //if (numberOfRetransmission < retransmissionThreshold){
                 server.sendMulti(message);
                 System.out.println("------MESSAGE RETRANSMITTED------ \n" + message.toString());

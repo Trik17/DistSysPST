@@ -110,8 +110,8 @@ public class Server  implements Runnable{
             while (ee.hasMoreElements())
             {
                 InetAddress i = (InetAddress) ee.nextElement();
-                //if(i.getHostAddress().contains("192.168.43")) //todo for tethering
-                    if(i.getHostAddress().contains("192.168.1")) //todo at home
+                if(i.getHostAddress().contains("192.168.43")) //todo for tethering
+                    //if(i.getHostAddress().contains("192.168.1")) //todo at home
                     return i;
             }
         }
