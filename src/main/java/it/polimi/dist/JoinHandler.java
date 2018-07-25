@@ -1,7 +1,8 @@
 package it.polimi.dist;
 
 import it.polimi.dist.Messages.AckJoinMessage;
-import it.polimi.dist.Model.TimerThread;
+import it.polimi.dist.ServerPackage.Server;
+import it.polimi.dist.ServerPackage.TimerThread;
 
 import java.util.ArrayList;
 import java.util.List;
