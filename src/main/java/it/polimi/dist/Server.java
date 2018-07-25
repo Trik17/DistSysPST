@@ -24,11 +24,13 @@ public class Server  implements Runnable{
     private Logic logic;
     private MulticastHandler multicastHandler;
     private ClientHandler clientHandler;
+    private JoinHandler joinHandler;
 
 
 
     public Server(int port, int multiPort, String groupIP) throws UnknownHostException {
         this.storage = new DataStorage();
+        this.joinHandler = new JoinHandler(this);
         this.port = port;
         this.multiPort = multiPort;
         this.executor = Executors.newCachedThreadPool();
@@ -93,6 +95,10 @@ public class Server  implements Runnable{
         }catch(IOException e){
                 e.printStackTrace();
         }
+    }
+
+    public JoinHandler getJoinHandler() {
+        return joinHandler;
     }
 
     public InetAddress getIP() throws SocketException {

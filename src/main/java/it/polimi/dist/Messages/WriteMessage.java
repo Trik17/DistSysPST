@@ -14,7 +14,7 @@ public class WriteMessage extends Message {
     public void execute(Logic logic) {
         //otherwise:
         /*
-        if(logic.writeBuffer.contains(this)) //does it works?todo
+        if(logic.writeBuffer.contains(this))
             return;
         */
         //this for avoid the readding of a write already present in the buffer

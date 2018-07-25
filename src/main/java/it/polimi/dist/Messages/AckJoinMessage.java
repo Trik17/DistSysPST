@@ -39,7 +39,10 @@ public class AckJoinMessage extends Message{
             logic.setServerNumber(numberOfServers);
             logic.inizializeVectorClock(numberOfServers);
             logic.getServer().setStorage(dataStorage);
-
+            if (!logic.getServer().getJoinHandler().getAckJoinBuffer().contains(this)){
+                logic.getServer().getJoinHandler().getAckJoinBuffer().add(this);
+                logic.getServer().getJoinHandler().checkTimer();
+            }
         }
 
     }

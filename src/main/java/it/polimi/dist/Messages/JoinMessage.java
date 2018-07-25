@@ -26,7 +26,7 @@ public class JoinMessage extends Message {
     @Override
     public void retransmission(Server server) {
         TimerThread timerThread = new TimerThread(this, server);
-        server.getLogic().getRetransmissionTimers().put(this, timerThread); // add to Hash Map in Logic with Message - Timer
+        server.getJoinHandler().setTimerJoin(timerThread);
         timerThread.start();
     }
 
