@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import static java.lang.Math.abs;
 
 
-public abstract class VectoClockUtil {
+public abstract class VectoUtil {
     //ArrayList<Integer> vectorClock
 
     public static boolean equalV(ArrayList<Integer> v1, ArrayList<Integer> v2){
@@ -27,16 +27,11 @@ public abstract class VectoClockUtil {
     index[0] -> serverNumber
     index[1] -> timestamp
      */
-    public static ArrayList<Long> missedMessage (ArrayList<Integer> vMessage, ArrayList<Integer> vClock){
+    /*public static boolean missingMessage(ArrayList<Integer> vMessage, ArrayList<Integer> vClock){
         ArrayList<Long> index = new ArrayList<Long>();
         //todo---------------!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        return index;
-    }
-
-    public static boolean alreadyReceved(){
-        //todo
         return false;
-    }
+    }*/
 
     /*
     it returns:
@@ -76,13 +71,13 @@ public abstract class VectoClockUtil {
         //    return 0;
     }
 
-    public static ArrayList<Integer> addOne(Logic logic) {
+    public static ArrayList<Integer> addOne(Logic logic, int serverNumber) {
         ArrayList<Integer> res;
         int temp;
         synchronized (logic) {
             res = logic.getVectorClock();
-            temp = res.get(logic.getServerNumber()) + 1;
-            res.set(logic.getServerNumber(), temp);
+            temp = res.get(serverNumber) + 1;
+            res.set(serverNumber, temp);
             logic.setVectorClock(res);
         }
         return res;

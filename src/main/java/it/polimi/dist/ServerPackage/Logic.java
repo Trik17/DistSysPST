@@ -3,11 +3,7 @@ package it.polimi.dist.ServerPackage;
 import it.polimi.dist.Messages.Acknowledgement;
 import it.polimi.dist.Messages.Message;
 import it.polimi.dist.Messages.WriteMessage;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 
 public class Logic{
 
@@ -17,10 +13,13 @@ public class Logic{
     private int serverNumber;
     //private ExecutorService executor; //executor.submit(this);
     private LinkedList<WriteMessage> writeBuffer;
+    private List<WriteMessage> performedWrites;
+    private List<Acknowledgement> transmittedAcks;
     //private LinkedList<WriteMessage> resendBuffer;
     private LinkedList<Acknowledgement> ackBuffer;
-    private Map<ArrayList<Long>,Message> queue;
+    private List<Message> queue;
     private Map<Message,TimerThread> retransmissionTimers;
+
 
 
     /*
@@ -36,9 +35,12 @@ public class Logic{
         this.writeBuffer = new LinkedList<WriteMessage>();
         //this.resendBuffer = new LinkedList<WriteMessage>();
         this.ackBuffer = new LinkedList<Acknowledgement>();
-        this.queue = new HashMap<ArrayList<Long>, Message>();
+        this.queue = new ArrayList<Message>();
         this.retransmissionTimers = new HashMap<Message, TimerThread>();
         this.vectorClock = new ArrayList<Integer>();
+        this.performedWrites = new ArrayList<WriteMessage>();
+        this.transmittedAcks = new ArrayList<Acknowledgement>();
+
         if(serverNumber==-1)
             inizializeVectorClock(1);
         else
@@ -62,27 +64,27 @@ public class Logic{
             if (writeBuffer.get(i).getServerNumber()!=this.serverNumber)
                 writeBuffer.remove(i);
         }
-
-        //TODO aspettare qualche secondo e iniziare a inviare di nuovo le write vecchie
     }
 
     //TODO -> collegare a server santa
     public void removeServer(int serverNumber){
+        /*
         for (int i = 0; i < writeBuffer.size(); i++) {
             if(writeBuffer.get(i).getServerNumber()==serverNumber)
                 writeBuffer.remove(i);
         }
+        //todo togliere il server caduto dal vector clock e ricontrollo che ora mi bastino gli ack
         for (int j = 0; j < ackBuffer.size(); j++) {
             if(ackBuffer.get(j).getServerNumber()==serverNumber)
                 ackBuffer.remove(j);
-        }
+        }*/
     }
 
     public void write(String dataId, int newData) {
         WriteMessage message = new WriteMessage(this.serverNumber);
         message.fill(dataId,newData);
         writeBuffer.add(message);
-        message.setVectorClock(VectoClockUtil.addOne(this));
+        message.setVectorClock(VectoUtil.addOne(this, this.serverNumber));
         server.sendMulti(message);
     }
 
@@ -93,32 +95,22 @@ public class Logic{
             else
                 return;
         }
-        /*if(!message.isNetMessage() && VectoClockUtil.outOfSequence(message.getVectorClock(),this.vectorClock, message.getServerNumber())) {
-            //TODO NON FUNZIONA!!!
-            /*
-            a
-            a
-            a
-            a
-            a
-            a  QUEUEEEEEEEEEE
-            a
-            a
-            a
-
-             *//*
-            ArrayList<Long> index ;
-            index=VectoClockUtil.missedMessage(message.getVectorClock(),this.vectorClock);
-            queue.put(index,message);
-            //todo requestRetransmission(i);//ma deve aspettare un attimo magari?
+        if(!message.isNetMessage() &&
+                VectoUtil.outOfSequence(message.getVectorClock(),this.vectorClock, message.getServerNumber())){
+            queue.add(message);
             return;
-        }*/
+        }
         message.execute(this);
         checkQueue(message);
     }
 
     private void checkQueue(Message message) {
-        //todo  forse è più di uno? devo fare una specie di for??
+        for (int i = 0; i < queue.size(); i++) {
+            if (message.getServerNumber()==queue.get(i).getServerNumber())
+                continue;//questo è solo per velocizzare la funzione
+            if (VectoUtil.outOfSequence(queue.get(i).getVectorClock(),this.vectorClock, queue.get(i).getServerNumber()))
+                queue.get(i).execute(this);
+        }
         /*long index[] = new long[2];
         //index[0] -> serverNumber        index[1] -> timestamp
         index[0]=message.serverNumber;
@@ -126,14 +118,6 @@ public class Logic{
         if (queue.containsKey(index))
             queue.get(index).execute(this);
     */}
-
-    //TODO
-    private void requestRetransmission(int clock, int serverNumber) {
-        //RequestRetransmission r = new RequestRetransmission();
-        //r.fill();
-        //TODO fare un messaggio particolare che chieda la ritrasmissione: e un metodo che lo ritrasmette
-        //server.sendMulti(r);
-    }
 
     public void checkAckBuffer(){
         //controlla quanti ack ci sono e se sono > di vectorclock size fa la scrittura
@@ -146,6 +130,7 @@ public class Logic{
             }
             if (count>= vectorClock.size())
                 performWrite(writeBuffer.get(i));
+            count=0;
         }
     }
 
@@ -153,11 +138,19 @@ public class Logic{
         retransmissionTimers.get(writeMessage).interrupt();
         retransmissionTimers.remove(writeMessage);
         server.getStorage().write(writeMessage.getKey(),writeMessage.getData());
+        this.performedWrites.add(writeMessage);
+        writeBuffer.remove(writeMessage);
+        for (int j = 0; j < ackBuffer.size(); j++) {
+            if (ackBuffer.get(j).getWriteTimestamp()==writeMessage.getTimeStamp()
+                    && ackBuffer.get(j).getWriteServerNumber()==writeMessage.getServerNumber())
+                ackBuffer.remove(j);
+        }
         System.out.println("Write performed: id = " + writeMessage.getKey() + "; value = " + String.valueOf(writeMessage.getData()));
-        //todo cancella i write message e i rispettivi ack!
     }
 
     public Server getServer() {   return server;    }
+
+    public List<WriteMessage> getPerformedWrites() { return performedWrites;    }
 
     public ArrayList<Integer> getVectorClock() {
         return vectorClock;
@@ -175,7 +168,7 @@ public class Logic{
         return ackBuffer;
     }
 
-    public Map<ArrayList<Long>, Message> getQueue() {
+    public List<Message> getQueue() {
         return queue;
     }
 
@@ -189,6 +182,10 @@ public class Logic{
 
     public void setServerNumber(int serverNumber) {
         this.serverNumber = serverNumber;
+    }
+
+    public List<Acknowledgement> getTransmittedAcks() {
+        return transmittedAcks;
     }
 }
 /*

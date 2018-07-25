@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import org.json.simple.JSONObject;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -96,8 +97,25 @@ public class DataStorage implements Serializable{
     public void write(String dataId, int newData) {  //TODO
         this.data.put(dataId,newData);
         //todo togliendo il commento(QUA E NEL COSTRUTTORE) si fa il file json writeToFile();
-    }/*
-    public static void main(String[] args) {
+    }
+    /*public static void main(String[] args) {
+        ArrayList<Long> index = new ArrayList<Long>();
+        ArrayList<Long> index2 = new ArrayList<Long>();
+        long a=3;
+        long b = 644674847;
+        long c = 3;
+        long d = 644674847;
+        index.add(a);
+        index.add(b);
+        index2.add(c);
+        index2.add(d);
+        if (index.equals(index2))
+            System.out.println(" funziona equals");
+        if (index==index2)
+            System.out.println(" funziona ==");
+        if (!index.equals(index2))
+            System.out.println("NON funziona equals");
+    /*
         while(true) {
             DataStorage dataStorage = new DataStorage();
             System.out.println("Which action do you want to execute? \n (R) Read - (W) Write");
