@@ -120,17 +120,19 @@ public class Logic{
     */}
 
     public void checkAckBuffer(){
-        //controlla quanti ack ci sono e se sono > di vectorclock size fa la scrittura
-        int count=0;
-        for (int i = 0; i < writeBuffer.size(); i++) {
-            for (int j = 0; j < ackBuffer.size(); j++) {
-                if (ackBuffer.get(j).getWriteTimestamp()==writeBuffer.get(i).getTimeStamp()
-                        && ackBuffer.get(j).getWriteServerNumber()==writeBuffer.get(i).getServerNumber())
-                    count++;
+        synchronized (this) {
+            //controlla quanti ack ci sono e se sono > di vectorclock size fa la scrittura
+            int count = 0;
+            for (int i = 0; i < writeBuffer.size(); i++) {
+                for (int j = 0; j < ackBuffer.size(); j++) {
+                    if (ackBuffer.get(j).getWriteTimestamp() == writeBuffer.get(i).getTimeStamp()
+                            && ackBuffer.get(j).getWriteServerNumber() == writeBuffer.get(i).getServerNumber())
+                        count++;
+                }
+                if (count >= vectorClock.size())
+                    performWrite(writeBuffer.get(i));
+                count = 0;
             }
-            if (count>= vectorClock.size())
-                performWrite(writeBuffer.get(i));
-            count=0;
         }
     }
 
