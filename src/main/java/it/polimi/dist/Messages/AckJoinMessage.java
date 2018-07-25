@@ -1,7 +1,7 @@
 package it.polimi.dist.Messages;
 
-import it.polimi.dist.DataStorage;
-import it.polimi.dist.Model.Logic;
+import it.polimi.dist.ServerPackage.DataStorage;
+import it.polimi.dist.ServerPackage.Logic;
 
 import java.util.Map;
 
@@ -39,7 +39,10 @@ public class AckJoinMessage extends Message{
             logic.setServerNumber(numberOfServers);
             logic.inizializeVectorClock(numberOfServers);
             logic.getServer().setStorage(dataStorage);
-
+            if (!logic.getServer().getJoinHandler().getAckJoinBuffer().contains(this)){
+                logic.getServer().getJoinHandler().getAckJoinBuffer().add(this);
+                logic.getServer().getJoinHandler().checkTimer();
+            }
         }
 
     }

@@ -1,9 +1,9 @@
-package it.polimi.dist.Model;
+package it.polimi.dist.ServerPackage;
 
 import it.polimi.dist.Messages.Acknowledgement;
 import it.polimi.dist.Messages.Message;
 import it.polimi.dist.Messages.WriteMessage;
-import it.polimi.dist.Server;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;

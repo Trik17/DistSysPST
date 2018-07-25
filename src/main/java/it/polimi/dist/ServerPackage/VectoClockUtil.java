@@ -1,11 +1,10 @@
-package it.polimi.dist.Model;
+package it.polimi.dist.ServerPackage;
 
 import it.polimi.dist.Messages.Message;
 
 import java.util.ArrayList;
 
 import static java.lang.Math.abs;
-import static java.lang.Math.log;
 
 
 public abstract class VectoClockUtil {

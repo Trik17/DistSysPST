@@ -1,8 +1,7 @@
 package it.polimi.dist.Messages;
 
-import it.polimi.dist.Client;
-import it.polimi.dist.Model.ClientMessage;
-import it.polimi.dist.Model.Logic;
+import it.polimi.dist.ClientPackage.Client;
+import it.polimi.dist.ServerPackage.Logic;
 
 import java.io.IOException;
 import java.util.Scanner;

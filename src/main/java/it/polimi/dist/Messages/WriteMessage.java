@@ -1,9 +1,9 @@
 package it.polimi.dist.Messages;
 
-import it.polimi.dist.Model.Logic;
-import it.polimi.dist.Model.TimerThread;
-import it.polimi.dist.Model.VectoClockUtil;
-import it.polimi.dist.Server;
+import it.polimi.dist.ServerPackage.Logic;
+import it.polimi.dist.ServerPackage.TimerThread;
+import it.polimi.dist.ServerPackage.VectoClockUtil;
+import it.polimi.dist.ServerPackage.Server;
 
 public class WriteMessage extends Message {
 
@@ -14,7 +14,7 @@ public class WriteMessage extends Message {
     public void execute(Logic logic) {
         //otherwise:
         /*
-        if(logic.writeBuffer.contains(this)) //does it works?todo
+        if(logic.writeBuffer.contains(this))
             return;
         */
         //this for avoid the readding of a write already present in the buffer

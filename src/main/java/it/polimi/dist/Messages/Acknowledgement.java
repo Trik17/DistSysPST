@@ -1,7 +1,6 @@
 package it.polimi.dist.Messages;
 
-import it.polimi.dist.Model.Logic;
-import it.polimi.dist.Model.VectoClockUtil;
+import it.polimi.dist.ServerPackage.Logic;
 
 public class Acknowledgement extends Message {
     protected long writeTimestamp;
@@ -41,6 +40,6 @@ public class Acknowledgement extends Message {
 
     @Override
     public String toString() {
-        return "<<<<<<<<<<<<<<<<<<<<<<<<<<<<< \nACK WRITE \nWrite Timestamp: " + String.valueOf(writeTimestamp) + "\nWrite Server Number: " + String.valueOf(writeServerNumber) + super.toString();
+        return "<<<<<<<<<<<<<<<<<<<<<<<<<<<<< \nACK WRITE \nWrite Timestamp: " + String.valueOf(writeTimestamp) + "\nWrite ServerPackage Number: " + String.valueOf(writeServerNumber) + super.toString();
     }
 }

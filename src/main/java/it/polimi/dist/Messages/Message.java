@@ -1,7 +1,7 @@
 package it.polimi.dist.Messages;
 
-import it.polimi.dist.Model.Logic;
-import it.polimi.dist.Server;
+import it.polimi.dist.ServerPackage.Logic;
+import it.polimi.dist.ServerPackage.Server;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -73,7 +73,7 @@ public abstract class Message implements Serializable {
 
     @Override
     public String toString() {
-        return "\nTimestamp: " + String.valueOf(timestamp) + "\nServer Number: " + String.valueOf(serverNumber)
+        return "\nTimestamp: " + String.valueOf(timestamp) + "\nServerPackage Number: " + String.valueOf(serverNumber)
                 + "\nData ID: " + key + "\nValue: " + String.valueOf(data) + "\n------------------------------";
     }
 }

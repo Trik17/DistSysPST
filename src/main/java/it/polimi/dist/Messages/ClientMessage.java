@@ -1,7 +1,6 @@
-package it.polimi.dist.Model;
+package it.polimi.dist.Messages;
 
-import it.polimi.dist.Client;
-import it.polimi.dist.Messages.Message;
+import it.polimi.dist.ClientPackage.Client;
 
 import java.io.IOException;
 

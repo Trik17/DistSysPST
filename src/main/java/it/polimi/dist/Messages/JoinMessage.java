@@ -1,8 +1,8 @@
 package it.polimi.dist.Messages;
 
-import it.polimi.dist.Model.Logic;
-import it.polimi.dist.Model.TimerThread;
-import it.polimi.dist.Server;
+import it.polimi.dist.ServerPackage.Logic;
+import it.polimi.dist.ServerPackage.TimerThread;
+import it.polimi.dist.ServerPackage.Server;
 
 public class JoinMessage extends Message {
 
@@ -26,7 +26,7 @@ public class JoinMessage extends Message {
     @Override
     public void retransmission(Server server) {
         TimerThread timerThread = new TimerThread(this, server);
-        server.getLogic().getRetransmissionTimers().put(this, timerThread); // add to Hash Map in Logic with Message - Timer
+        server.getJoinHandler().setTimerJoin(timerThread);
         timerThread.start();
     }
 

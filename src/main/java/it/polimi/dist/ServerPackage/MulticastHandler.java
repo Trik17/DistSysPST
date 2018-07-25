@@ -1,10 +1,11 @@
-package it.polimi.dist;
+package it.polimi.dist.ServerPackage;
 
 
 import java.io.*;
 import java.net.DatagramPacket;
 import java.net.MulticastSocket;
 import it.polimi.dist.Messages.Message;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
