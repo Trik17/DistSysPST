@@ -27,13 +27,14 @@ public class Acknowledgement extends Message {
         return writeServerNumber;
     }
 
-    public void setWriteServerNumber(int writeServerNumber) {
-        this.writeServerNumber = writeServerNumber;
-    }
-
     public void execute(Logic logic) {
         if(logic.getAckBuffer().contains(this))
             return;
+        for (int j = 0; j < logic.getPerformedWrites().size(); j++) {
+            if (writeTimestamp==logic.getPerformedWrites().get(j).getTimeStamp()
+                    && writeServerNumber == logic.getPerformedWrites().get(j).getServerNumber())
+                return;
+        }
         logic.getAckBuffer().add(this);
         logic.checkAckBuffer();
     }

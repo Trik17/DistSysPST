@@ -3,11 +3,7 @@ package it.polimi.dist.ServerPackage;
 import it.polimi.dist.Messages.Acknowledgement;
 import it.polimi.dist.Messages.Message;
 import it.polimi.dist.Messages.WriteMessage;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 
 public class Logic{
 
@@ -17,10 +13,13 @@ public class Logic{
     private int serverNumber;
     //private ExecutorService executor; //executor.submit(this);
     private LinkedList<WriteMessage> writeBuffer;
+    private List<WriteMessage> performedWrites;
+    private List<Acknowledgement> transmittedAcks;
     //private LinkedList<WriteMessage> resendBuffer;
     private LinkedList<Acknowledgement> ackBuffer;
     private Map<ArrayList<Long>,Message> queue;
     private Map<Message,TimerThread> retransmissionTimers;
+
 
 
     /*
@@ -39,6 +38,9 @@ public class Logic{
         this.queue = new HashMap<ArrayList<Long>, Message>();
         this.retransmissionTimers = new HashMap<Message, TimerThread>();
         this.vectorClock = new ArrayList<Integer>();
+        this.performedWrites = new ArrayList<WriteMessage>();
+        this.transmittedAcks = new ArrayList<Acknowledgement>();
+
         if(serverNumber==-1)
             inizializeVectorClock(1);
         else
@@ -127,14 +129,6 @@ public class Logic{
             queue.get(index).execute(this);
     */}
 
-    //TODO
-    private void requestRetransmission(int clock, int serverNumber) {
-        //RequestRetransmission r = new RequestRetransmission();
-        //r.fill();
-        //TODO fare un messaggio particolare che chieda la ritrasmissione: e un metodo che lo ritrasmette
-        //server.sendMulti(r);
-    }
-
     public void checkAckBuffer(){
         //controlla quanti ack ci sono e se sono > di vectorclock size fa la scrittura
         int count=0;
@@ -146,6 +140,7 @@ public class Logic{
             }
             if (count>= vectorClock.size())
                 performWrite(writeBuffer.get(i));
+            count=0;
         }
     }
 
@@ -153,10 +148,18 @@ public class Logic{
         retransmissionTimers.get(writeMessage).interrupt();
         retransmissionTimers.remove(writeMessage);
         server.getStorage().write(writeMessage.getKey(),writeMessage.getData());
-        //todo cancella i write message e i rispettivi ack!
+        this.performedWrites.add(writeMessage);
+        writeBuffer.remove(writeMessage);
+        for (int j = 0; j < ackBuffer.size(); j++) {
+            if (ackBuffer.get(j).getWriteTimestamp()==writeMessage.getTimeStamp()
+                    && ackBuffer.get(j).getWriteServerNumber()==writeMessage.getServerNumber())
+                ackBuffer.remove(j);
+        }
     }
 
     public Server getServer() {   return server;    }
+
+    public List<WriteMessage> getPerformedWrites() { return performedWrites;    }
 
     public ArrayList<Integer> getVectorClock() {
         return vectorClock;
@@ -188,6 +191,10 @@ public class Logic{
 
     public void setServerNumber(int serverNumber) {
         this.serverNumber = serverNumber;
+    }
+
+    public List<Acknowledgement> getTransmittedAcks() {
+        return transmittedAcks;
     }
 }
 /*
