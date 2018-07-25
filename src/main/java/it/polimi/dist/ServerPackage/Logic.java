@@ -17,7 +17,7 @@ public class Logic{
     private List<Acknowledgement> transmittedAcks;
     //private LinkedList<WriteMessage> resendBuffer;
     private LinkedList<Acknowledgement> ackBuffer;
-    private Map<ArrayList<Long>,Message> queue;
+    private List<Message> queue;
     private Map<Message,TimerThread> retransmissionTimers;
 
 
@@ -35,7 +35,7 @@ public class Logic{
         this.writeBuffer = new LinkedList<WriteMessage>();
         //this.resendBuffer = new LinkedList<WriteMessage>();
         this.ackBuffer = new LinkedList<Acknowledgement>();
-        this.queue = new HashMap<ArrayList<Long>, Message>();
+        this.queue = new ArrayList<Message>();
         this.retransmissionTimers = new HashMap<Message, TimerThread>();
         this.vectorClock = new ArrayList<Integer>();
         this.performedWrites = new ArrayList<WriteMessage>();
@@ -64,8 +64,6 @@ public class Logic{
             if (writeBuffer.get(i).getServerNumber()!=this.serverNumber)
                 writeBuffer.remove(i);
         }
-        //TODO aspettare qualche secondo e iniziare a inviare di nuovo le write vecchie nei buffer
-                    // o bastano i timer già fatti?
     }
 
     //TODO -> collegare a server santa
@@ -99,13 +97,7 @@ public class Logic{
         }
         if(!message.isNetMessage() &&
                 VectoUtil.outOfSequence(message.getVectorClock(),this.vectorClock, message.getServerNumber())){
-            //TODO NON FUNZIONA!!!
-            /*
-            todo  QUEUEEEEEEEE
-             */
-            //ArrayList<Long> index ;
-            //index=VectoUtil.missedMessage(message.getVectorClock(),this.vectorClock);
-            //queue.put(index,message);
+            queue.add(message);
             return;
         }
         message.execute(this);
@@ -113,7 +105,12 @@ public class Logic{
     }
 
     private void checkQueue(Message message) {
-        //todo  forse è più di uno? devo fare una specie di for??
+        for (int i = 0; i < queue.size(); i++) {
+            if (message.getServerNumber()==queue.get(i).getServerNumber())
+                continue;//questo è solo per velocizzare la funzione
+            if (VectoUtil.outOfSequence(queue.get(i).getVectorClock(),this.vectorClock, queue.get(i).getServerNumber()))
+                queue.get(i).execute(this);
+        }
         /*long index[] = new long[2];
         //index[0] -> serverNumber        index[1] -> timestamp
         index[0]=message.serverNumber;
@@ -170,7 +167,7 @@ public class Logic{
         return ackBuffer;
     }
 
-    public Map<ArrayList<Long>, Message> getQueue() {
+    public List<Message> getQueue() {
         return queue;
     }
 

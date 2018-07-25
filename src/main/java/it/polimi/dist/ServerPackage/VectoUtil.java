@@ -27,16 +27,11 @@ public abstract class VectoUtil {
     index[0] -> serverNumber
     index[1] -> timestamp
      */
-    public static ArrayList<Long> missedMessage (ArrayList<Integer> vMessage, ArrayList<Integer> vClock){
+    /*public static boolean missingMessage(ArrayList<Integer> vMessage, ArrayList<Integer> vClock){
         ArrayList<Long> index = new ArrayList<Long>();
         //todo---------------!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        return index;
-    }
-
-    public static boolean alreadyReceved(){
-        //todo
         return false;
-    }
+    }*/
 
     /*
     it returns:
