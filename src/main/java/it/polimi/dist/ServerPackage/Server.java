@@ -200,15 +200,16 @@ public class Server  implements Runnable{
     public static void main(String[] args) {
         Server server = null;
         try {
+            String groupIP = "225.4.5.6";
             String ip = InetAddress.getLocalHost().getHostAddress();
-            System.out.println("ServerPackage ip: " + ip);
-            System.out.println("Are you the first server? \n(1) Yes - (2) No");
+            System.out.println("Server ip: " + ip);
+            System.out.println("Do you want to create a new Multicast Connection? \n(1) Yes - (2) No");
             Scanner scanner = new Scanner(System.in);
             int choice = scanner.nextInt();
             if (choice == 1)
-                server = new Server(9334, 9000,"225.4.5.6", 0);
+                server = new Server(9334, 9000,groupIP, 0);
             else
-                server = new Server(9334, 9000,"225.4.5.6");
+                server = new Server(9334, 9000,groupIP);
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }

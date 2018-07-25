@@ -14,6 +14,7 @@ public abstract class Message implements Serializable {
     protected ArrayList<Integer> vectorClock;
     protected int serverNumber; //position in the vector clock of the message's server
     protected boolean isNetMessage;
+    protected int numberOfRetransmission = 0;
 
     public Message(int serverNumber){
         this.serverNumber = serverNumber;
@@ -60,6 +61,14 @@ public abstract class Message implements Serializable {
 
     public void retransmission(Server server){
         return;
+    }
+
+    public int getNumberOfRetransmission() {
+        return numberOfRetransmission;
+    }
+
+    public void setNumberOfRetransmission(int numberOfRetransmission) {
+        this.numberOfRetransmission = numberOfRetransmission;
     }
 
     @Override

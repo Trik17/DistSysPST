@@ -153,6 +153,7 @@ public class Logic{
         retransmissionTimers.get(writeMessage).interrupt();
         retransmissionTimers.remove(writeMessage);
         server.getStorage().write(writeMessage.getKey(),writeMessage.getData());
+        System.out.println("Write performed: id = " + writeMessage.getKey() + "; value = " + String.valueOf(writeMessage.getData()));
         //todo cancella i write message e i rispettivi ack!
     }
 

@@ -5,7 +5,9 @@ import it.polimi.dist.Messages.ClientReadMessage;
 import it.polimi.dist.Messages.ClientWriteMessage;
 
 import java.io.*;
+import java.net.ConnectException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.NoSuchElementException;
 import java.util.Random;
@@ -45,17 +47,17 @@ public class Client {
 
     public void createRandomMessages() {
         try {
-            new ClientReadThread(this).start();
+            new Thread(new ClientReadThread(this)).start();
 
             do {
                 System.out.println("Type anything and press Enter to start...");
-                String choice = scanner.next();
+                String startInput = scanner.next();
 
                 Random rnd = new Random();
 
                 //Communicating with the server
                 for (int i = 0; i < 20; i++) {
-                    Thread.sleep(50);
+                    Thread.sleep(50); //message frequency
                     String id = String.valueOf(rnd.nextInt(5));
                     int value = rnd.nextInt(50);
                     ClientMessage clientMessage;
@@ -170,18 +172,16 @@ public class Client {
             System.out.println("Connection established");
             System.out.println("Select Client Mode: \n(1) Manual (2) Auto");
             int choice = scanner.nextInt();
-            if (choice == 2){
+            if (choice == 2) {
                 client.createRandomMessages();
-            }
-            else {
+            } else {
                 client.startClient();
             }
         } catch (UnknownHostException e) {
             e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("The ip address does not exist");
         }
     }
-
 
 }
