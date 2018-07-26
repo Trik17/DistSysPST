@@ -92,7 +92,7 @@ public abstract class Message implements Serializable {
 
         String string = "";
         for (int i = 0; i < vectorClock.size(); i++){
-            string = string.concat(String.valueOf(vectorClock.get(i)));
+            string = string.concat(String.valueOf(vectorClock.get(i)) + ",");
         }
         return  string;
     }
