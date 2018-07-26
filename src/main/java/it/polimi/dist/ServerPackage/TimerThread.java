@@ -1,6 +1,7 @@
 package it.polimi.dist.ServerPackage;
 
 import it.polimi.dist.Messages.Message;
+import it.polimi.dist.Messages.RemoveMessage;
 import it.polimi.dist.Messages.WriteMessage;
 
 import java.util.ArrayList;
@@ -22,12 +23,13 @@ public class TimerThread extends Thread {
     public void run() {
         try {
             this.sleep(toSleep);
-            if (messageToResend instanceof WriteMessage) {
+            if (messageToResend instanceof WriteMessage && !server.getLogic().isStopped()) {
                 WriteMessage message = findMessage(); //find the messageToResend in the Write Buffer
                 if (checkFailedServers(message)){
                     //remove server
                     int failedServerNumber = message.getAckNotReceived().indexOf(retransmissionThreshold);
-                    server.getLogic().removeServer(message.getAckNotReceived().get(failedServerNumber));
+                    RemoveMessage removeMessage = new RemoveMessage(server.getLogic().getServerNumber(),failedServerNumber);
+                    server.getLogic().removeServer(removeMessage);
                     return;
                 }
                 else {
