@@ -84,7 +84,7 @@ public abstract class Message implements Serializable {
     @Override
     public String toString() {
         return "\nTimestamp: " + String.valueOf(timestamp) + "\nServer Number: " + String.valueOf(serverNumber)
-                + "Vector Clock: " + arrayToString(vectorClock) + "\n------------------------------";
+                + "\nVector Clock: " + arrayToString(vectorClock) + "\n------------------------------";
     }
 
     private String arrayToString(ArrayList<Integer> vectorClock) {

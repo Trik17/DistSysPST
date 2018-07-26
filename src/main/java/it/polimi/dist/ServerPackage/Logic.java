@@ -91,8 +91,8 @@ public class Logic{
             vectorClock.remove(serverNumber);
         }
         checkAckBuffer();
-        //checkQueue(???); ???
-    }
+    //checkQueue(???); ???
+}
 
     public void write(String dataId, int newData) {
         WriteMessage message = new WriteMessage(this.serverNumber);
@@ -122,8 +122,10 @@ public class Logic{
         for (int i = 0; i < queue.size(); i++) {
             /*if (message.getServerNumber()==queue.get(i).getServerNumber())
                 continue;*///questo è solo per velocizzare la funzione
-            if (!VectoUtil.outOfSequence(queue.get(i).getVectorClock(),this.vectorClock, queue.get(i).getServerNumber()))
+            if (!VectoUtil.outOfSequence(queue.get(i).getVectorClock(),this.vectorClock, queue.get(i).getServerNumber())){
+                System.out.println("execution of a no-more-outOfSequence packet");
                 queue.get(i).execute(this);
+            }
         }
         /*long index[] = new long[2];
         //index[0] -> serverNumber        index[1] -> timestamp

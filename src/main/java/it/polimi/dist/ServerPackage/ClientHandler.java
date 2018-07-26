@@ -41,7 +41,7 @@ public class ClientHandler implements Runnable  {
                     System.out.println("Message Received from Client");
                     //System.out.println(message.toString());
                     message.execute(server.getLogic());
-                    System.out.println("Message processed");
+                    System.out.println("Client Message processed");
 
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
