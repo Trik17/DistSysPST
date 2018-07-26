@@ -62,16 +62,16 @@ public class Logic{
 
     public void removeServer(int serverNumber){
         synchronized (this) {
-            if (isStopped())
+            if (isStopped()) {
                 return;
+            }
             this.stopped = true;//todo + poi toglierlo + blocco gli invii ??
             RemoveMessage removeMessage = new RemoveMessage(this.serverNumber,serverNumber);
             this.removeMessages.add(removeMessage);
             server.sendMulti(removeMessage);
 
                     //------------------------
-            if (this.serverNumber>serverNumber)//qua o dopo gli ack?
-                this.serverNumber-=1;
+
 
             //send removepack and then wait the acks
 
@@ -85,6 +85,8 @@ public class Logic{
     public void checkAckRemove(){
         synchronized (this) {
             if (ackRemovedServers.size() >= (vectorClock.size()-1) ){
+                if (this.serverNumber>serverNumber)//qua o dopo gli ack?
+                    this.serverNumber-=1;
                 /*
                 e se mi arriva poi una remove server di ritrasmissione
                 dopo che io ho finito e sono ripartito?
@@ -232,6 +234,10 @@ public class Logic{
     public List<AckMessage> getTransmittedAcks() {
         return transmittedAcks;
     }
+
+    public List<RemoveMessage> getRemoveMessages() {        return removeMessages;     }
+
+
 }
 /*
 ogni server parte da 0
