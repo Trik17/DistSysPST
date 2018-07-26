@@ -25,14 +25,14 @@ public class MulticastHandler implements Runnable {
 
     @Override
     public void  run(){
+        System.out.println("Multicast Handler online");
         while (true) {
             try {
-                System.out.println("Multicast Handler online");
                 //Create buffer to receive datagram
                 byte[] buffer = new byte[bufferSize];
                 DatagramPacket datagram = new DatagramPacket(buffer, bufferSize);
                 multiSocket.receive(datagram);
-                System.out.println("Packet received");
+                //System.out.println("Packet received");
 
                 //Deserialize object
                 ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
