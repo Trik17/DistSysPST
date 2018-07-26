@@ -5,9 +5,14 @@ import it.polimi.dist.ServerPackage.TimerThread;
 import it.polimi.dist.ServerPackage.VectoUtil;
 import it.polimi.dist.ServerPackage.Server;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class WriteMessage extends Message {
 
+    protected ArrayList<Integer> ackNotReceived = new ArrayList<Integer>(); //todo in the write buffer 
     public WriteMessage(int serverNumber) {
+
         super(serverNumber);
     }
 
@@ -17,7 +22,7 @@ public class WriteMessage extends Message {
         if(logic.writeBuffer.contains(this))
             return;
         */
-        //this for avoid the readding of a write already present in the buffer
+        //this for avoid the reading of a write already present in the buffer
         for (int i = 0; i < logic.getWriteBuffer().size(); i++) {
             if (logic.getWriteBuffer().get(i).timestamp == this.timestamp
                     && logic.getWriteBuffer().get(i).serverNumber == this.serverNumber){

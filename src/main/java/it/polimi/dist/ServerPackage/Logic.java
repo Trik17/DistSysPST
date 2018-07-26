@@ -139,7 +139,7 @@ public class Logic{
     private void performWrite(WriteMessage writeMessage){
         try {
             String key = String.valueOf(writeMessage.getTimeStamp()).concat(String.valueOf(writeMessage.getServerNumber()));
-            if (retransmissionTimers.get(key).isInterrupted()){
+            if (!retransmissionTimers.get(key).isInterrupted()){
                 retransmissionTimers.get(key).interrupt();
                 retransmissionTimers.remove(key);
             }

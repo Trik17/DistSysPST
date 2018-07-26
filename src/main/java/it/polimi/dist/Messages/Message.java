@@ -82,7 +82,7 @@ public abstract class Message implements Serializable {
 
     @Override
     public String toString() {
-        return "\nTimestamp: " + String.valueOf(timestamp) + "\nServerPackage Number: " + String.valueOf(serverNumber)
+        return "\nTimestamp: " + String.valueOf(timestamp) + "\nServer Number: " + String.valueOf(serverNumber)
                 + "\nData ID: " + key + "\nValue: " + String.valueOf(data) + "\n------------------------------";
     }
 }
