@@ -39,6 +39,7 @@ public class Server  implements Runnable{
 
     public Server(int port, int multiPort, String groupIP, int serverNumber) throws UnknownHostException {
         this.storage = new DataStorage();
+        this.joinHandler = new JoinHandler(this);
         this.port = port;
         this.multiPort = multiPort;
         this.executor = Executors.newCachedThreadPool();
