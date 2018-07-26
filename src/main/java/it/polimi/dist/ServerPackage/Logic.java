@@ -1,13 +1,7 @@
 package it.polimi.dist.ServerPackage;
 
-<<<<<<< HEAD
-import it.polimi.dist.Messages.*;
 
-=======
-import it.polimi.dist.Messages.AckMessage;
-import it.polimi.dist.Messages.Message;
-import it.polimi.dist.Messages.WriteMessage;
->>>>>>> 40869d7f0381f7f884f5a679ba582e4eb330eff4
+import it.polimi.dist.Messages.*;
 import java.util.*;
 
 public class Logic{
@@ -18,15 +12,10 @@ public class Logic{
     //private ExecutorService executor;
     private LinkedList<WriteMessage> writeBuffer;
     private List<WriteMessage> performedWrites;
-<<<<<<< HEAD
-    private List<Acknowledge> transmittedAcks;
-    private List<AckRemovedServer> ackRemovedServers;
-    private LinkedList<Acknowledge> ackBuffer;
-=======
     private List<AckMessage> transmittedAcks;
     //private LinkedList<WriteMessage> resendBuffer;
     private LinkedList<AckMessage> ackBuffer;
->>>>>>> 40869d7f0381f7f884f5a679ba582e4eb330eff4
+    private List<AckRemovedServer> ackRemovedServers;
     private List<Message> queue;
     private Map<String,TimerThread> retransmissionTimers;
     private boolean stopped;
@@ -37,25 +26,15 @@ public class Logic{
         this.server=server;
         //this.executor = Executors.newCachedThreadPool();   //executor.submit(this);
         this.writeBuffer = new LinkedList<WriteMessage>();
-<<<<<<< HEAD
-        this.ackBuffer = new LinkedList<Acknowledge>();
-=======
-        //this.resendBuffer = new LinkedList<WriteMessage>();
         this.ackBuffer = new LinkedList<AckMessage>();
->>>>>>> 40869d7f0381f7f884f5a679ba582e4eb330eff4
         this.queue = new ArrayList<Message>();
         this.retransmissionTimers = new HashMap<String, TimerThread>();
         this.vectorClock = new ArrayList<Integer>();
         this.performedWrites = new ArrayList<WriteMessage>();
-<<<<<<< HEAD
-        this.transmittedAcks = new ArrayList<Acknowledge>();
         this.ackRemovedServers = new ArrayList<AckRemovedServer>();
         this.stopped = false;
         this.removeMessages = new ArrayList<RemoveMessage>();
-=======
         this.transmittedAcks = new ArrayList<AckMessage>();
-
->>>>>>> 40869d7f0381f7f884f5a679ba582e4eb330eff4
         if(serverNumber==-1)
             initializeVectorClock(1);
         else
@@ -179,7 +158,7 @@ public class Logic{
             //controlla quanti ack ci sono e se sono > di vectorclock size fa la scrittura
             int count = 0;
             for (WriteMessage aWriteBuffer : writeBuffer) {
-                for (Acknowledge anAckBuffer : ackBuffer) {
+                for (AckMessage anAckBuffer : ackBuffer) {
                     if (anAckBuffer.getWriteTimestamp() == aWriteBuffer.getTimeStamp()
                             && anAckBuffer.getWriteServerNumber() == aWriteBuffer.getServerNumber())
                         count++;

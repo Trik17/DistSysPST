@@ -80,7 +80,6 @@ public abstract class Message implements Serializable {
                 + "\nVector Clock: " + arrayToString(vectorClock) + "\n------------------------------";
     }
 
-<<<<<<< HEAD
     public boolean isRemovingMessage(){
         if (this.isRemovingMessage)
             return true;
@@ -88,10 +87,9 @@ public abstract class Message implements Serializable {
             return false;
     }
 
-    private String arrayToString(ArrayList<Integer> vectorClock) {
-=======
+
     public String arrayToString(ArrayList<Integer> vectorClock) {
->>>>>>> 40869d7f0381f7f884f5a679ba582e4eb330eff4
+
         String string = "";
         for (int i = 0; i < vectorClock.size(); i++){
             string = string.concat(String.valueOf(vectorClock.get(i)));
