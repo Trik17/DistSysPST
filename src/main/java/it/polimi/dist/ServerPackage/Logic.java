@@ -1,6 +1,6 @@
 package it.polimi.dist.ServerPackage;
 
-import it.polimi.dist.Messages.Acknowledgement;
+import it.polimi.dist.Messages.Acknowledge;
 import it.polimi.dist.Messages.Message;
 import it.polimi.dist.Messages.WriteMessage;
 import java.util.*;
@@ -14,9 +14,9 @@ public class Logic{
     //private ExecutorService executor; //executor.submit(this);
     private LinkedList<WriteMessage> writeBuffer;
     private List<WriteMessage> performedWrites;
-    private List<Acknowledgement> transmittedAcks;
+    private List<Acknowledge> transmittedAcks;
     //private LinkedList<WriteMessage> resendBuffer;
-    private LinkedList<Acknowledgement> ackBuffer;
+    private LinkedList<Acknowledge> ackBuffer;
     private List<Message> queue;
     private Map<String,TimerThread> retransmissionTimers;
 
@@ -34,20 +34,20 @@ public class Logic{
         //this.executor = Executors.newCachedThreadPool();
         this.writeBuffer = new LinkedList<WriteMessage>();
         //this.resendBuffer = new LinkedList<WriteMessage>();
-        this.ackBuffer = new LinkedList<Acknowledgement>();
+        this.ackBuffer = new LinkedList<Acknowledge>();
         this.queue = new ArrayList<Message>();
         this.retransmissionTimers = new HashMap<String, TimerThread>();
         this.vectorClock = new ArrayList<Integer>();
         this.performedWrites = new ArrayList<WriteMessage>();
-        this.transmittedAcks = new ArrayList<Acknowledgement>();
+        this.transmittedAcks = new ArrayList<Acknowledge>();
 
         if(serverNumber==-1)
-            inizializeVectorClock(1);
+            initializeVectorClock(1);
         else
-            inizializeVectorClock(serverNumber+1);
+            initializeVectorClock(serverNumber+1);
     }
 
-    public void inizializeVectorClock(int size){
+    public void initializeVectorClock(int size){
         for (int i = 0; i < size; i++) {
             vectorClock.add(0);
         }
@@ -189,7 +189,7 @@ public class Logic{
         return writeBuffer;
     }
 
-    public LinkedList<Acknowledgement> getAckBuffer() {
+    public LinkedList<Acknowledge> getAckBuffer() {
         return ackBuffer;
     }
 
@@ -209,7 +209,7 @@ public class Logic{
         this.serverNumber = serverNumber;
     }
 
-    public List<Acknowledgement> getTransmittedAcks() {
+    public List<Acknowledge> getTransmittedAcks() {
         return transmittedAcks;
     }
 }

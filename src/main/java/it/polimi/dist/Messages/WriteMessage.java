@@ -5,7 +5,6 @@ import it.polimi.dist.ServerPackage.TimerThread;
 import it.polimi.dist.ServerPackage.VectoUtil;
 import it.polimi.dist.ServerPackage.Server;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class WriteMessage extends Message {
@@ -17,30 +16,35 @@ public class WriteMessage extends Message {
     }
 
     public void execute(Logic logic) {
-        //otherwise:
-        /*
-        if(logic.writeBuffer.contains(this))
-            return;
-        */
-        //this for avoid the reading of a write already present in the buffer
-        for (int i = 0; i < logic.getWriteBuffer().size(); i++) {
-            if (logic.getWriteBuffer().get(i).timestamp == this.timestamp
-                    && logic.getWriteBuffer().get(i).serverNumber == this.serverNumber){
-                reSendAck(logic);
+        synchronized (logic) {
+            //otherwise:
+            /*
+            if(logic.writeBuffer.contains(this))
                 return;
+            */
+            //this for avoid the reading of a write already present in the buffer
+            for (int i = 0; i < logic.getWriteBuffer().size(); i++) {
+                if (logic.getWriteBuffer().get(i).timestamp == this.timestamp
+                        && logic.getWriteBuffer().get(i).serverNumber == this.serverNumber) {
+                    reSendAck(logic);
+                    return;
+                }
             }
-        }
-        for (int i = 0; i < logic.getPerformedWrites().size(); i++) {
-            if (logic.getPerformedWrites().get(i).timestamp == this.timestamp
-                    && logic.getPerformedWrites().get(i).serverNumber == this.serverNumber){
-                reSendAck(logic);
-                return;
+            for (int i = 0; i < logic.getPerformedWrites().size(); i++) {
+                if (logic.getPerformedWrites().get(i).timestamp == this.timestamp
+                        && logic.getPerformedWrites().get(i).serverNumber == this.serverNumber) {
+                    reSendAck(logic);
+                    return;
+                }
             }
+            if (serverNumber != logic.getServerNumber())
+                VectoUtil.addOne(logic, this.serverNumber);
+            for (int i = 0; i < logic.getVectorClock().size(); i++) {
+                ackNotReceived.add(1);
+            }
+            logic.getWriteBuffer().add(this);
+            sendAck(logic);
         }
-        if (serverNumber!=logic.getServerNumber())
-            VectoUtil.addOne(logic,this.serverNumber);
-        logic.getWriteBuffer().add(this);
-        sendAck(logic);
     }
 
     private void reSendAck(Logic logic) {
@@ -62,7 +66,7 @@ public class WriteMessage extends Message {
     }
 
     private void sendAck(Logic logic){
-        Acknowledgement ack = new Acknowledgement(logic.getServerNumber());
+        Acknowledge ack = new Acknowledge(logic.getServerNumber());
         ack.fillReferences(this.timestamp,this.serverNumber);
         ack.setVectorClock(VectoUtil.addOne(logic, logic.getServerNumber()));
         logic.getServer().sendMulti(ack);
@@ -71,6 +75,10 @@ public class WriteMessage extends Message {
             retransmission(logic.getServer());
         }
 
+    }
+
+    public ArrayList<Integer> getAckNotReceived() {
+        return ackNotReceived;
     }
 
     @Override

@@ -37,7 +37,7 @@ public class AckJoinMessage extends Message{
     public void execute(Logic logic) {
         if(logic.getServerNumber() == -1) {
             logic.setServerNumber(numberOfServers);
-            logic.inizializeVectorClock(numberOfServers);
+            logic.initializeVectorClock(numberOfServers);
             logic.getServer().setStorage(dataStorage);
             if (!logic.getServer().getJoinHandler().getAckJoinBuffer().contains(this)){
                 logic.getServer().getJoinHandler().getAckJoinBuffer().add(this);
