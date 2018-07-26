@@ -120,9 +120,9 @@ public class Logic{
 
     private void checkQueue(Message message) {
         for (int i = 0; i < queue.size(); i++) {
-            if (message.getServerNumber()==queue.get(i).getServerNumber())
-                continue;//questo è solo per velocizzare la funzione
-            if (VectoUtil.outOfSequence(queue.get(i).getVectorClock(),this.vectorClock, queue.get(i).getServerNumber()))
+            /*if (message.getServerNumber()==queue.get(i).getServerNumber())
+                continue;*///questo è solo per velocizzare la funzione
+            if (!VectoUtil.outOfSequence(queue.get(i).getVectorClock(),this.vectorClock, queue.get(i).getServerNumber()))
                 queue.get(i).execute(this);
         }
         /*long index[] = new long[2];
