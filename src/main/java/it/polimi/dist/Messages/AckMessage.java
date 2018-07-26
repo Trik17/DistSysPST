@@ -5,11 +5,11 @@ import it.polimi.dist.ServerPackage.VectoUtil;
 
 import java.util.ArrayList;
 
-public class Acknowledge extends Message {
+public class AckMessage extends Message {
     protected long writeTimestamp;
     protected int writeServerNumber;
 
-    public Acknowledge(int serverNumber){
+    public AckMessage(int serverNumber){
         super(serverNumber);
     }
 
@@ -32,6 +32,7 @@ public class Acknowledge extends Message {
 
     public void execute(Logic logic) {
         synchronized (this) {
+            //update the ackNotReceived subtracting 1 to the correct server position of the Arraylist
             for (int i = 0; i < logic.getWriteBuffer().size(); i++) {
                 if (logic.getWriteBuffer().get(i).timestamp == this.writeTimestamp
                         && logic.getWriteBuffer().get(i).serverNumber == this.writeServerNumber) {

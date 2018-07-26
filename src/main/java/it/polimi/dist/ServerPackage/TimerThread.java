@@ -1,17 +1,20 @@
 package it.polimi.dist.ServerPackage;
 
 import it.polimi.dist.Messages.Message;
+import it.polimi.dist.Messages.WriteMessage;
+
+import java.util.ArrayList;
 
 public class TimerThread extends Thread {
 
     private Server server;
-    private Message message;
+    private Message messageToResend;
     private int toSleep = 5000;
-    private int retransmissionThreshold = 5;
+    private int retransmissionThreshold = 7;
 
 
     public TimerThread(Message message, Server server) {
-        this.message = message;
+        this.messageToResend = message;
         this.server = server;
     }
 
@@ -19,20 +22,49 @@ public class TimerThread extends Thread {
     public void run() {
         try {
             this.sleep(toSleep);
-            int numberOfRetransmission = message.getNumberOfRetransmission();
-            //if (numberOfRetransmission < retransmissionThreshold){
-                server.sendMulti(message);
-                System.out.println("------MESSAGE RETRANSMITTED------ \n" + message.toString());
-                //if I have not already received all acks (and so the timerthread is still alive)
-                // resend the message (only join/write)
-                message.setNumberOfRetransmission(numberOfRetransmission + 1);
-            /*}
-            else {
-                server.getLogic().removeServer();
-            }*/
-
+            if (messageToResend instanceof WriteMessage) {
+                WriteMessage message = findMessage(); //find the messageToResend in the Write Buffer
+                if (checkFailedServers(message)){
+                    //remove server
+                    int failedServerNumber = message.getAckNotReceived().indexOf(retransmissionThreshold);
+                    server.getLogic().removeServer(message.getAckNotReceived().get(failedServerNumber));
+                    return;
+                }
+                else {
+                    updateMissingAcks(message); //add 1 to all position of ackNotReceived
+                }
+            }
+            server.sendMulti(messageToResend);
+            System.out.println("------MESSAGE RETRANSMITTED------ \n" + messageToResend.toString());
+            //if I have not already received all acks (and so the timeTthread is still alive)
+            // resend the messageToResend (only join/write)
         } catch (InterruptedException e) {
             System.out.println("No retransmission, timer interrupted");
         }
     }
+
+
+    private boolean checkFailedServers(WriteMessage message) {
+        System.out.println("Missing Acks: [" + message.arrayToString(message.getAckNotReceived()) + "]");
+        return message.getAckNotReceived().contains(retransmissionThreshold);
+    }
+    private void updateMissingAcks(WriteMessage message) {
+        ArrayList<Integer> ackNotReceived = message.getAckNotReceived();
+        for (int i = 0; i < server.getLogic().getVectorClock().size(); i++) {
+            ackNotReceived.set(i, ackNotReceived.get(i) + 1);
+        }
+    }
+
+    private WriteMessage findMessage() {
+        WriteMessage message;
+        for (int i = 0; i < server.getLogic().getWriteBuffer().size(); i++) {
+            message = server.getLogic().getWriteBuffer().get(i);
+            if (message.getTimeStamp() == messageToResend.getTimeStamp()
+                    && message.getServerNumber() == messageToResend.getServerNumber()) {
+                return message;
+            }
+        }
+        return null;
+    }
+
 }

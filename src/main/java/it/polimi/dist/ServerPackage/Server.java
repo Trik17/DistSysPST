@@ -128,7 +128,7 @@ public class Server  implements Runnable{
         return storage;
     }
 
-    public InetAddress getgroup() {
+    public InetAddress getGroup() {
         return group;
     }
 
@@ -171,9 +171,6 @@ public class Server  implements Runnable{
         this.multiPort = multiPort;
     }
 
-    public InetAddress getGroup() {
-        return group;
-    }
 
     public void setGroup(InetAddress group) {
         this.group = group;
@@ -202,15 +199,17 @@ public class Server  implements Runnable{
         Server server = null;
         try {
             String groupIP = "225.4.5.6";
+            int port = 9334;
+            int multiPort = 9000;
             String ip = InetAddress.getLocalHost().getHostAddress();
             System.out.println("Server ip: " + ip);
             System.out.println("Do you want to create a new Multicast Connection? \n(1) Yes - (2) No");
             Scanner scanner = new Scanner(System.in);
             int choice = scanner.nextInt();
             if (choice == 1)
-                server = new Server(9334, 9000,groupIP, 0);
+                server = new Server(port, multiPort, groupIP, 0);
             else
-                server = new Server(9334, 9000,groupIP);
+                server = new Server(port, multiPort, groupIP);
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }

@@ -14,7 +14,6 @@ public abstract class Message implements Serializable {
     protected ArrayList<Integer> vectorClock;
     protected int serverNumber; //position in the vector clock of the message's server
     protected boolean isNetMessage;
-    protected int numberOfRetransmission = 0;
 
     public Message(int serverNumber){
         this.serverNumber = serverNumber;
@@ -64,13 +63,7 @@ public abstract class Message implements Serializable {
         return;
     }
 
-    public int getNumberOfRetransmission() {
-        return numberOfRetransmission;
-    }
 
-    public void setNumberOfRetransmission(int numberOfRetransmission) {
-        this.numberOfRetransmission = numberOfRetransmission;
-    }
 
     @Override
     public boolean equals(Object obj) {
@@ -87,7 +80,7 @@ public abstract class Message implements Serializable {
                 + "\nVector Clock: " + arrayToString(vectorClock) + "\n------------------------------";
     }
 
-    private String arrayToString(ArrayList<Integer> vectorClock) {
+    public String arrayToString(ArrayList<Integer> vectorClock) {
         String string = "";
         for (int i = 0; i < vectorClock.size(); i++){
             string = string.concat(String.valueOf(vectorClock.get(i)));

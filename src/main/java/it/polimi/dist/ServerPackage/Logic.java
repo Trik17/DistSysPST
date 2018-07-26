@@ -1,6 +1,6 @@
 package it.polimi.dist.ServerPackage;
 
-import it.polimi.dist.Messages.Acknowledge;
+import it.polimi.dist.Messages.AckMessage;
 import it.polimi.dist.Messages.Message;
 import it.polimi.dist.Messages.WriteMessage;
 import java.util.*;
@@ -14,9 +14,9 @@ public class Logic{
     //private ExecutorService executor; //executor.submit(this);
     private LinkedList<WriteMessage> writeBuffer;
     private List<WriteMessage> performedWrites;
-    private List<Acknowledge> transmittedAcks;
+    private List<AckMessage> transmittedAcks;
     //private LinkedList<WriteMessage> resendBuffer;
-    private LinkedList<Acknowledge> ackBuffer;
+    private LinkedList<AckMessage> ackBuffer;
     private List<Message> queue;
     private Map<String,TimerThread> retransmissionTimers;
 
@@ -34,12 +34,12 @@ public class Logic{
         //this.executor = Executors.newCachedThreadPool();
         this.writeBuffer = new LinkedList<WriteMessage>();
         //this.resendBuffer = new LinkedList<WriteMessage>();
-        this.ackBuffer = new LinkedList<Acknowledge>();
+        this.ackBuffer = new LinkedList<AckMessage>();
         this.queue = new ArrayList<Message>();
         this.retransmissionTimers = new HashMap<String, TimerThread>();
         this.vectorClock = new ArrayList<Integer>();
         this.performedWrites = new ArrayList<WriteMessage>();
-        this.transmittedAcks = new ArrayList<Acknowledge>();
+        this.transmittedAcks = new ArrayList<AckMessage>();
 
         if(serverNumber==-1)
             initializeVectorClock(1);
@@ -189,7 +189,7 @@ public class Logic{
         return writeBuffer;
     }
 
-    public LinkedList<Acknowledge> getAckBuffer() {
+    public LinkedList<AckMessage> getAckBuffer() {
         return ackBuffer;
     }
 
@@ -209,7 +209,7 @@ public class Logic{
         this.serverNumber = serverNumber;
     }
 
-    public List<Acknowledge> getTransmittedAcks() {
+    public List<AckMessage> getTransmittedAcks() {
         return transmittedAcks;
     }
 }

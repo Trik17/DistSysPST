@@ -37,8 +37,10 @@ public class WriteMessage extends Message {
                     return;
                 }
             }
-            if (serverNumber != logic.getServerNumber())
+            if (serverNumber != logic.getServerNumber()) {
                 VectoUtil.addOne(logic, this.serverNumber);
+            }
+            //initialize the ackNotReceived setting all 1
             for (int i = 0; i < logic.getVectorClock().size(); i++) {
                 ackNotReceived.add(1);
             }
@@ -66,7 +68,7 @@ public class WriteMessage extends Message {
     }
 
     private void sendAck(Logic logic){
-        Acknowledge ack = new Acknowledge(logic.getServerNumber());
+        AckMessage ack = new AckMessage(logic.getServerNumber());
         ack.fillReferences(this.timestamp,this.serverNumber);
         ack.setVectorClock(VectoUtil.addOne(logic, logic.getServerNumber()));
         logic.getServer().sendMulti(ack);
