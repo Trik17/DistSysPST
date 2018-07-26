@@ -36,11 +36,12 @@ public class Client {
                 ClientMessage clientMessage = createMessage();
                 clientMessage.inputFromClient(this);
                 System.out.println("Sent Client message");
-
             }
         } catch (NoSuchElementException e) {
             System.out.println("Connection closed");
         } finally {
+            objIn.close();
+            objOut.close();
             socketClient.close();
         }
     }
@@ -73,6 +74,16 @@ public class Client {
             } while (true);
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void selectMode() throws IOException {
+        System.out.println("Select Client Mode: \n(1) Manual (2) Auto");
+        int choice = scanner.nextInt();
+        if (choice == 2) {
+            createRandomMessages();
+        } else {
+            startClient();
         }
     }
 
@@ -170,18 +181,14 @@ public class Client {
             //String ip = InetAddress.getLocalHost().getHostAddress();
             Client client = new Client(ip, 9334, scanner);
             System.out.println("Connection established");
-            System.out.println("Select Client Mode: \n(1) Manual (2) Auto");
-            int choice = scanner.nextInt();
-            if (choice == 2) {
-                client.createRandomMessages();
-            } else {
-                client.startClient();
-            }
+            client.selectMode();
         } catch (UnknownHostException e) {
             e.printStackTrace();
         } catch (IOException e) {
             System.out.println("The ip address does not exist");
         }
     }
+
+
 
 }

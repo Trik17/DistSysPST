@@ -58,7 +58,7 @@ public class MulticastHandler implements Runnable {
             oos.writeObject(message);
             oos.flush();
             byte[] data = baos.toByteArray();
-            DatagramPacket packet = new DatagramPacket(data, data.length, server.getgroup(), multiSocket.getLocalPort());
+            DatagramPacket packet = new DatagramPacket(data, data.length, server.getGroup(), multiSocket.getLocalPort());
 
             //Send data
             multiSocket.send(packet);
