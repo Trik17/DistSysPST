@@ -20,6 +20,7 @@ public abstract class Message implements Serializable {
         this.serverNumber = serverNumber;
         this.timestamp = System.currentTimeMillis();
         this.isNetMessage=false;
+        this.vectorClock = new ArrayList<Integer>();
     }
 
     public abstract void execute(Logic logic);
@@ -83,6 +84,14 @@ public abstract class Message implements Serializable {
     @Override
     public String toString() {
         return "\nTimestamp: " + String.valueOf(timestamp) + "\nServer Number: " + String.valueOf(serverNumber)
-                + "\nData ID: " + key + "\nValue: " + String.valueOf(data) + "\n------------------------------";
+                + "Vector Clock: " + arrayToString(vectorClock) + "\n------------------------------";
+    }
+
+    private String arrayToString(ArrayList<Integer> vectorClock) {
+        String string = "";
+        for (int i = 0; i < vectorClock.size(); i++){
+            string = string.concat(String.valueOf(vectorClock.get(i)));
+        }
+        return  string;
     }
 }
