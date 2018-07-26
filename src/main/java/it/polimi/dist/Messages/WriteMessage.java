@@ -16,7 +16,7 @@ public class WriteMessage extends Message {
     }
 
     public void execute(Logic logic) {
-        synchronized (logic) {
+        //synchronized (logic) {
             //otherwise:
             /*
             if(logic.writeBuffer.contains(this))
@@ -46,7 +46,7 @@ public class WriteMessage extends Message {
             }
             logic.getWriteBuffer().add(this);
             sendAck(logic);
-        }
+        //}
     }
 
     private void reSendAck(Logic logic) {
