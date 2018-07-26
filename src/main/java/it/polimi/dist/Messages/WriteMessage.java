@@ -75,6 +75,6 @@ public class WriteMessage extends Message {
 
     @Override
     public String toString() {
-        return "<<<<<<<<<<<<<<<<<<<<<<<<<<<<< \nWRITE MESSAGE" + super.toString();
+        return "<<<<<<<<<<<<<<<<<<<<<<<<<<<<< \nWRITE MESSAGE \nData ID: " + key + "\nValue: " + String.valueOf(data) + super.toString();
     }
 }
