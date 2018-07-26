@@ -68,16 +68,30 @@ public class Logic{
 
     //TODO -> collegare a server santa
     public void removeServer(int serverNumber){
+
         /*
         for (int i = 0; i < writeBuffer.size(); i++) {
             if(writeBuffer.get(i).getServerNumber()==serverNumber)
                 writeBuffer.remove(i);
-        }
-        //todo togliere il server caduto dal vector clock e ricontrollo che ora mi bastino gli ack
+        }*/
+        //
+        // todo o invece devo togliere quelle pending?
+        // todo togliere il server caduto dal vector clock e ricontrollo che ora mi bastino gli ack
+        /*
         for (int j = 0; j < ackBuffer.size(); j++) {
             if(ackBuffer.get(j).getServerNumber()==serverNumber)
                 ackBuffer.remove(j);
         }*/
+        synchronized (this) {
+            if (this.serverNumber>serverNumber)
+                this.serverNumber-=1;
+            //e tutti i messaggi che hanno i clock e i server number sbagliati?
+            //-> cancello tutti i pending e gli reimposto il clock
+            //todo e quelli nei timer? vanno risettati anche a loro i clock!
+            vectorClock.remove(serverNumber);
+        }
+        checkAckBuffer();
+        //checkQueue(???); ???
     }
 
     public void write(String dataId, int newData) {
