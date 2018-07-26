@@ -12,10 +12,16 @@ public class JoinHandler {
     private Server server;
     private List<AckJoinMessage> ackJoinBuffer;
     private TimerThread timerJoin;
+    private List<Long> randoms;
 
     public JoinHandler(Server server) {
         this.server = server;
         this.ackJoinBuffer = new ArrayList<AckJoinMessage>();
+        this.randoms = new ArrayList<Long>();
+    }
+
+    public List<Long> getRandoms() {
+        return randoms;
     }
 
     public List<AckJoinMessage> getAckJoinBuffer() {

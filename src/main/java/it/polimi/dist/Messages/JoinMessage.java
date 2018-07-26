@@ -4,11 +4,16 @@ import it.polimi.dist.ServerPackage.Logic;
 import it.polimi.dist.ServerPackage.TimerThread;
 import it.polimi.dist.ServerPackage.Server;
 
+import java.util.Random;
+
 public class JoinMessage extends Message {
 
+    private long random;
 
     public JoinMessage() {
         super(-1);
+        Random rnd = new Random();
+        this.random = rnd.nextLong();
         this.isNetMessage = true;
     }
 
@@ -19,8 +24,15 @@ public class JoinMessage extends Message {
             int numberOfServers = logic.getVectorClock().size();
             AckJoinMessage joinMessage = new AckJoinMessage(serverNumber, numberOfServers, logic.getServer().getStorage());
             logic.getServer().sendMulti(joinMessage);
-            logic.addServer();
+            if (!logic.getServer().getJoinHandler().getRandoms().contains(random)) {
+                logic.addServer();
+                logic.getServer().getJoinHandler().getRandoms().add(random);
+            }
         }
+    }
+
+    public long getRandom() {
+        return random;
     }
 
     @Override
