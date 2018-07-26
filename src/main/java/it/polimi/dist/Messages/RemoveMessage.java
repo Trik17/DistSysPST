@@ -1,6 +1,7 @@
 package it.polimi.dist.Messages;
 
 import it.polimi.dist.ServerPackage.Logic;
+import it.polimi.dist.ServerPackage.VectoUtil;
 
 public class RemoveMessage extends Message {
     private int removedServerNumber;
@@ -13,9 +14,11 @@ public class RemoveMessage extends Message {
 
     @Override
     public void execute(Logic logic) {
-        if (logic.isStopped())
-            return;
-        else
-            logic.removeServer(this.removedServerNumber);
+        logic.removeServer(this);
+    }
+
+    public void sendAckRemove(Logic logic){
+        AckRemovedServer ack = new AckRemovedServer(logic.getServerNumber(), this);
+        logic.getServer().sendMulti(ack);
     }
 }
