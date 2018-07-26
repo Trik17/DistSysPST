@@ -23,7 +23,7 @@ public class TimerThread extends Thread {
     public void run() {
         try {
             this.sleep(toSleep);
-            /*if (messageToResend instanceof WriteMessage && !server.getLogic().isStopped()) {
+            if (messageToResend instanceof WriteMessage && !server.getLogic().isStopped()) {
                 WriteMessage message = findMessage(); //find the messageToResend in the Write Buffer
                 if (checkFailedServers(message)){
                     //remove server
@@ -35,7 +35,7 @@ public class TimerThread extends Thread {
                 else {
                     updateMissingAcks(message); //add 1 to all position of ackNotReceived
                 }
-            }*/
+            }
             server.sendMulti(messageToResend);
             System.out.println("------MESSAGE RETRANSMITTED------ \n" + messageToResend.toString());
             //if I have not already received all acks (and so the timeTthread is still alive)
