@@ -19,7 +19,7 @@ public class JoinMessage extends Message {
 
     @Override
     public void execute(Logic logic) {
-        if (logic.getServerNumber() != -1) {
+        if (logic.getServerNumber() != -1) { //not done by the new server joined
             int serverNumber = logic.getServerNumber();
             int numberOfServers = logic.getVectorClock().size();
             AckJoinMessage joinMessage = new AckJoinMessage(serverNumber, numberOfServers, logic.getServer().getStorage());

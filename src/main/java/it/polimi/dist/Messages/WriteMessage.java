@@ -10,9 +10,9 @@ import java.util.ArrayList;
 
 public class WriteMessage extends Message {
 
-    protected ArrayList<Integer> ackNotReceived = new ArrayList<Integer>(); //todo in the write buffer 
-    public WriteMessage(int serverNumber) {
+    protected ArrayList<Integer> ackNotReceived = new ArrayList<Integer>(); //todo in the write buffer
 
+    public WriteMessage(int serverNumber) {
         super(serverNumber);
     }
 
