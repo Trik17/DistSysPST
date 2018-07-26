@@ -1,46 +1,39 @@
 package it.polimi.dist.ServerPackage;
 
-import it.polimi.dist.Messages.Acknowledge;
-import it.polimi.dist.Messages.Message;
-import it.polimi.dist.Messages.WriteMessage;
+import it.polimi.dist.Messages.*;
+
 import java.util.*;
 
 public class Logic{
 
     private Server server;
-    //private Map<Integer,Message> messages;
     private ArrayList<Integer> vectorClock;
     private int serverNumber;
-    //private ExecutorService executor; //executor.submit(this);
+    //private ExecutorService executor;
     private LinkedList<WriteMessage> writeBuffer;
     private List<WriteMessage> performedWrites;
     private List<Acknowledge> transmittedAcks;
-    //private LinkedList<WriteMessage> resendBuffer;
+    private List<AckRemovedServer> ackRemovedServers;
     private LinkedList<Acknowledge> ackBuffer;
     private List<Message> queue;
     private Map<String,TimerThread> retransmissionTimers;
-
-
-
-    /*
-    index[0] -> serverNumber
-    index[1] -> timestamp
-     */
+    private boolean stopped;
+    private List<RemoveMessage> removeMessages;
 
     public Logic(Server server, int serverNumber){
         this.serverNumber=serverNumber;
         this.server=server;
-        //this.messages = new HashMap<Integer,Message>();
-        //this.executor = Executors.newCachedThreadPool();
+        //this.executor = Executors.newCachedThreadPool();   //executor.submit(this);
         this.writeBuffer = new LinkedList<WriteMessage>();
-        //this.resendBuffer = new LinkedList<WriteMessage>();
         this.ackBuffer = new LinkedList<Acknowledge>();
         this.queue = new ArrayList<Message>();
         this.retransmissionTimers = new HashMap<String, TimerThread>();
         this.vectorClock = new ArrayList<Integer>();
         this.performedWrites = new ArrayList<WriteMessage>();
         this.transmittedAcks = new ArrayList<Acknowledge>();
-
+        this.ackRemovedServers = new ArrayList<AckRemovedServer>();
+        this.stopped = false;
+        this.removeMessages = new ArrayList<RemoveMessage>();
         if(serverNumber==-1)
             initializeVectorClock(1);
         else
@@ -66,33 +59,57 @@ public class Logic{
         }
     }
 
-    //TODO -> collegare a server santa
     public void removeServer(int serverNumber){
+        synchronized (this) {
+            if (isStopped())
+                return;
+            this.stopped = true;//todo + poi toglierlo + blocco gli invii ??
+            RemoveMessage removeMessage = new RemoveMessage(this.serverNumber,serverNumber);
+            this.removeMessages.add(removeMessage);
+            server.sendMulti(removeMessage);
 
-        /*
-        for (int i = 0; i < writeBuffer.size(); i++) {
-            if(writeBuffer.get(i).getServerNumber()==serverNumber)
+                    //------------------------
+            if (this.serverNumber>serverNumber)//qua o dopo gli ack?
+                this.serverNumber-=1;
+
+            //send removepack and then wait the acks
+
+            //e tutti i messaggi che hanno i clock e i server number sbagliati?
+            //-> cancello tutti i pending e gli reimposto il clock
+            //todo e quelli nei timer? vanno risettati anche a loro i clock!
+            vectorClock.remove(serverNumber);//Removes the element at the specified position in this list. Shifts any subsequent elements to the left (subtracts one from their indices).
+        }
+    }
+    //todo
+    public void checkAckRemove(){
+        synchronized (this) {
+            if (ackRemovedServers.size() >= (vectorClock.size()-1) ){
+                /*
+                e se mi arriva poi una remove server di ritrasmissione
+                dopo che io ho finito e sono ripartito?
+                 */
+            }else
+                return;
+        }
+        //todo
+    }
+    //todo
+    public void restartPendingWrite(){
+        /*for (int i = 0; i < writeBuffer.size(); i++) {
+            if(writeBuffer.get(i).getServerNumber()!=this.serverNumber ||
+                    writeBuffer.get(i).getServerNumber() != )
                 writeBuffer.remove(i);
-        }*/
-        //
-        // todo o invece devo togliere quelle pending?
-        // todo togliere il server caduto dal vector clock e ricontrollo che ora mi bastino gli ack
-        /*
+        }
         for (int j = 0; j < ackBuffer.size(); j++) {
             if(ackBuffer.get(j).getServerNumber()==serverNumber)
                 ackBuffer.remove(j);
         }*/
-        synchronized (this) {
-            if (this.serverNumber>serverNumber)
-                this.serverNumber-=1;
-            //e tutti i messaggi che hanno i clock e i server number sbagliati?
-            //-> cancello tutti i pending e gli reimposto il clock
-            //todo e quelli nei timer? vanno risettati anche a loro i clock!
-            vectorClock.remove(serverNumber);
-        }
-        checkAckBuffer();
-    //checkQueue(???); ???
-}
+        // todo o invece devo togliere quelle pending?
+        // todo togliere il server caduto dal vector clock e ricontrollo che ora mi bastino gli ack
+        this.ackBuffer.clear();
+        this.queue.clear();
+    }
+
 
     public void write(String dataId, int newData) {
         WriteMessage message = new WriteMessage(this.serverNumber);
@@ -103,11 +120,16 @@ public class Logic{
     }
 
     public void receive(Message message){
-        if(serverNumber==-1) {
+        if(serverNumber == -1) {
             if (message.isNetMessage())
                 message.execute(this);
             else
                 return;
+        }
+        if (isStopped()){
+            if (message.isRemovingMessage())
+                message.execute(this);
+            return;
         }
         if(!message.isNetMessage() &&
                 VectoUtil.outOfSequence(message.getVectorClock(),this.vectorClock, message.getServerNumber())){
@@ -125,28 +147,23 @@ public class Logic{
             if (!VectoUtil.outOfSequence(queue.get(i).getVectorClock(),this.vectorClock, queue.get(i).getServerNumber())){
                 System.out.println("execution of a no-more-outOfSequence packet");
                 queue.get(i).execute(this);
+                queue.remove(i);
             }
         }
-        /*long index[] = new long[2];
-        //index[0] -> serverNumber        index[1] -> timestamp
-        index[0]=message.serverNumber;
-        index[1]=message.timestamp;
-        if (queue.containsKey(index))
-            queue.get(index).execute(this);
-    */}
+    }
 
     public void checkAckBuffer(){
         synchronized (this) {
             //controlla quanti ack ci sono e se sono > di vectorclock size fa la scrittura
             int count = 0;
-            for (int i = 0; i < writeBuffer.size(); i++) {
-                for (int j = 0; j < ackBuffer.size(); j++) {
-                    if (ackBuffer.get(j).getWriteTimestamp() == writeBuffer.get(i).getTimeStamp()
-                            && ackBuffer.get(j).getWriteServerNumber() == writeBuffer.get(i).getServerNumber())
+            for (WriteMessage aWriteBuffer : writeBuffer) {
+                for (Acknowledge anAckBuffer : ackBuffer) {
+                    if (anAckBuffer.getWriteTimestamp() == aWriteBuffer.getTimeStamp()
+                            && anAckBuffer.getWriteServerNumber() == aWriteBuffer.getServerNumber())
                         count++;
                 }
                 if (count >= vectorClock.size())
-                    performWrite(writeBuffer.get(i));
+                    performWrite(aWriteBuffer);
                 count = 0;
             }
         }
@@ -173,6 +190,8 @@ public class Logic{
         System.out.println("Write performed: id = " + writeMessage.getKey() + "; value = " + String.valueOf(writeMessage.getData()));
     }
 
+    public List<AckRemovedServer> getAckRemovedServers() { return ackRemovedServers;     }
+
     public Server getServer() {   return server;    }
 
     public List<WriteMessage> getPerformedWrites() { return performedWrites;    }
@@ -181,9 +200,9 @@ public class Logic{
         return vectorClock;
     }
 
-    public void setVectorClock(ArrayList<Integer> vectorClock) {
-        this.vectorClock = vectorClock;
-    }
+    public void setVectorClock(ArrayList<Integer> vectorClock) {   this.vectorClock = vectorClock;    }
+
+    public boolean isStopped() {        return stopped;    }
 
     public LinkedList<WriteMessage> getWriteBuffer() {
         return writeBuffer;

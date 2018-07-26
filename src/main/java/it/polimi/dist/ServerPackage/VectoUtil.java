@@ -28,10 +28,9 @@ public abstract class VectoUtil {
     index[1] -> timestamp
      */
     /*public static boolean missingMessage(ArrayList<Integer> vMessage, ArrayList<Integer> vClock){
-        ArrayList<Long> index = new ArrayList<Long>();
-        //todo---------------!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        return false;
+
     }*/
+
 
     /*
     it returns:

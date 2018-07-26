@@ -15,6 +15,7 @@ public abstract class Message implements Serializable {
     protected int serverNumber; //position in the vector clock of the message's server
     protected boolean isNetMessage;
     protected int numberOfRetransmission = 0;
+    protected boolean isRemovingMessage = false;
 
     public Message(int serverNumber){
         this.serverNumber = serverNumber;
@@ -51,7 +52,6 @@ public abstract class Message implements Serializable {
         return serverNumber;
     }
 
-
     public String getKey() {
         return key;
     }
@@ -85,6 +85,13 @@ public abstract class Message implements Serializable {
     public String toString() {
         return "\nTimestamp: " + String.valueOf(timestamp) + "\nServer Number: " + String.valueOf(serverNumber)
                 + "\nVector Clock: " + arrayToString(vectorClock) + "\n------------------------------";
+    }
+
+    public boolean isRemovingMessage(){
+        if (this.isRemovingMessage)
+            return true;
+        else
+            return false;
     }
 
     private String arrayToString(ArrayList<Integer> vectorClock) {
