@@ -17,7 +17,8 @@ public class Logic{
     private LinkedList<AckMessage> ackBuffer;
     private List<AckRemovedServer> ackRemovedServers;
     private List<Message> queue;
-    private Map<String,TimerThread> retransmissionTimers;
+    private Map<String,TimerThread> writeRetransmissionTimers;
+    private TimerThread removeRetransmissionTimer;
     private boolean stopped;
     private List<RemoveMessage> removeMessages;
 
@@ -28,7 +29,7 @@ public class Logic{
         this.writeBuffer = new LinkedList<WriteMessage>();
         this.ackBuffer = new LinkedList<AckMessage>();
         this.queue = new ArrayList<Message>();
-        this.retransmissionTimers = new HashMap<String, TimerThread>();
+        this.writeRetransmissionTimers = new HashMap<String, TimerThread>();
         this.vectorClock = new ArrayList<Integer>();
         this.performedWrites = new ArrayList<WriteMessage>();
         this.ackRemovedServers = new ArrayList<AckRemovedServer>();
@@ -175,9 +176,9 @@ public class Logic{
     private void performWrite(WriteMessage writeMessage){
         try {
             String key = String.valueOf(writeMessage.getTimeStamp()).concat(String.valueOf(writeMessage.getServerNumber()));
-            if (!retransmissionTimers.get(key).isInterrupted()){
-                retransmissionTimers.get(key).interrupt();
-                retransmissionTimers.remove(key);
+            if (!writeRetransmissionTimers.get(key).isInterrupted()){
+                writeRetransmissionTimers.get(key).interrupt();
+                writeRetransmissionTimers.remove(key);
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -219,8 +220,8 @@ public class Logic{
         return queue;
     }
 
-    public Map<String, TimerThread> getRetransmissionTimers() {
-        return retransmissionTimers;
+    public Map<String, TimerThread> getWriteRetransmissionTimers() {
+        return writeRetransmissionTimers;
     }
 
     public int getServerNumber() {
@@ -238,7 +239,16 @@ public class Logic{
     public List<RemoveMessage> getRemoveMessages() {        return removeMessages;     }
 
 
+    public TimerThread getRemoveRetransmissionTimer() {
+        return removeRetransmissionTimer;
+    }
+
+    public void setRemoveRetransmissionTimer(TimerThread removeRetransmissionTimer) {
+        this.removeRetransmissionTimer = removeRetransmissionTimer;
+    }
 }
+
+
 /*
 ogni server parte da 0
 ogni volta che si aggiunge un server aggiungo un nuovo elemento al vectorClock

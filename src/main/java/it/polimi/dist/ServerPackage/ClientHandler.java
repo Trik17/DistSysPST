@@ -46,20 +46,6 @@ public class ClientHandler implements Runnable  {
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
-           /* while (true) {
-                String line = provaIn.nextLine();
-                out.w
-                System.out.println(line);
-                if (line.equals("quit")) {
-                    break;
-                }
-                else {
-                    provaOut.println("Ok");
-                    provaOut.flush();
-                }
-            }
-            provaIn.close();
-            provaOut.close();*/
             }
         }
         catch (IOException e) {
