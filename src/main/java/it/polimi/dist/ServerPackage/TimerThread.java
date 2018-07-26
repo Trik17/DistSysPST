@@ -69,4 +69,7 @@ public class TimerThread extends Thread {
         return null;
     }
 
+    public Message getMessageToResend() {
+        return messageToResend;
+    }
 }

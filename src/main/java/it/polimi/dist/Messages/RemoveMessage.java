@@ -20,7 +20,15 @@ public class RemoveMessage extends Message {
     }
 
     public void sendAckRemove(Logic logic){
-        AckRemovedServer ack = new AckRemovedServer(logic.getServerNumber(), this);
+        AckRemovedServer ack;
+        if (logic.isStopped())
+            ack = new AckRemovedServer(logic.getServerNumber(), this);
+        else {
+            if (this.removedServerNumber <= logic.getServerNumber())
+                ack = new AckRemovedServer(logic.getServerNumber() + 1, this);
+            else
+                ack = new AckRemovedServer(logic.getServerNumber(), this);
+        }
         logic.getServer().sendMulti(ack);
     }
 
@@ -31,5 +39,7 @@ public class RemoveMessage extends Message {
         timerThread.start();
     }
 
-
+    public int getRemovedServerNumber() {
+        return removedServerNumber;
+    }
 }

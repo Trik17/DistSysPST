@@ -2,6 +2,8 @@ package it.polimi.dist.ServerPackage;
 
 
 import it.polimi.dist.Messages.*;
+import org.graalvm.compiler.lir.util.ValueSet;
+
 import java.util.*;
 
 public class Logic{
@@ -20,7 +22,8 @@ public class Logic{
     private Map<String,TimerThread> writeRetransmissionTimers;
     private TimerThread removeRetransmissionTimer;
     private boolean stopped;
-    private List<RemoveMessage> removeMessages;
+    private List<RemoveMessage> myRemoveMessages;
+    private List<RemoveMessage> othersRemoveMessages;
 
     public Logic(Server server, int serverNumber){
         this.serverNumber=serverNumber;
@@ -34,7 +37,8 @@ public class Logic{
         this.performedWrites = new ArrayList<WriteMessage>();
         this.ackRemovedServers = new ArrayList<AckRemovedServer>();//ack del MIO removeMessage
         this.stopped = false;
-        this.removeMessages = new ArrayList<RemoveMessage>();//quelle degli altri (e anche il mio che mi mando da solo) per capire se io le ho già fatte (o le sto facendo)
+        this.myRemoveMessages = new ArrayList<RemoveMessage>();//quelle inviate da me
+        this.othersRemoveMessages = new ArrayList<RemoveMessage>();//quelle degli altri per capire se io le ho già fatte (o le sto facendo)
         this.transmittedAcks = new ArrayList<AckMessage>();
         if(serverNumber==-1)
             initializeVectorClock(1);
@@ -63,43 +67,59 @@ public class Logic{
 
     public void removeServer(RemoveMessage message){
         synchronized (this) {
-            for (int i = 0; i < this.removeMessages.size(); i++) {
-                if (message.getTimeStamp() == removeMessages.get(i).getTimeStamp() &&
-                        message.getServerNumber() == removeMessages.get(i).getServerNumber())
+            //entro qui se ho già ricevuto le remove di altri: sendAck e return
+            for (int i = 0; i < this.othersRemoveMessages.size(); i++) {
+                if (message.getTimeStamp() == othersRemoveMessages.get(i).getTimeStamp() &&
+                        message.getServerNumber() == othersRemoveMessages.get(i).getServerNumber()) {
                     message.sendAckRemove(this);
-                    break;
+                    return;
+                }
             }
-            if (isStopped()) {
-
+            //qua se mi ha già stoppato qualcuno (non quello di questo messaggio) o mi sono stoppato io
+            if (isStopped()){
+                othersRemoveMessages.add(message);
+                message.sendAckRemove(this);
                 return;
             }
-            this.stopped = true;//todo + poi toglierlo + blocco gli invii ??
+            //se è il mio stesso messaggio che ho già inviato
+            for (int i = 0; i < this.myRemoveMessages.size(); i++) {
+                if (message.getTimeStamp() == myRemoveMessages.get(i).getTimeStamp() &&
+                        message.getServerNumber() == myRemoveMessages.get(i).getServerNumber()) {
+                    return;
+                }
+            }
+            //se è la prima volta, avviata da me o da qualcun altro
+            this.stopped = true;
+            message.sendAckRemove(this);
             RemoveMessage removeMessage = new RemoveMessage(this.serverNumber,serverNumber);
-            this.removeMessages.add(removeMessage);
+            this.myRemoveMessages.add(removeMessage);
             server.sendMulti(removeMessage);
         }
     }
-    //todo
-    public void checkAckRemove(int removedServer){
+
+    public void checkAckRemove(RemoveMessage removeMessage){
         synchronized (this) {
-            if (ackRemovedServers.size() >= (vectorClock.size()-1) ){
-                if (this.serverNumber>removedServer)//qua o dopo gli ack?
-                    this.serverNumber-=1;
-                vectorClock.remove(removedServer);//Removes the element at the specified position in this list. Shifts any subsequent elements to the left (subtracts one from their indices).
+            int count=0;
+            for (int i = 0; i < ackRemovedServers.size(); i++) {
+                if (removeMessage.getTimeStamp() == getMyRemoveMessages().get(i).getTimeStamp()){
+                    count++;
+                }
+            }
+            if (count >= (vectorClock.size()-1) ){
+                if (!removeRetransmissionTimer.isInterrupted())
+                    removeRetransmissionTimer.interrupt();
+                if (this.serverNumber > removeMessage.getRemovedServerNumber())
+                    this.serverNumber -= 1;
+                vectorClock.remove(removeMessage.getRemovedServerNumber());//Removes the element at the specified position in this list. Shifts any subsequent elements to the left (subtracts one from their indices).
                 this.ackBuffer.clear();
                 this.queue.clear();
-                //todo stoppare timer del removingMessage
-                for (int i = 0; i < ; i++) {
-
+                String key;
+                for (int i = 0; i < writeBuffer.size(); i++) {
+                    key = String.valueOf(writeBuffer.get(i).getTimeStamp()).concat(String.valueOf(writeBuffer.get(i).getServerNumber()));
+                    writeBuffer.get(i).getVectorClock().remove(removeMessage.getRemovedServerNumber());
+                    writeRetransmissionTimers.get(key).getMessageToResend().getVectorClock().remove(removeMessage.getRemovedServerNumber());
                 }
-                //todo ripartono da sole le write?
-                //todo aggiornare vector clock dei messaggi in write buffer
-                //todo e quelli nei timer? vanno risettati anche a loro i clock!
-                // todo togliere il server caduto dal vector clock e ricontrollo che ora mi bastino gli ack
-                /*
-                e se mi arriva poi una remove server di ritrasmissione
-                dopo che io ho finito e sono ripartito?
-                 */
+                // ripartono da sole le write
                 this.stopped=false;
             }else
                 return;
@@ -203,17 +223,17 @@ public class Logic{
 
     public List<Message> getQueue() {        return queue;    }
 
-    public Map<String, TimerThread> getRetransmissionTimers() {
-        return retransmissionTimers;
-    }
-
     public int getServerNumber() {        return serverNumber;    }
 
     public void setServerNumber(int serverNumber) {        this.serverNumber = serverNumber;    }
 
     public List<AckMessage> getTransmittedAcks() {        return transmittedAcks;    }
 
-    public List<RemoveMessage> getRemoveMessages() {        return removeMessages;     }
+    public List<RemoveMessage> getOthersRemoveMessages() {
+        return othersRemoveMessages;
+    }
+
+    public List<RemoveMessage> getMyRemoveMessages() {        return myRemoveMessages;     }
 
 
     public TimerThread getRemoveRetransmissionTimer() {
@@ -222,6 +242,10 @@ public class Logic{
 
     public void setRemoveRetransmissionTimer(TimerThread removeRetransmissionTimer) {
         this.removeRetransmissionTimer = removeRetransmissionTimer;
+    }
+
+    public Map<String, TimerThread> getWriteRetransmissionTimers() {
+        return writeRetransmissionTimers;
     }
 }
 
