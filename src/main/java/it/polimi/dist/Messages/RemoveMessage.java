@@ -1,6 +1,7 @@
 package it.polimi.dist.Messages;
 
 import it.polimi.dist.ServerPackage.Logic;
+import it.polimi.dist.ServerPackage.VectoUtil;
 import it.polimi.dist.ServerPackage.Server;
 import it.polimi.dist.ServerPackage.TimerThread;
 
@@ -15,10 +16,12 @@ public class RemoveMessage extends Message {
 
     @Override
     public void execute(Logic logic) {
-        if (logic.isStopped())
-            return;
-        else
-            logic.removeServer(this.removedServerNumber);
+        logic.removeServer(this);
+    }
+
+    public void sendAckRemove(Logic logic){
+        AckRemovedServer ack = new AckRemovedServer(logic.getServerNumber(), this);
+        logic.getServer().sendMulti(ack);
     }
 
     @Override

@@ -32,9 +32,9 @@ public class Logic{
         this.writeRetransmissionTimers = new HashMap<String, TimerThread>();
         this.vectorClock = new ArrayList<Integer>();
         this.performedWrites = new ArrayList<WriteMessage>();
-        this.ackRemovedServers = new ArrayList<AckRemovedServer>();
+        this.ackRemovedServers = new ArrayList<AckRemovedServer>();//ack del MIO removeMessage
         this.stopped = false;
-        this.removeMessages = new ArrayList<RemoveMessage>();
+        this.removeMessages = new ArrayList<RemoveMessage>();//quelle degli altri (e anche il mio che mi mando da solo) per capire se io le ho già fatte (o le sto facendo)
         this.transmittedAcks = new ArrayList<AckMessage>();
         if(serverNumber==-1)
             initializeVectorClock(1);
@@ -61,59 +61,50 @@ public class Logic{
         }
     }
 
-    public void removeServer(int serverNumber){
+    public void removeServer(RemoveMessage message){
         synchronized (this) {
+            for (int i = 0; i < this.removeMessages.size(); i++) {
+                if (message.getTimeStamp() == removeMessages.get(i).getTimeStamp() &&
+                        message.getServerNumber() == removeMessages.get(i).getServerNumber())
+                    message.sendAckRemove(this);
+                    break;
+            }
             if (isStopped()) {
+
                 return;
             }
             this.stopped = true;//todo + poi toglierlo + blocco gli invii ??
             RemoveMessage removeMessage = new RemoveMessage(this.serverNumber,serverNumber);
             this.removeMessages.add(removeMessage);
             server.sendMulti(removeMessage);
-
-                    //------------------------
-
-
-            //send removepack and then wait the acks
-
-            //e tutti i messaggi che hanno i clock e i server number sbagliati?
-            //-> cancello tutti i pending e gli reimposto il clock
-            //todo e quelli nei timer? vanno risettati anche a loro i clock!
-            vectorClock.remove(serverNumber);//Removes the element at the specified position in this list. Shifts any subsequent elements to the left (subtracts one from their indices).
         }
     }
     //todo
-    public void checkAckRemove(){
+    public void checkAckRemove(int removedServer){
         synchronized (this) {
             if (ackRemovedServers.size() >= (vectorClock.size()-1) ){
-                if (this.serverNumber>serverNumber)//qua o dopo gli ack?
+                if (this.serverNumber>removedServer)//qua o dopo gli ack?
                     this.serverNumber-=1;
+                vectorClock.remove(removedServer);//Removes the element at the specified position in this list. Shifts any subsequent elements to the left (subtracts one from their indices).
+                this.ackBuffer.clear();
+                this.queue.clear();
+                //todo stoppare timer del removingMessage
+                for (int i = 0; i < ; i++) {
+
+                }
+                //todo ripartono da sole le write?
+                //todo aggiornare vector clock dei messaggi in write buffer
+                //todo e quelli nei timer? vanno risettati anche a loro i clock!
+                // todo togliere il server caduto dal vector clock e ricontrollo che ora mi bastino gli ack
                 /*
                 e se mi arriva poi una remove server di ritrasmissione
                 dopo che io ho finito e sono ripartito?
                  */
+                this.stopped=false;
             }else
                 return;
         }
-        //todo
     }
-    //todo
-    public void restartPendingWrite(){
-        /*for (int i = 0; i < writeBuffer.size(); i++) {
-            if(writeBuffer.get(i).getServerNumber()!=this.serverNumber ||
-                    writeBuffer.get(i).getServerNumber() != )
-                writeBuffer.remove(i);
-        }
-        for (int j = 0; j < ackBuffer.size(); j++) {
-            if(ackBuffer.get(j).getServerNumber()==serverNumber)
-                ackBuffer.remove(j);
-        }*/
-        // todo o invece devo togliere quelle pending?
-        // todo togliere il server caduto dal vector clock e ricontrollo che ora mi bastino gli ack
-        this.ackBuffer.clear();
-        this.queue.clear();
-    }
-
 
     public void write(String dataId, int newData) {
         WriteMessage message = new WriteMessage(this.serverNumber);
@@ -200,41 +191,27 @@ public class Logic{
 
     public List<WriteMessage> getPerformedWrites() { return performedWrites;    }
 
-    public ArrayList<Integer> getVectorClock() {
-        return vectorClock;
-    }
+    public ArrayList<Integer> getVectorClock() {        return vectorClock;    }
 
     public void setVectorClock(ArrayList<Integer> vectorClock) {   this.vectorClock = vectorClock;    }
 
     public boolean isStopped() {        return stopped;    }
 
-    public LinkedList<WriteMessage> getWriteBuffer() {
-        return writeBuffer;
+    public LinkedList<WriteMessage> getWriteBuffer() {        return writeBuffer;    }
+
+    public LinkedList<AckMessage> getAckBuffer() {        return ackBuffer;    }
+
+    public List<Message> getQueue() {        return queue;    }
+
+    public Map<String, TimerThread> getRetransmissionTimers() {
+        return retransmissionTimers;
     }
 
-    public LinkedList<AckMessage> getAckBuffer() {
-        return ackBuffer;
-    }
+    public int getServerNumber() {        return serverNumber;    }
 
-    public List<Message> getQueue() {
-        return queue;
-    }
+    public void setServerNumber(int serverNumber) {        this.serverNumber = serverNumber;    }
 
-    public Map<String, TimerThread> getWriteRetransmissionTimers() {
-        return writeRetransmissionTimers;
-    }
-
-    public int getServerNumber() {
-        return serverNumber;
-    }
-
-    public void setServerNumber(int serverNumber) {
-        this.serverNumber = serverNumber;
-    }
-
-    public List<AckMessage> getTransmittedAcks() {
-        return transmittedAcks;
-    }
+    public List<AckMessage> getTransmittedAcks() {        return transmittedAcks;    }
 
     public List<RemoveMessage> getRemoveMessages() {        return removeMessages;     }
 
