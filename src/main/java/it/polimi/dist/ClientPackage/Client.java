@@ -50,14 +50,14 @@ public class Client {
             new Thread(new ClientReadThread(this)).start();
 
             do {
-                System.out.println("Type anything and press Enter to start...");
-                String startInput = scanner.next();
-
+                System.out.println("Insert the desired frequency (in milliseconds)");
+                int frequency = scanner.nextInt();
+                //int frequency = 100; todo for the test
                 Random rnd = new Random();
 
                 //Communicating with the server
                 for (int i = 0; i < 20; i++) {
-                    Thread.sleep(50); //message frequency
+                    Thread.sleep(frequency);
                     String id = String.valueOf(rnd.nextInt(5));
                     int value = rnd.nextInt(50);
                     ClientMessage clientMessage;
