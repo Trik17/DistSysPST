@@ -19,6 +19,7 @@ public class Logic{
     private LinkedList<Acknowledgement> ackBuffer;
     private List<Message> queue;
     private Map<String,TimerThread> retransmissionTimers;
+    private Object lock;
 
 
 
@@ -28,6 +29,7 @@ public class Logic{
      */
 
     public Logic(Server server, int serverNumber){
+        this.lock = new Object();
         this.serverNumber=serverNumber;
         this.server=server;
         //this.messages = new HashMap<Integer,Message>();
@@ -118,21 +120,24 @@ public class Logic{
     }
 
     private void checkQueue(Message message) {
-        for (int i = 0; i < queue.size(); i++) {
-            /*if (message.getServerNumber()==queue.get(i).getServerNumber())
-                continue;*///questo è solo per velocizzare la funzione
-            if (!VectoUtil.outOfSequence(queue.get(i).getVectorClock(),this.vectorClock, queue.get(i).getServerNumber())){
-                System.out.println("execution of a no-more-outOfSequence packet");
-                queue.get(i).execute(this);
+        synchronized (lock) {
+            for (int i = 0; i < queue.size(); i++) {
+                /*if (message.getServerNumber()==queue.get(i).getServerNumber())
+                    continue;*///questo è solo per velocizzare la funzione
+                if (!VectoUtil.outOfSequence(queue.get(i).getVectorClock(), this.vectorClock, queue.get(i).getServerNumber())) {
+                    System.out.println("execution of a no-more-outOfSequence packet");
+                    queue.get(i).execute(this);
+                    queue.remove(i);//todo o sincronizzo o metto prima dell'execute?
+                }
             }
+            /*long index[] = new long[2];
+            //index[0] -> serverNumber        index[1] -> timestamp
+            index[0]=message.serverNumber;
+            index[1]=message.timestamp;
+            if (queue.containsKey(index))
+                queue.get(index).execute(this);    */
         }
-        /*long index[] = new long[2];
-        //index[0] -> serverNumber        index[1] -> timestamp
-        index[0]=message.serverNumber;
-        index[1]=message.timestamp;
-        if (queue.containsKey(index))
-            queue.get(index).execute(this);
-    */}
+    }
 
     public void checkAckBuffer(){
         synchronized (this) {
