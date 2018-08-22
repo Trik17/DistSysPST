@@ -23,6 +23,9 @@ public class WriteMessage extends Message {
             return;
         */
         //this for avoid the reading of a write already present in the buffer
+        /*
+        case: alredy in the write buffer
+         */
         for (int i = 0; i < logic.getWriteBuffer().size(); i++) {
             if (logic.getWriteBuffer().get(i).timestamp == this.timestamp
                     && logic.getWriteBuffer().get(i).serverNumber == this.serverNumber){
@@ -30,6 +33,9 @@ public class WriteMessage extends Message {
                 return;
             }
         }
+        /*
+        case: write already done by this server
+         */
         for (int i = 0; i < logic.getPerformedWrites().size(); i++) {
             if (logic.getPerformedWrites().get(i).timestamp == this.timestamp
                     && logic.getPerformedWrites().get(i).serverNumber == this.serverNumber){

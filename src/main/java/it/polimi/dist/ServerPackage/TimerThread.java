@@ -21,7 +21,14 @@ public class TimerThread extends Thread {
             this.sleep(toSleep);
             int numberOfRetransmission = message.getNumberOfRetransmission();
             //if (numberOfRetransmission < retransmissionThreshold){
-                server.sendMulti(message);
+            for (int i = 0; i < server.getLogic().getWriteBuffer().size(); i++) {
+                if (server.getLogic().getWriteBuffer().get(i).getTimeStamp() == message.getTimeStamp()
+                        && server.getLogic().getWriteBuffer().get(i).getServerNumber() == message.getServerNumber()){
+                    server.sendMulti(server.getLogic().getWriteBuffer().get(i));
+                    break;
+                }
+            }
+                //server.sendMulti(message);
                 System.out.println("------MESSAGE RETRANSMITTED------ \n" + message.toString());
                 //if I have not already received all acks (and so the timerthread is still alive)
                 // resend the message (only join/write)

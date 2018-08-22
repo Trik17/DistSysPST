@@ -97,7 +97,6 @@ public class Logic{
     public void write(String dataId, int newData) {
         WriteMessage message = new WriteMessage(this.serverNumber);
         message.fill(dataId,newData);
-        //writeBuffer.add(message);
         message.setVectorClock(VectoUtil.addOne(this, this.serverNumber));
         server.sendMulti(message);
     }
