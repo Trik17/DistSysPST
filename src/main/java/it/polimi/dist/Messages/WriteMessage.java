@@ -11,15 +11,13 @@ import java.util.ArrayList;
 public class WriteMessage extends Message {
 
     protected ArrayList<Integer> ackNotReceived = new ArrayList<Integer>(); //todo in the write buffer
-    private Object lockExecute;
 
     public WriteMessage(int serverNumber) {
         super(serverNumber);
-        lockExecute = new Object();
     }
 
     public void execute(Logic logic) {
-        synchronized (lockExecute) {
+        synchronized (logic.getServer()) {
             //otherwise:
             /*
             if(logic.writeBuffer.contains(this))
@@ -77,6 +75,7 @@ public class WriteMessage extends Message {
         ack.setVectorClock(VectoUtil.addOne(logic, logic.getServerNumber()));
         logic.getServer().sendMulti(ack);
         logic.getTransmittedAcks().add(ack);
+        System.out.println("ADDED TRASMITTED ACK  " + this.getTimeStamp() + "  " + arrayToString(getVectorClock()));
         if (logic.getServerNumber() != serverNumber){// the server which sent this message has already started the timer
             retransmission(logic.getServer());
         }

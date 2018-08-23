@@ -87,7 +87,7 @@ public abstract class Message implements Serializable {
                 + "\nVector Clock: " + arrayToString(vectorClock) + "\n------------------------------";
     }
 
-    private String arrayToString(ArrayList<Integer> vectorClock) {
+    protected String arrayToString(ArrayList<Integer> vectorClock) {
         String string = "";
         for (int i = 0; i < vectorClock.size(); i++){
             string = string.concat(String.valueOf(vectorClock.get(i)) + ", ");
