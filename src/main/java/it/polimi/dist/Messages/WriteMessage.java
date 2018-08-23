@@ -11,42 +11,46 @@ import java.util.ArrayList;
 public class WriteMessage extends Message {
 
     protected ArrayList<Integer> ackNotReceived = new ArrayList<Integer>(); //todo in the write buffer
+    private Object lockExecute;
 
     public WriteMessage(int serverNumber) {
         super(serverNumber);
+        lockExecute = new Object();
     }
 
     public void execute(Logic logic) {
-        //otherwise:
-        /*
-        if(logic.writeBuffer.contains(this))
-            return;
-        */
-        //this for avoid the reading of a write already present in the buffer
-        /*
-        case: alredy in the write buffer
-         */
-        for (int i = 0; i < logic.getWriteBuffer().size(); i++) {
-            if (logic.getWriteBuffer().get(i).timestamp == this.timestamp
-                    && logic.getWriteBuffer().get(i).serverNumber == this.serverNumber){
-                reSendAck(logic);
+        synchronized (lockExecute) {
+            //otherwise:
+            /*
+            if(logic.writeBuffer.contains(this))
                 return;
+            */
+            //this for avoid the reading of a write already present in the buffer
+            /*
+            case: alredy in the write buffer
+             */
+            for (int i = 0; i < logic.getWriteBuffer().size(); i++) {
+                if (logic.getWriteBuffer().get(i).timestamp == this.timestamp
+                        && logic.getWriteBuffer().get(i).serverNumber == this.serverNumber) {
+                    reSendAck(logic);
+                    return;
+                }
             }
-        }
-        /*
-        case: write already done by this server
-         */
-        for (int i = 0; i < logic.getPerformedWrites().size(); i++) {
-            if (logic.getPerformedWrites().get(i).timestamp == this.timestamp
-                    && logic.getPerformedWrites().get(i).serverNumber == this.serverNumber){
-                reSendAck(logic);
-                return;
+            /*
+            case: write already done by this server
+             */
+            for (int i = 0; i < logic.getPerformedWrites().size(); i++) {
+                if (logic.getPerformedWrites().get(i).timestamp == this.timestamp
+                        && logic.getPerformedWrites().get(i).serverNumber == this.serverNumber) {
+                    reSendAck(logic);
+                    return;
+                }
             }
+            if (serverNumber != logic.getServerNumber())
+                VectoUtil.addOne(logic, this.serverNumber);
+            logic.getWriteBuffer().add(this);
+            sendAck(logic);
         }
-        if (serverNumber!=logic.getServerNumber())
-            VectoUtil.addOne(logic,this.serverNumber);
-        logic.getWriteBuffer().add(this);
-        sendAck(logic);
     }
 
     private void reSendAck(Logic logic) {
