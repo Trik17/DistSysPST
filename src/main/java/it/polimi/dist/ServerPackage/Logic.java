@@ -23,8 +23,10 @@ public class Logic{
     private boolean stopped;
     private List<RemoveMessage> myRemoveMessages;
     private List<RemoveMessage> othersRemoveMessages;
+    private Object lock;
 
     public Logic(Server server, int serverNumber){
+        this.lock = new Object();
         this.serverNumber=serverNumber;
         this.server=server;
         //this.executor = Executors.newCachedThreadPool();   //executor.submit(this);
@@ -128,7 +130,6 @@ public class Logic{
     public void write(String dataId, int newData) {
         WriteMessage message = new WriteMessage(this.serverNumber);
         message.fill(dataId,newData);
-        //writeBuffer.add(message);
         message.setVectorClock(VectoUtil.addOne(this, this.serverNumber));
         server.sendMulti(message);
     }
@@ -155,16 +156,25 @@ public class Logic{
     }
 
     private void checkQueue(Message message) {
-        for (int i = 0; i < queue.size(); i++) {
-            /*if (message.getServerNumber()==queue.get(i).getServerNumber())
-                continue;*///questo è solo per velocizzare la funzione
-            if (!VectoUtil.outOfSequence(queue.get(i).getVectorClock(),this.vectorClock, queue.get(i).getServerNumber())){
-                System.out.println("execution of a no-more-outOfSequence packet");
-                queue.get(i).execute(this);
-                queue.remove(i);
+        synchronized (lock) {
+            for (int i = 0; i < queue.size(); i++) {
+                /*if (message.getServerNumber()==queue.get(i).getServerNumber())
+                    continue;*///questo è solo per velocizzare la funzione
+                if (!VectoUtil.outOfSequence(queue.get(i).getVectorClock(), this.vectorClock, queue.get(i).getServerNumber())) {
+                    System.out.println("execution of a no-more-outOfSequence packet");
+                    queue.get(i).execute(this);
+                    queue.remove(i);//todo o sincronizzo o metto prima dell'execute?
+                }
             }
+            /*long index[] = new long[2];
+            //index[0] -> serverNumber        index[1] -> timestamp
+            index[0]=message.serverNumber;
+            index[1]=message.timestamp;
+            if (queue.containsKey(index))
+                queue.get(index).execute(this);    */
         }
     }
+
 
     public void checkAckBuffer(){
         synchronized (this) {
@@ -212,7 +222,10 @@ public class Logic{
 
     public ArrayList<Integer> getVectorClock() {        return vectorClock;    }
 
-    public void setVectorClock(ArrayList<Integer> vectorClock) {   this.vectorClock = vectorClock;    }
+    public void setVectorClock(ArrayList<Integer> vectorClock) {
+        this.vectorClock = vectorClock;
+        System.out.println("NEW VECTORCLOCK: " + this.vectorClock );
+    }
 
     public boolean isStopped() {        return stopped;    }
 

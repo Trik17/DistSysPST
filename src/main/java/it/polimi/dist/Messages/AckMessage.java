@@ -44,17 +44,22 @@ public class AckMessage extends Message {
             return;*/
             for (int j = 0; j < logic.getAckBuffer().size(); j++) {
                 if (timestamp == logic.getAckBuffer().get(j).getTimeStamp()
-                        && serverNumber == logic.getAckBuffer().get(j).getServerNumber())
+                        && serverNumber == logic.getAckBuffer().get(j).getServerNumber()) {
+                    //System.out.println("RETURN ACK perché già in ack buffer");
                     return;
+                }
             }
             for (int j = 0; j < logic.getPerformedWrites().size(); j++) {
                 if (writeTimestamp == logic.getPerformedWrites().get(j).getTimeStamp()
-                        && writeServerNumber == logic.getPerformedWrites().get(j).getServerNumber())
+                        && writeServerNumber == logic.getPerformedWrites().get(j).getServerNumber()) {
+                    System.out.println("RETURN ACK perché già performata la write");
                     return;
+                }
             }
             if (serverNumber != logic.getServerNumber())
                 VectoUtil.addOne(logic, this.serverNumber);
             logic.getAckBuffer().add(this);
+            System.out.println("ADDED ACK to ack buffer " + getWriteTimestamp() + "  " + arrayToString(getVectorClock()));
             logic.checkAckBuffer();
         }
     }

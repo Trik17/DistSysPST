@@ -71,13 +71,16 @@ public abstract class VectoUtil {
     }
 
     public static ArrayList<Integer> addOne(Logic logic, int serverNumber) {
-        ArrayList<Integer> res;
+        ArrayList<Integer> res = new ArrayList<Integer>();
         int temp;
         synchronized (logic) {
-            res = logic.getVectorClock();
+            for (int i = 0; i < logic.getVectorClock().size(); i++) {
+                res.add(logic.getVectorClock().get(i));
+            }
+            // errata perché passa il riferimento: res = logic.getVectorClock();
             temp = res.get(serverNumber) + 1;
             res.set(serverNumber, temp);
-            logic.setVectorClock(res);
+            logic.getVectorClock().set(serverNumber, temp);
         }
         return res;
     }
