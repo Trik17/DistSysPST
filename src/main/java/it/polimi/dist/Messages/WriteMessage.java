@@ -73,13 +73,12 @@ public class WriteMessage extends Message {
         Acknowledgement ack = new Acknowledgement(logic.getServerNumber());
         ack.fillReferences(this.timestamp,this.serverNumber);
         ack.setVectorClock(VectoUtil.addOne(logic, logic.getServerNumber()));
-        logic.getServer().sendMulti(ack);
         logic.getTransmittedAcks().add(ack);
-        System.out.println("ADDED TRASMITTED ACK  " + this.getTimeStamp() + "  " + arrayToString(getVectorClock()));
+        logic.getServer().sendMulti(ack);
+        System.out.println("ADDED TRASMITTED ACK  " + ack.getWriteTimestamp() + "  " + arrayToString(ack.getVectorClock()));
         if (logic.getServerNumber() != serverNumber){// the server which sent this message has already started the timer
             retransmission(logic.getServer());
         }
-
     }
 
     @Override

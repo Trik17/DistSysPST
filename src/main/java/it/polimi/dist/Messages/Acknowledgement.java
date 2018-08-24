@@ -48,6 +48,7 @@ public class Acknowledgement extends Message {
         if (serverNumber!=logic.getServerNumber())
             VectoUtil.addOne(logic,this.serverNumber);
         logic.getAckBuffer().add(this);
+        System.out.println("ADDED ACK to ack buffer " + getWriteTimestamp() + "  " + arrayToString(getVectorClock()));
         logic.checkAckBuffer();
     }
 
