@@ -24,8 +24,8 @@ public class TimerThread extends Thread {
             for (int i = 0; i < server.getLogic().getWriteBuffer().size(); i++) {
                 if (server.getLogic().getWriteBuffer().get(i).getTimeStamp() == message.getTimeStamp()
                         && server.getLogic().getWriteBuffer().get(i).getServerNumber() == message.getServerNumber()){
-                    server.sendMulti(server.getLogic().getWriteBuffer().get(i));
                     System.out.println("------MESSAGE RETRANSMITTED------ \n" + server.getLogic().getWriteBuffer().get(i).toString());
+                    server.sendMulti(server.getLogic().getWriteBuffer().get(i));
                     //break;
                     return;
                 }

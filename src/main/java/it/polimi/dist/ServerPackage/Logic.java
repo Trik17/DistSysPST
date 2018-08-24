@@ -187,6 +187,7 @@ public class Logic{
 
     public void setVectorClock(ArrayList<Integer> vectorClock) {
         this.vectorClock = vectorClock;
+        System.out.println("NEW VECTORCLOCK: " + this.vectorClock );
     }
 
     public LinkedList<WriteMessage> getWriteBuffer() {

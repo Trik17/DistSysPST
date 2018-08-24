@@ -55,6 +55,8 @@ public class WriteMessage extends Message {
         for (int i = 0; i < logic.getTransmittedAcks().size(); i++) {
             if (logic.getTransmittedAcks().get(i).getWriteTimestamp() == this.timestamp
                     && logic.getTransmittedAcks().get(i).getWriteServerNumber() == this.serverNumber){
+                System.out.println("RESEND AKC:");
+                System.out.println(logic.getTransmittedAcks().get(i).toString());
                 logic.getServer().sendMulti(logic.getTransmittedAcks().get(i));
                 return;
             }
@@ -76,6 +78,7 @@ public class WriteMessage extends Message {
         logic.getTransmittedAcks().add(ack);
         logic.getServer().sendMulti(ack);
         System.out.println("ADDED TRASMITTED ACK  " + ack.getWriteTimestamp() + "  " + arrayToString(ack.getVectorClock()));
+        System.out.println(ack.toString());
         if (logic.getServerNumber() != serverNumber){// the server which sent this message has already started the timer
             retransmission(logic.getServer());
         }
