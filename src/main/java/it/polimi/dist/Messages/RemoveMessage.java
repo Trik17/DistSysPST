@@ -10,8 +10,8 @@ public class RemoveMessage extends Message {
 
     public RemoveMessage(int serverNumber, int removedServerNumber) {
         super(serverNumber);
-        isRemovingMessage=true;
-        this.removedServerNumber=removedServerNumber;
+        isRemovingMessage = true;
+        this.removedServerNumber = removedServerNumber;
     }
 
     @Override
@@ -39,7 +39,14 @@ public class RemoveMessage extends Message {
         timerThread.start();
     }
 
+    @Override
+    public String toString() {
+        return "<<<<<<<<<<<<<<<<<<<<<<<<<<<<< \nREMOVE MESSAGE" + "\nRemoved Server Number:" + String.valueOf(removedServerNumber) + super.toString();
+    }
+
     public int getRemovedServerNumber() {
         return removedServerNumber;
     }
 }
+
+

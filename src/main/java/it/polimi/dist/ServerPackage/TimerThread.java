@@ -27,6 +27,7 @@ public class TimerThread extends Thread {
                 WriteMessage message = findMessage(); //find the messageToResend in the Write Buffer
                 if (checkFailedServers(message)){
                     //remove server
+                    System.out.println("!!!!!REMOVING SERVER!!!!!");
                     int failedServerNumber = message.getAckNotReceived().indexOf(retransmissionThreshold);
                     RemoveMessage removeMessage = new RemoveMessage(server.getLogic().getServerNumber(),failedServerNumber);
                     server.getLogic().removeServer(removeMessage);
