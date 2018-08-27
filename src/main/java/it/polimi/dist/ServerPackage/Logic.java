@@ -123,10 +123,13 @@ public class Logic{
                     writeRetransmissionTimers.get(key).getMessageToResend().getVectorClock().remove(removeMessage.getRemovedServerNumber());
                 }
                 // ripartono da sole le write
-                this.stopped=false;
                 this.getAckRemovedServers().clear();
                 this.getMyRemoveMessages().clear();
                 this.getOthersRemoveMessages().clear();
+                for (int i = 0; i < getWriteBuffer().size(); i++) {
+                    getWriteBuffer().get(i).getVectorClock().remove(removeMessage.getRemovedServerNumber());
+                }
+                this.stopped=false;
             }else
                 return;
         }
