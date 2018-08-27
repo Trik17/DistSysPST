@@ -69,6 +69,7 @@ public class Logic{
     //only one server at a time can fail
     public void removeServer(RemoveMessage message){
         synchronized (this) {
+            System.out.println("CALLED removeServer() FUNCTION");
             //entro qui se ho già ricevuto le remove di altri: sendAck e return
             for (int i = 0; i < this.othersRemoveMessages.size(); i++) {
                 if (message.getTimeStamp() == othersRemoveMessages.get(i).getTimeStamp() &&
