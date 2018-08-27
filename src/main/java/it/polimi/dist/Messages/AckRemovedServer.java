@@ -14,17 +14,17 @@ public class AckRemovedServer extends Message{
 
     @Override
     public void execute(Logic logic) {
-        synchronized (logic) {
+        synchronized (logic) {//todo controlla bene questa
             for (int i = 0; i < logic.getMyRemoveMessages().size(); i++) {
                 if (logic.getMyRemoveMessages().get(i).getServerNumber() == this.removeMessage.getServerNumber() &&
                         this.removeMessage.getTimeStamp() == logic.getMyRemoveMessages().get(i).getTimeStamp()){
-                    if (logic.getAckRemovedServers().get(i).getServerNumber() == this.removeMessage.getServerNumber())
-                        return;
-                    else {
-                        logic.getAckRemovedServers().add(this);
-                        logic.checkAckRemove(removeMessage);
-                        return;
+                    for (int j = 0; i < logic.getAckRemovedServers().size(); j++) {
+                        if (logic.getAckRemovedServers().get(j).getServerNumber() == this.removeMessage.getServerNumber())
+                            return;
                     }
+                    logic.getAckRemovedServers().add(this);
+                    logic.checkAckRemove(removeMessage);
+                    return;
                 }
             }
         }

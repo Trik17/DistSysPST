@@ -66,6 +66,7 @@ public class Logic{
         }
     }
 
+    //only one server at a time can fail
     public void removeServer(RemoveMessage message){
         synchronized (this) {
             //entro qui se ho già ricevuto le remove di altri: sendAck e return
@@ -122,6 +123,9 @@ public class Logic{
                 }
                 // ripartono da sole le write
                 this.stopped=false;
+                this.getAckRemovedServers().clear();
+                this.getMyRemoveMessages().clear();
+                this.getOthersRemoveMessages().clear();
             }else
                 return;
         }
@@ -163,7 +167,7 @@ public class Logic{
                 if (!VectoUtil.outOfSequence(queue.get(i).getVectorClock(), this.vectorClock, queue.get(i).getServerNumber())) {
                     System.out.println("execution of a no-more-outOfSequence packet");
                     queue.get(i).execute(this);
-                    queue.remove(i);//todo o sincronizzo o metto prima dell'execute?
+                    queue.remove(i);//todo o sincronizzo o metto prima dell'execute?: è sincronizzata
                 }
             }
             /*long index[] = new long[2];
