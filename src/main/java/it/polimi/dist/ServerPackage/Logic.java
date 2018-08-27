@@ -184,14 +184,14 @@ public class Logic{
         synchronized (this) {
             //controlla quanti ack ci sono e se sono > di vectorclock size fa la scrittura
             int count = 0;
-            for (WriteMessage aWriteBuffer : writeBuffer) {
-                for (AckMessage anAckBuffer : ackBuffer) {
-                    if (anAckBuffer.getWriteTimestamp() == aWriteBuffer.getTimeStamp()
-                            && anAckBuffer.getWriteServerNumber() == aWriteBuffer.getServerNumber())
+            for (int i = 0; i < writeBuffer.size(); i++) {
+                for (int j = 0; j < ackBuffer.size(); j++) {
+                    if (ackBuffer.get(j).getWriteTimestamp() == writeBuffer.get(i).getTimeStamp()
+                            && ackBuffer.get(j).getWriteServerNumber() == writeBuffer.get(i).getServerNumber())
                         count++;
                 }
                 if (count >= vectorClock.size())
-                    performWrite(aWriteBuffer);
+                    performWrite(writeBuffer.get(i));
                 count = 0;
             }
         }
