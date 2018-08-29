@@ -25,6 +25,7 @@ public class JoinMessage extends Message {
             AckJoinMessage joinMessage = new AckJoinMessage(serverNumber, numberOfServers, logic.getServer().getStorage());
             logic.getServer().sendMulti(joinMessage);
             if (!logic.getServer().getJoinHandler().getRandoms().contains(random)) {
+                System.out.println("ADDING SERVER");
                 logic.addServer();
                 logic.getServer().getJoinHandler().getRandoms().add(random);
             }
