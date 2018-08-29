@@ -201,7 +201,7 @@ public class Logic{
         }
     }
 
-    private void performWrite(WriteMessage writeMessage){
+    private synchronized void performWrite(WriteMessage writeMessage){
         try {
             String key = String.valueOf(writeMessage.getTimeStamp()).concat(String.valueOf(writeMessage.getServerNumber()));
             if (!writeRetransmissionTimers.get(key).isInterrupted()){
