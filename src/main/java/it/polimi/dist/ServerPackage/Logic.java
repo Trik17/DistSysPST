@@ -125,14 +125,23 @@ public class Logic{
                 vectorClock.remove(removeMessage.getRemovedServerNumber());//Removes the element at the specified position in this list. Shifts any subsequent elements to the left (subtracts one from their indices).
                 this.ackBuffer.clear();
                 this.queue.clear();
-                String key;
+
                 //this function eliminate the removedServer from the vector clocks of the messages in write buffer
                 ArrayList<Integer> newAckNotReceived = new ArrayList<Integer>();
                 for (int j = 0; j < getVectorClock().size(); j++) {
                     newAckNotReceived.add(1);
                 }
                 for (int i = 0; i < writeBuffer.size(); i++) {
-                    //key = String.valueOf(writeBuffer.get(i).getTimeStamp()).concat(String.valueOf(writeBuffer.get(i).getServerNumber()));
+                    //String key = String.valueOf(writeBuffer.get(i).getTimeStamp()).concat(String.valueOf(writeBuffer.get(i).getServerNumber()));
+                    try{
+                        String key = String.valueOf(writeBuffer.get(i).getTimeStamp()).concat(String.valueOf(writeBuffer.get(i).getServerNumber()));
+                        if (!writeRetransmissionTimers.get(key).isInterrupted()){
+                            writeRetransmissionTimers.get(key).interrupt();
+                            writeRetransmissionTimers.remove(key);
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                     writeBuffer.get(i).getVectorClock().remove(removeMessage.getRemovedServerNumber());
                     writeBuffer.get(i).setAckNotReceived(newAckNotReceived);
                     writeBuffer.get(i).setAfterRemove(true);
@@ -140,8 +149,6 @@ public class Logic{
                         writeBuffer.get(i).setServerNumber(writeBuffer.get(i).getServerNumber()-1);
                     //writeRetransmissionTimers.get(key).getMessageToResend().getVectorClock().remove(removeMessage.getRemovedServerNumber());
                 }
-
-
                 // ripartono da sole le write
                 this.getAckRemovedServers().clear();
                 this.getMyRemoveMessages().clear();

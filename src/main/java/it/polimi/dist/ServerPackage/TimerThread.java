@@ -11,7 +11,7 @@ public class TimerThread extends Thread {
     private Server server;
     private Message messageToResend;
     private int toSleep = 5000;
-    private int retransmissionThreshold = 2;
+    private int retransmissionThreshold = 6;
 
 
     public TimerThread(Message message, Server server) {
