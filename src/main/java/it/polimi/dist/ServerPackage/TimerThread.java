@@ -11,7 +11,7 @@ public class TimerThread extends Thread {
     private Server server;
     private Message messageToResend;
     private int toSleep = 5000;
-    private int retransmissionThreshold = 7;
+    private int retransmissionThreshold = 2;
 
 
     public TimerThread(Message message, Server server) {
@@ -31,6 +31,9 @@ public class TimerThread extends Thread {
                     int failedServerNumber = message.getAckNotReceived().indexOf(retransmissionThreshold);
                     RemoveMessage removeMessage = new RemoveMessage(server.getLogic().getServerNumber(),failedServerNumber);
                     server.getLogic().removeServer(removeMessage);
+                    for (int i = 0; i < message.getAckNotReceived().size(); i++) {
+                        message.getAckNotReceived().set(i, 0);
+                    }
                     return;
                 }
                 else {
