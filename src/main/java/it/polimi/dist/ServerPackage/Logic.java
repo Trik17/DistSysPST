@@ -88,15 +88,24 @@ public class Logic{
             for (int i = 0; i < this.myRemoveMessages.size(); i++) {
                 if (message.getTimeStamp() == myRemoveMessages.get(i).getTimeStamp() &&
                         message.getServerNumber() == myRemoveMessages.get(i).getServerNumber()) {
-                    return;
+                    return;//todo e se si perde il mio ack?
                 }
             }
             //se è la prima volta, avviata da me o da qualcun altro
             this.stopped = true;
+            //se avviata da me:
+            if (message.getServerNumber()==this.serverNumber){
+                RemoveMessage removeMessage = new RemoveMessage(this.serverNumber,message.getRemovedServerNumber());
+                this.myRemoveMessages.add(removeMessage);
+                server.sendMulti(removeMessage);
+                return;
+            }
+            //se avviata da altri:
             message.sendAckRemove(this);
             RemoveMessage removeMessage = new RemoveMessage(this.serverNumber,serverNumber);
             this.myRemoveMessages.add(removeMessage);
             server.sendMulti(removeMessage);
+
         }
     }
 
@@ -117,19 +126,18 @@ public class Logic{
                 this.ackBuffer.clear();
                 this.queue.clear();
                 String key;
+                //this function eliminate the removedServer from the vector clocks of the messages in write buffer
                 for (int i = 0; i < writeBuffer.size(); i++) {
-                    key = String.valueOf(writeBuffer.get(i).getTimeStamp()).concat(String.valueOf(writeBuffer.get(i).getServerNumber()));
+                    //key = String.valueOf(writeBuffer.get(i).getTimeStamp()).concat(String.valueOf(writeBuffer.get(i).getServerNumber()));
                     writeBuffer.get(i).getVectorClock().remove(removeMessage.getRemovedServerNumber());
-                    writeRetransmissionTimers.get(key).getMessageToResend().getVectorClock().remove(removeMessage.getRemovedServerNumber());
+                    if (writeBuffer.get(i).getServerNumber()> removeMessage.getRemovedServerNumber())
+                        writeBuffer.get(i).setServerNumber(writeBuffer.get(i).getServerNumber()-1);
+                    //writeRetransmissionTimers.get(key).getMessageToResend().getVectorClock().remove(removeMessage.getRemovedServerNumber());
                 }
                 // ripartono da sole le write
                 this.getAckRemovedServers().clear();
                 this.getMyRemoveMessages().clear();
                 this.getOthersRemoveMessages().clear();
-                for (int i = 0; i < getWriteBuffer().size(); i++) {
-                    getWriteBuffer().get(i).getVectorClock().remove(removeMessage.getRemovedServerNumber());
-                }
-                resetVectorClocks(removeMessage.getRemovedServerNumber());
                 this.stopped=false;
                 resendWrites();
             }else
@@ -140,14 +148,6 @@ public class Logic{
     private void resendWrites() {
         for (int i = 0; i < getWriteBuffer().size(); i++) {
             server.sendMulti(getWriteBuffer().get(i));
-        }
-    }
-
-    //this function eliminate the removedServer from the vector clocks of the messages in write buffer
-    private void resetVectorClocks(int removedServer){
-        for (int i = 0; i < getWriteBuffer().size(); i++) {
-            getWriteBuffer().get(i).getVectorClock().remove(removedServer);
-            System.out.println("vector clock of message:"+getWriteBuffer().get(i).getTimeStamp()+"changed in:"+getWriteBuffer().get(i).arrayToString(getWriteBuffer().get(i).getVectorClock()));
         }
     }
 
@@ -170,7 +170,13 @@ public class Logic{
                 message.execute(this);
             return;
         }
-        if(!message.isNetMessage() &&
+        for (int i = 0; i < myRemoveMessages.size(); i++) {
+            if (message.getServerNumber()==myRemoveMessages.get(i).getServerNumber() &&
+                    message.getTimeStamp()==myRemoveMessages.get(i).getTimeStamp()
+                    /*todo &&((RemoveMessage)message).getRemovedServerNumber()==myRemoveMessages.get(i).getRemovedServerNumber()*/)
+                return;
+        }
+        if(!message.isNetMessage() && !message.isRemovingMessage() &&
                 VectoUtil.outOfSequence(message.getVectorClock(),this.vectorClock, message.getServerNumber())){
             queue.add(message);
             return;

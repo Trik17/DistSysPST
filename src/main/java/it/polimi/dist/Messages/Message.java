@@ -59,6 +59,10 @@ public abstract class Message implements Serializable {
         return data;
     }
 
+    public void setServerNumber(int serverNumber) {
+        this.serverNumber = serverNumber;
+    }
+
     public void retransmission(Server server){
         return;
     }
