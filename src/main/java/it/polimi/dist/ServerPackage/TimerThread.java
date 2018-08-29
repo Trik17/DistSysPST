@@ -28,12 +28,14 @@ public class TimerThread extends Thread {
                 if (checkFailedServers(message)){
                     //remove server
                     System.out.println("!!!!!REMOVING SERVER!!!!!");
+                    ArrayList<Integer> newAckNotReceived = new ArrayList<Integer>();
+                    for (int i = 0; i < server.getLogic().getVectorClock().size() - 1; i++) {
+                        newAckNotReceived.add(1);
+                    }
+                    ((WriteMessage) messageToResend).setAckNotReceived(newAckNotReceived);
                     int failedServerNumber = message.getAckNotReceived().indexOf(retransmissionThreshold);
                     RemoveMessage removeMessage = new RemoveMessage(server.getLogic().getServerNumber(),failedServerNumber);
                     server.getLogic().removeServer(removeMessage);
-                    for (int i = 0; i < message.getAckNotReceived().size(); i++) {
-                        message.getAckNotReceived().set(i, 0);
-                    }
                     return;
                 }
                 else {
@@ -88,4 +90,3 @@ public class TimerThread extends Thread {
     }
 }
 
-//todo retransmission of all the old messages with timer alive
