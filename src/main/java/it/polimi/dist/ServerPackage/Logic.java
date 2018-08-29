@@ -129,9 +129,25 @@ public class Logic{
                 for (int i = 0; i < getWriteBuffer().size(); i++) {
                     getWriteBuffer().get(i).getVectorClock().remove(removeMessage.getRemovedServerNumber());
                 }
+                resetVectorClocks(removeMessage.getRemovedServerNumber());
                 this.stopped=false;
+                resendWrites();
             }else
                 return;
+        }
+    }
+
+    private void resendWrites() {
+        for (int i = 0; i < getWriteBuffer().size(); i++) {
+            server.sendMulti(getWriteBuffer().get(i));
+        }
+    }
+
+    //this function eliminate the removedServer from the vector clocks of the messages in write buffer
+    private void resetVectorClocks(int removedServer){
+        for (int i = 0; i < getWriteBuffer().size(); i++) {
+            getWriteBuffer().get(i).getVectorClock().remove(removedServer);
+            System.out.println("vector clock of message:"+getWriteBuffer().get(i).getTimeStamp()+"changed in:"+getWriteBuffer().get(i).arrayToString(getWriteBuffer().get(i).getVectorClock()));
         }
     }
 
@@ -201,7 +217,7 @@ public class Logic{
         }
     }
 
-    private void performWrite(WriteMessage writeMessage){
+    private synchronized void performWrite(WriteMessage writeMessage){
         try {
             String key = String.valueOf(writeMessage.getTimeStamp()).concat(String.valueOf(writeMessage.getServerNumber()));
             if (!writeRetransmissionTimers.get(key).isInterrupted()){
