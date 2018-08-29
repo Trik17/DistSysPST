@@ -93,6 +93,10 @@ public class WriteMessage extends Message {
         return ackNotReceived;
     }
 
+    public void setAckNotReceived(ArrayList<Integer> ackNotReceived) {
+        this.ackNotReceived = ackNotReceived;
+    }
+
     @Override
     public String toString() {
         return "<<<<<<<<<<<<<<<<<<<<<<<<<<<<< \nWRITE MESSAGE \nData ID: " + key + "\nValue: " + String.valueOf(data) + super.toString();
