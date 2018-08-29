@@ -10,10 +10,12 @@ import java.util.ArrayList;
 public class WriteMessage extends Message {
 
     protected ArrayList<Integer> ackNotReceived = new ArrayList<Integer>(); //todo in the write buffer
+    private boolean afterRemove;
 
 
     public WriteMessage(int serverNumber) {
         super(serverNumber);
+        afterRemove = false;
     }
 
     public void execute(Logic logic) {
@@ -30,6 +32,10 @@ public class WriteMessage extends Message {
             for (int i = 0; i < logic.getWriteBuffer().size(); i++) {
                 if (logic.getWriteBuffer().get(i).timestamp == this.timestamp
                         && logic.getWriteBuffer().get(i).serverNumber == this.serverNumber) {
+                    if (isAfterRemove()){
+                        sendAck(logic);
+                        return;
+                    }
                     reSendAck(logic);
                     return;
                 }
@@ -96,5 +102,13 @@ public class WriteMessage extends Message {
     @Override
     public String toString() {
         return "<<<<<<<<<<<<<<<<<<<<<<<<<<<<< \nWRITE MESSAGE \nData ID: " + key + "\nValue: " + String.valueOf(data) + super.toString();
+    }
+
+    public boolean isAfterRemove() {
+        return afterRemove;
+    }
+
+    public void setAfterRemove(boolean afterRemove) {
+        this.afterRemove = afterRemove;
     }
 }
