@@ -36,19 +36,20 @@ public class TimerThread extends Thread {
                 else {
                     updateMissingAcks(message); //add 1 to all position of ackNotReceived
                 }
-            }
-            for (int i = 0; i < server.getLogic().getWriteBuffer().size(); i++) {
-                if (server.getLogic().getWriteBuffer().get(i).getTimeStamp() == messageToResend.getTimeStamp()
-                        && server.getLogic().getWriteBuffer().get(i).getServerNumber() == messageToResend.getServerNumber()){
-                    System.out.println("------MESSAGE RETRANSMITTED------ \n" + messageToResend.toString());
-                    server.sendMulti(server.getLogic().getWriteBuffer().get(i));
-                    //break;
-                    return;
+                for (int i = 0; i < server.getLogic().getWriteBuffer().size(); i++) {
+                    if (server.getLogic().getWriteBuffer().get(i).getTimeStamp() == messageToResend.getTimeStamp()
+                            && server.getLogic().getWriteBuffer().get(i).getServerNumber() == messageToResend.getServerNumber()){
+                        System.out.println("------MESSAGE RETRANSMITTED------ \n" + messageToResend.toString());
+                        server.sendMulti(server.getLogic().getWriteBuffer().get(i));
+                        //break;
+                        return;
+                    }
                 }
             }
             System.out.println("NOT FOUND");
+            server.sendMulti(messageToResend); //for join message
             //server.sendMulti(message);
-            //if I have not already received all acks (and so the timeTthread is still alive)
+            //if I have not already received all acks (and so the timerThread is still alive)
             // resend the messageToResend (only join/write)
         } catch (InterruptedException e) {
             System.out.println("No retransmission, timer interrupted");
@@ -83,3 +84,5 @@ public class TimerThread extends Thread {
         return messageToResend;
     }
 }
+
+//todo retransmission of all the old messages with timer alive
