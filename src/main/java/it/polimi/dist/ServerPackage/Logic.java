@@ -127,13 +127,21 @@ public class Logic{
                 this.queue.clear();
                 String key;
                 //this function eliminate the removedServer from the vector clocks of the messages in write buffer
+                ArrayList<Integer> newAckNotReceived = new ArrayList<Integer>();
+                for (int j = 0; j < getVectorClock().size(); j++) {
+                    newAckNotReceived.add(1);
+                }
                 for (int i = 0; i < writeBuffer.size(); i++) {
                     //key = String.valueOf(writeBuffer.get(i).getTimeStamp()).concat(String.valueOf(writeBuffer.get(i).getServerNumber()));
                     writeBuffer.get(i).getVectorClock().remove(removeMessage.getRemovedServerNumber());
+                    writeBuffer.get(i).setAckNotReceived(newAckNotReceived);
+                    writeBuffer.get(i).setAfterRemove(true);
                     if (writeBuffer.get(i).getServerNumber()> removeMessage.getRemovedServerNumber())
                         writeBuffer.get(i).setServerNumber(writeBuffer.get(i).getServerNumber()-1);
                     //writeRetransmissionTimers.get(key).getMessageToResend().getVectorClock().remove(removeMessage.getRemovedServerNumber());
                 }
+
+
                 // ripartono da sole le write
                 this.getAckRemovedServers().clear();
                 this.getMyRemoveMessages().clear();
