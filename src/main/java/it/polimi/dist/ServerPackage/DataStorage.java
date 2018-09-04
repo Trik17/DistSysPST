@@ -73,6 +73,7 @@ public class DataStorage implements Serializable{
 
     public void setData(Map<String, Integer> data) {
         this.data = data;
+        writeToFile();
     }
 
     private void writeToFile(){
