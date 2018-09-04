@@ -40,7 +40,8 @@ public class DataStorage implements Serializable{
                 //e1.printStackTrace();
             }
         }catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            System.out.println("no map in .json file: new server, it's not a reboot");
 
         }//todo fino a qua (più il commento nella funzione write */
            /*
