@@ -1,7 +1,5 @@
 package it.polimi.dist.ServerPackage;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
@@ -24,7 +22,7 @@ public class DataStorage implements Serializable{
         this.mapper = new ObjectMapper();       //declare a new ObjectMapper variable
         this.mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
         this.data = new HashMap(); // or HashMap<String, Integer>()
-        ///*TODO togliere da qua per  avere json
+        /*TODO togliere da qua per  avere json
         try {
             fileReader = new FileReader("src/main/resources/data.json");
             //filewriter = new FileWriter("src/main/resources/data.json");
@@ -42,7 +40,7 @@ public class DataStorage implements Serializable{
         }catch (Exception e) {
             e.printStackTrace();
 
-        }//todo fino a qua (più il commento nella funzione write */
+        }todo fino a qua (più il commento nella funzione write */
            /*
             file = new File("src/main/resources/data.json");
 
@@ -98,7 +96,7 @@ public class DataStorage implements Serializable{
 
     public void write(String dataId, int newData) {  //TODO
         this.data.put(dataId,newData);
-        writeToFile(); //todo togliendo il commento(QUA E NEL COSTRUTTORE) si fa il file json
+        //todo togliendo il commento(QUA E NEL COSTRUTTORE) si fa il file json writeToFile();
     }
     /*public static void main(String[] args) {
         ArrayList<Long> index = new ArrayList<Long>();
