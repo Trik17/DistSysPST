@@ -45,7 +45,7 @@ public class AckMessage extends Message {
             for (int j = 0; j < logic.getAckBuffer().size(); j++) {
                 if (timestamp == logic.getAckBuffer().get(j).getTimeStamp()
                         && serverNumber == logic.getAckBuffer().get(j).getServerNumber()) {
-                    //System.out.println("RETURN ACK perché già in ack buffer");
+                    System.out.println("RETURN ACK perché già in ack buffer");
                     return;
                 }
             }
