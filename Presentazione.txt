@@ -1,0 +1,10 @@
+slides & -> demo:
+-io accendo il server
+-collego un client
+-tu accendi il server 2
+-secondo client per leggere il client 1 manual
+-e poi un altro auto (con perdita pacchetti)
+-giù server 2
+-operazioni
+-reboot server 2 per vedere le operazioni
+-e poi reboot totale
