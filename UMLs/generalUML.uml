@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>it.polimi.dist</OriginalElement>
+  <nodes>
+    <node x="520.3734807256235" y="109.0">it.polimi.dist.Messages.WriteMessage</node>
+    <node x="615.8734807256235" y="267.0">it.polimi.dist.ServerPackage.Logic</node>
+    <node x="-100.0" y="180.0">it.polimi.dist.ServerPackage.VectoUtil</node>
+    <node x="0.0" y="109.0">it.polimi.dist.Messages.AckJoinMessage</node>
+    <node x="265.1234807256235" y="267.0">it.polimi.dist.ServerPackage.ClientHandler</node>
+    <node x="405.1234807256235" y="267.0">it.polimi.dist.ServerPackage.MulticastHandler</node>
+    <node x="173.66706349206316" y="109.0">it.polimi.dist.Messages.ClientMessage</node>
+    <node x="599.326184807256" y="0.0">it.polimi.dist.Messages.Message</node>
+    <node x="-91.0" y="297.0">it.polimi.dist.ClientPackage.Client</node>
+    <node x="799.3734807256235" y="109.0">it.polimi.dist.Messages.RemoveMessage</node>
+    <node x="844.1234807256235" y="188.0">it.polimi.dist.Messages.AckRemovedServer</node>
+    <node x="399.6234807256235" y="356.0">it.polimi.dist.ServerPackage.Server</node>
+    <node x="615.3734807256235" y="435.0">it.polimi.dist.ServerPackage.TimerThread</node>
+    <node x="664.3734807256235" y="109.0">it.polimi.dist.Messages.JoinMessage</node>
+    <node x="93.0" y="188.0">it.polimi.dist.Messages.ClientWriteMessage</node>
+    <node x="266.0" y="188.0">it.polimi.dist.Messages.ClientReadMessage</node>
+    <node x="130.1234807256235" y="267.0">it.polimi.dist.ServerPackage.DataStorage</node>
+    <node x="-123.0" y="376.0">it.polimi.dist.ClientPackage.ClientReadThread</node>
+    <node x="387.3734807256235" y="109.0">it.polimi.dist.Messages.AckMessage</node>
+    <node x="370.7901473922901" y="514.0">it.polimi.dist.ServerPackage.JoinHandler</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="it.polimi.dist.ServerPackage.TimerThread" target="it.polimi.dist.Messages.Message">
+      <point x="43.125" y="-14.5" />
+      <point x="715.9984807256235" y="410.0" />
+      <point x="1004.6234807256235" y="410.0" />
+      <point x="1004.6234807256235" y="49.0" />
+      <point x="688.1039625850339" y="49.0" />
+      <point x="41.77777777777783" y="14.5" />
+    </edge>
+    <edge source="it.polimi.dist.ServerPackage.JoinHandler" target="it.polimi.dist.Messages.AckJoinMessage">
+      <point x="-41.625" y="-14.5" />
+      <point x="384.6651473922901" y="489.0" />
+      <point x="67.0" y="489.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="it.polimi.dist.ClientPackage.ClientReadThread" target="it.polimi.dist.ClientPackage.Client">
+      <point x="0.0" y="-14.5" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="it.polimi.dist.Messages.AckMessage" target="it.polimi.dist.Messages.Message">
+      <point x="0.0" y="-14.5" />
+      <point x="443.8734807256235" y="79.0" />
+      <point x="625.4372959183671" y="79.0" />
+      <point x="-20.888888888888914" y="14.5" />
+    </edge>
+    <edge source="it.polimi.dist.Messages.JoinMessage" target="it.polimi.dist.Messages.Message">
+      <point x="0.0" y="-14.5" />
+      <point x="721.8734807256235" y="79.0" />
+      <point x="656.7706292517005" y="79.0" />
+      <point x="10.444444444444457" y="14.5" />
+    </edge>
+    <edge source="it.polimi.dist.ServerPackage.Server" target="it.polimi.dist.ServerPackage.ClientHandler">
+      <point x="-22.85714285714289" y="-14.5" />
+      <point x="416.7663378684806" y="326.0" />
+      <point x="295.1234807256235" y="326.0" />
+      <point x="-30.0" y="14.5" />
+    </edge>
+    <edge source="it.polimi.dist.ServerPackage.JoinHandler" target="it.polimi.dist.ServerPackage.TimerThread">
+      <point x="41.625" y="-14.5" />
+      <point x="467.9151473922901" y="489.0" />
+      <point x="672.8734807256235" y="489.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="it.polimi.dist.ServerPackage.Logic" target="it.polimi.dist.Messages.Message">
+      <point x="0.0" y="-14.5" />
+      <point x="653.8734807256235" y="89.0" />
+      <point x="646.326184807256" y="89.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="it.polimi.dist.ServerPackage.Logic" target="it.polimi.dist.Messages.WriteMessage">
+      <point x="-15.200000000000045" y="-14.5" />
+      <point x="638.6734807256234" y="237.0" />
+      <point x="581.8734807256235" y="237.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="it.polimi.dist.ServerPackage.Server" target="it.polimi.dist.ServerPackage.DataStorage">
+      <point x="-34.28571428571422" y="-14.5" />
+      <point x="405.3377664399093" y="336.0" />
+      <point x="187.6234807256235" y="336.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="it.polimi.dist.ServerPackage.Logic" target="it.polimi.dist.ServerPackage.Server">
+      <point x="-9.5" y="14.5" />
+      <point x="644.3734807256235" y="336.0" />
+      <point x="473.9091950113377" y="336.0" />
+      <point x="34.28571428571422" y="-14.5" />
+    </edge>
+    <edge source="it.polimi.dist.Messages.ClientReadMessage" target="it.polimi.dist.Messages.ClientMessage">
+      <point x="0.0" y="-14.5" />
+      <point x="342.0" y="163.0" />
+      <point x="266.66706349206316" y="163.0" />
+      <point x="31.0" y="14.5" />
+    </edge>
+    <edge source="it.polimi.dist.Messages.AckRemovedServer" target="it.polimi.dist.Messages.Message">
+      <point x="37.5" y="-14.5" />
+      <point x="956.6234807256235" y="59.0" />
+      <point x="677.6595181405894" y="59.0" />
+      <point x="31.33333333333337" y="14.5" />
+    </edge>
+    <edge source="it.polimi.dist.ServerPackage.Logic" target="it.polimi.dist.Messages.RemoveMessage">
+      <point x="15.200000000000045" y="-14.5" />
+      <point x="669.0734807256235" y="237.0" />
+      <point x="833.6234807256235" y="237.0" />
+      <point x="-34.25" y="14.5" />
+    </edge>
+    <edge source="it.polimi.dist.ServerPackage.Logic" target="it.polimi.dist.Messages.AckMessage">
+      <point x="-30.399999999999977" y="-14.5" />
+      <point x="623.4734807256235" y="247.0" />
+      <point x="443.8734807256235" y="247.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="it.polimi.dist.Messages.AckRemovedServer" target="it.polimi.dist.Messages.RemoveMessage">
+      <point x="-37.5" y="-14.5" />
+      <point x="881.6234807256235" y="163.0" />
+      <point x="902.1234807256235" y="163.0" />
+      <point x="34.25" y="14.5" />
+    </edge>
+    <edge source="it.polimi.dist.ServerPackage.Server" target="it.polimi.dist.ServerPackage.JoinHandler">
+      <point x="0.0" y="14.5" />
+      <point x="439.6234807256235" y="410.0" />
+      <point x="431.7901473922901" y="410.0" />
+      <point x="431.7901473922901" y="489.0" />
+      <point x="440.1651473922901" y="489.0" />
+      <point x="13.875" y="-14.5" />
+    </edge>
+    <edge source="it.polimi.dist.ServerPackage.MulticastHandler" target="it.polimi.dist.ServerPackage.Server">
+      <point x="34.5" y="14.5" />
+      <point x="508.6234807256235" y="316.0" />
+      <point x="451.0520521541948" y="316.0" />
+      <point x="11.428571428571331" y="-14.5" />
+    </edge>
+    <edge source="it.polimi.dist.Messages.RemoveMessage" target="it.polimi.dist.Messages.Message">
+      <point x="0.0" y="-14.5" />
+      <point x="867.8734807256235" y="69.0" />
+      <point x="667.2150736961449" y="69.0" />
+      <point x="20.888888888888914" y="14.5" />
+    </edge>
+    <edge source="it.polimi.dist.ServerPackage.Server" target="it.polimi.dist.ServerPackage.Logic">
+      <point x="22.85714285714289" y="-14.5" />
+      <point x="462.4806235827664" y="326.0" />
+      <point x="625.3734807256235" y="326.0" />
+      <point x="-28.5" y="14.5" />
+    </edge>
+    <edge source="it.polimi.dist.Messages.ClientWriteMessage" target="it.polimi.dist.Messages.ClientMessage">
+      <point x="0.0" y="-14.5" />
+      <point x="169.5" y="163.0" />
+      <point x="204.66706349206316" y="163.0" />
+      <point x="-31.0" y="14.5" />
+    </edge>
+    <edge source="it.polimi.dist.Messages.WriteMessage" target="it.polimi.dist.Messages.Message">
+      <point x="0.0" y="-14.5" />
+      <point x="581.8734807256235" y="89.0" />
+      <point x="635.8817403628116" y="89.0" />
+      <point x="-10.444444444444457" y="14.5" />
+    </edge>
+    <edge source="it.polimi.dist.Messages.ClientMessage" target="it.polimi.dist.Messages.Message">
+      <point x="0.0" y="-14.5" />
+      <point x="235.66706349206316" y="69.0" />
+      <point x="614.9928514739227" y="69.0" />
+      <point x="-31.33333333333337" y="14.5" />
+    </edge>
+    <edge source="it.polimi.dist.ServerPackage.JoinHandler" target="it.polimi.dist.ServerPackage.Server">
+      <point x="-13.875" y="-14.5" />
+      <point x="412.4151473922901" y="489.0" />
+      <point x="420.7901473922901" y="489.0" />
+      <point x="420.7901473922901" y="410.0" />
+      <point x="412.95681405895675" y="410.0" />
+      <point x="-26.666666666666742" y="14.5" />
+    </edge>
+    <edge source="it.polimi.dist.ServerPackage.ClientHandler" target="it.polimi.dist.ServerPackage.Server">
+      <point x="30.0" y="14.5" />
+      <point x="355.1234807256235" y="316.0" />
+      <point x="428.19490929705216" y="316.0" />
+      <point x="-11.428571428571331" y="-14.5" />
+    </edge>
+    <edge source="it.polimi.dist.ServerPackage.Logic" target="it.polimi.dist.ServerPackage.TimerThread">
+      <point x="9.5" y="14.5" />
+      <point x="663.3734807256235" y="336.0" />
+      <point x="667.3734807256235" y="336.0" />
+      <point x="667.3734807256235" y="410.0" />
+      <point x="658.4984807256235" y="410.0" />
+      <point x="-14.375" y="-14.5" />
+    </edge>
+    <edge source="it.polimi.dist.ServerPackage.Logic" target="it.polimi.dist.Messages.AckRemovedServer">
+      <point x="30.399999999999977" y="-14.5" />
+      <point x="684.2734807256235" y="247.0" />
+      <point x="919.1234807256235" y="247.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="it.polimi.dist.Messages.AckJoinMessage" target="it.polimi.dist.Messages.Message">
+      <point x="0.0" y="-14.5" />
+      <point x="67.0" y="59.0" />
+      <point x="604.5484070294782" y="59.0" />
+      <point x="-41.77777777777783" y="14.5" />
+    </edge>
+    <edge source="it.polimi.dist.ServerPackage.TimerThread" target="it.polimi.dist.ServerPackage.Server">
+      <point x="-43.125" y="-14.5" />
+      <point x="629.7484807256235" y="410.0" />
+      <point x="466.29014739229024" y="410.0" />
+      <point x="26.666666666666742" y="14.5" />
+    </edge>
+    <edge source="it.polimi.dist.ServerPackage.Server" target="it.polimi.dist.ServerPackage.MulticastHandler">
+      <point x="0.0" y="-14.5" />
+      <point x="-34.5" y="14.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="490.0" y="260.5" />
+  <SelectedNodes />
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>public</VISIBILITY>
+</Diagram>
+
