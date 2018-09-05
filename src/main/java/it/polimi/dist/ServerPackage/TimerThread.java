@@ -46,7 +46,7 @@ public class TimerThread extends Thread {
                     }
                 }
             }
-            System.out.println("NOT FOUND");
+            //System.out.println("NOT FOUND");
             server.sendMulti(messageToResend); //for join message
             //server.sendMulti(message);
             //if I have not already received all acks (and so the timerThread is still alive)
