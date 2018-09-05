@@ -35,8 +35,8 @@ public class DataStorage implements Serializable{
                 System.out.println("found map in .json file: it's a reboot");
             } catch (JsonMappingException e1) {
                 System.out.println("no map in .json file: new server, it's not a reboot");
-                //TODO OGNI VOLTA BISOGNA RESETTARE IL FILE
-                //TODO: questo e il caso di non reboot
+                //OGNI VOLTA BISOGNA RESETTARE IL FILE: svuotandolo, non cancellandolo
+                //questo e il caso di non reboot
                 //e1.printStackTrace();
             }
         }catch (Exception e) {
