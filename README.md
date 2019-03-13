@@ -5,7 +5,7 @@ For simplicity assume that the data to be replicated are integer numbers, each i
 N servers keep a copy of the data shared by clients, offering two primitives:\
 int read(dataId); \
 void write(dataId, newValue); \
-The client may connect to any of these servers (a single one for the entire session). Servers cooperate to keep a consistent, replicated copy of the shared data. In particular, the system must provide a sequential consistency model. \
+The client may connect to any of these servers (a single one for the entire session). Servers cooperate to keep a consistent, replicated copy of the shared data. In particular, the system must provide a causal consistency model. \
 The following assumptions hold: \
 Servers are reliable and known to each other. \
 Severs run on the same subnet (IP multicast is available among them). \
